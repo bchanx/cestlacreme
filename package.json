@@ -1,6 +1,7 @@
 {
   "name": "cestlacreme",
-  "version": "1.0.0",
+  "version": "0.0.1",
+  "private": true,
   "description": "cestlacreme",
   "main": "app.js",
   "repository": {
@@ -14,5 +15,8 @@
     "express": "^4.13.3",
     "jade": "^1.11.0",
     "serve-favicon": "^2.3.0"
+  },
+  "engines": {
+    "node": "4.2.1"
   }
 }
