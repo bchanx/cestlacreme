@@ -1,6 +1,7 @@
 var express = require('express');
 var favicon = require('serve-favicon');
 var path = require('path');
+var compress = require('compression');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 
@@ -12,6 +13,7 @@ app.set('port', (process.env.PORT || 3000));
 app.set('env', (process.env.NODE_ENV || 'development'));
 
 app.use(favicon(__dirname + '/static/favicon.ico'));
+app.use(compress());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -19,6 +21,7 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 app.locals = {
   env: app.get('env'),
+  title: 'C\'est la Creme',
   min: app.get('env') === 'production' ? '.min' : ''
 };
 
