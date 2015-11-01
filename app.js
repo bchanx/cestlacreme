@@ -9,8 +9,11 @@ var app = express();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.set('port', (process.env.PORT || 3000));
-app.set('env', (process.env.NODE_ENV || 'development'));
+
+var ENV = process.env.NODE_ENV || 'development';
+var PORT = process.env.PORT || 3000;
+app.set('env', ENV);
+app.set('port', PORT);
 
 app.use(favicon(__dirname + '/static/favicon.ico'));
 app.use(compress());
@@ -20,15 +23,20 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'static')));
 
 app.locals = {
-  env: app.get('env'),
+  env: ENV,
   title: 'C\'est la Creme',
-  min: app.get('env') === 'production' ? '.min' : ''
+  min: ENV === 'production' ? '.min' : ''
 };
 
 app.get('/', function (req, res) {
-  res.render('index');
+  if (ENV === 'development') {
+    res.render('index');
+  }
+  else {
+    res.render('splash');
+  }
 });
 
-var server = app.listen(app.get('port'), function () {
-  console.log('Server running as [%s] on port [%s]', app.get('env'), app.get('port'));
+var server = app.listen(PORT, function () {
+  console.log('Server running as [%s] on port [%s]', ENV, PORT);
 });

@@ -7,13 +7,22 @@ var cssmin = require('gulp-cssmin');
 var autoprefixer = require('gulp-autoprefixer');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var stylus = require('gulp-stylus');
 var spawn = require('child_process').spawn;
 
-gulp.task('stylesheets', function() {
+gulp.task('stylus', function() {
+  gulp.src('stylesheets/stylus/root.styl')
+    .pipe(stylus())
+    .pipe(rename('stylus.css'))
+    .pipe(gulp.dest('stylesheets'));
+});
+
+gulp.task('stylesheets', ['stylus'], function() {
   gulp.src('stylesheets/**/*.css')
     .pipe(order([
       'lib/normalize.css',
       'lib/*.css',
+      'stylus.css',
       '*.css'
     ]))
     .pipe(concat('main.css'))
@@ -46,6 +55,7 @@ gulp.task('start', ['stylesheets', 'scripts'], function() {
     ext: 'js html css',
     env: {
       NODE_ENV: 'development'
+//      NODE_ENV: 'production'
     },
     ignore: ['stylesheets/', 'scripts/']
   });
