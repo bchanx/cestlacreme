@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'static')));
 app.locals = {
   env: ENV,
   title: 'C\'est la Creme',
-  min: ENV === 'production' ? '/min' : ''
+  min: ENV === 'production' ? '.min' : ''
 };
 
 var React = require('react');

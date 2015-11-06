@@ -18,6 +18,12 @@ var babel = require('gulp-babel');
 var spawn = require('child_process').spawn;
 
 const PRODUCTION = 0;
+const STATIC = 'static/dist';
+const VENDOR_DEPS = [
+  'react',
+  'react-dom',
+  'react-router'
+];
 
 ///// STYLESHEETS /////
 
@@ -39,12 +45,12 @@ gulp.task('css', function() {
       browsers: ['last 2 versions'],
       cascade: false
     }))
-    .pipe(gulp.dest('static/dist'))
+    .pipe(gulp.dest(STATIC))
     .pipe(cssmin())
     .pipe(rename({
       extname: '.min.css'
     }))
-    .pipe(gulp.dest('static/dist/min'));
+    .pipe(gulp.dest(STATIC));
 });
 
 gulp.task('fonts', function() {
@@ -57,12 +63,12 @@ gulp.task('deps.css', ['fonts'], function() {
     'bower_components/normalize-css/normalize.css',
     'bower_components/Ionicons/css/ionicons.css'
   ]).pipe(concat('deps.css'))
-    .pipe(gulp.dest('static/dist'))
+    .pipe(gulp.dest(STATIC))
     .pipe(cssmin())
     .pipe(rename({
       extname: '.min.css'
     }))
-    .pipe(gulp.dest('static/dist/min'));
+    .pipe(gulp.dest(STATIC));
 });
 
 gulp.task('stylesheets', ['deps.css', 'stylus', 'css']);
@@ -74,27 +80,41 @@ gulp.task('deps.js', function() {
   return gulp.src([
     'bower_components/jquery/dist/jquery.js'
   ]).pipe(concat('deps.js'))
-    .pipe(gulp.dest('static/dist'))
+    .pipe(gulp.dest(STATIC))
     .pipe(uglify({ mangle: false }))
     .pipe(rename({
       extname: '.min.js'
     }))
-    .pipe(gulp.dest('static/dist/min'));
+    .pipe(gulp.dest(STATIC));
 });
 
 gulp.task('js', function() {
   return gulp.src('scripts/**/*.js')
     .pipe(concat('main.js'))
-    .pipe(gulp.dest('static/dist'))
+    .pipe(gulp.dest(STATIC))
     .pipe(uglify())
     .pipe(rename({
       extname: '.min.js'
     }))
-    .pipe(gulp.dest('static/dist/min'));
+    .pipe(gulp.dest(STATIC));
+});
+
+gulp.task('vendor', function() {
+  browserify()
+    .require(VENDOR_DEPS)
+    .bundle()
+    .pipe(source('vendor.js'))
+    .pipe(gulp.dest(STATIC))
+    .pipe(streamify(uglify({ mangle: false })))
+    .pipe(rename({
+      extname: '.min.js'
+    }))
+    .pipe(gulp.dest(STATIC));
 });
 
 gulp.task('browserify', function() {
   var bundler = watchify(browserify('app/main.js'))
+    .external(VENDOR_DEPS)
     .transform(babelify, {
       presets: ['es2015', 'react']
     })
@@ -111,49 +131,14 @@ gulp.task('browserify', function() {
         gutil.log(gutil.colors.green('Finished rebundling in', (Date.now() - start) + 'ms.'));
       })
       .pipe(source('bundle.js'))
-      .pipe(gulp.dest('static/dist'))
+      .pipe(gulp.dest(STATIC))
       .pipe(streamify(uglify({ mangle: false })))
       .pipe(rename({
         extname: '.min.js'
       }))
-      .pipe(gulp.dest('static/dist/min'));
+      .pipe(gulp.dest(STATIC));
   }
-
-  /*
-  return browserify('app/main.js')
-    .transform(babelify, {
-      presets: ['es2015', 'react']
-    })
-    .bundle()
-    .pipe(source('bundle.js'))
-    .pipe(gulp.dest('static/dist'))
-    .pipe(streamify(uglify({ mangle: false })))
-    .pipe(rename({
-      extname: '.min.js'
-    }))
-    .pipe(gulp.dest('static/dist/min'));*/
 });
-
-/*
-var deps = [
-  'react',
-  'react-dom',
-  'react-router'
-];
-
-gulp.task('vendor-browserify', function() {
-  browserify()
-    .require(deps)
-    .bundle()
-    .pipe(source('vendor.bundle.js'))
-    .pipe(gulp.dest('static/dist'))
-    .pipe(streamify(uglify({ mangle: false })))
-    .pipe(rename({
-      extname: '.min.js'
-    }))
-    .pipe(gulp.dest('static/dist'));
-});*/
-
 
 gulp.task('server', function() {
   gulp.src('app.js')
@@ -164,7 +149,7 @@ gulp.task('server', function() {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('scripts', ['deps.js', 'js', 'browserify', 'server']);
+gulp.task('scripts', ['deps.js', 'js', 'vendor', 'browserify', 'server']);
 
 ///// WATCH && RUN /////
 
@@ -182,7 +167,7 @@ gulp.task('start', ['stylesheets', 'scripts', 'watch'], function() {
     env: {
       NODE_ENV: !PRODUCTION ? 'development' : 'production'
     },
-    ignore: ['stylesheets/', 'scripts/', 'app/', 'static/dist/min', 'app.js']
+    ignore: ['stylesheets/', 'scripts/', 'app/', 'static/dist/*.min.*', 'app.js']
   });
 });
 
