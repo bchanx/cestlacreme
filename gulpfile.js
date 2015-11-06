@@ -1,5 +1,9 @@
 var gulp = require('gulp');
 var path = require('path');
+var browserify = require('browserify');
+var babelify = require('babelify');
+var watchify = require('watchify');
+var source = require('vinyl-source-stream');
 var nodemon = require('gulp-nodemon');
 var order = require('gulp-order');
 var concat = require('gulp-concat');
@@ -8,20 +12,25 @@ var autoprefixer = require('gulp-autoprefixer');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var stylus = require('gulp-stylus');
+var streamify = require('gulp-streamify');
+var gutil = require('gulp-util');
+var babel = require('gulp-babel');
 var spawn = require('child_process').spawn;
 
+const PRODUCTION = 0;
+
+///// STYLESHEETS /////
+
 gulp.task('stylus', function() {
-  gulp.src('stylesheets/stylus/root.styl')
+  return gulp.src('stylesheets/stylus/root.styl')
     .pipe(stylus())
     .pipe(rename('stylus.css'))
     .pipe(gulp.dest('stylesheets'));
 });
 
-gulp.task('stylesheets', ['stylus'], function() {
-  gulp.src('stylesheets/**/*.css')
+gulp.task('css', function() {
+  return gulp.src(['stylesheets/**/*.css'])
     .pipe(order([
-      'lib/normalize.css',
-      'lib/*.css',
       'stylus.css',
       '*.css'
     ]))
@@ -35,33 +44,146 @@ gulp.task('stylesheets', ['stylus'], function() {
     .pipe(rename({
       extname: '.min.css'
     }))
-    .pipe(gulp.dest('static/dist'));
+    .pipe(gulp.dest('static/dist/min'));
 });
 
-gulp.task('scripts', function() {
-  gulp.src('scripts/*.js')
+gulp.task('fonts', function() {
+  return gulp.src('bower_components/Ionicons/fonts/*')
+    .pipe(gulp.dest('static/fonts'));
+});
+
+gulp.task('deps.css', ['fonts'], function() {
+  return gulp.src([
+    'bower_components/normalize-css/normalize.css',
+    'bower_components/Ionicons/css/ionicons.css'
+  ]).pipe(concat('deps.css'))
+    .pipe(gulp.dest('static/dist'))
+    .pipe(cssmin())
+    .pipe(rename({
+      extname: '.min.css'
+    }))
+    .pipe(gulp.dest('static/dist/min'));
+});
+
+gulp.task('stylesheets', ['deps.css', 'stylus', 'css']);
+
+
+///// SCRIPTS /////
+
+gulp.task('deps.js', function() {
+  return gulp.src([
+    'bower_components/jquery/dist/jquery.js'
+  ]).pipe(concat('deps.js'))
+    .pipe(gulp.dest('static/dist'))
+    .pipe(uglify({ mangle: false }))
+    .pipe(rename({
+      extname: '.min.js'
+    }))
+    .pipe(gulp.dest('static/dist/min'));
+});
+
+gulp.task('js', function() {
+  return gulp.src('scripts/**/*.js')
     .pipe(concat('main.js'))
     .pipe(gulp.dest('static/dist'))
     .pipe(uglify())
     .pipe(rename({
       extname: '.min.js'
     }))
-    .pipe(gulp.dest('static/dist'));
+    .pipe(gulp.dest('static/dist/min'));
 });
 
-gulp.task('start', ['stylesheets', 'scripts'], function() {
+gulp.task('browserify', function() {
+  var bundler = watchify(browserify('app/main.js'))
+    .transform(babelify, {
+      presets: ['es2015', 'react']
+    })
+    .on('update', rebundle);
+  return rebundle();
+
+  function rebundle() {
+    var start = Date.now();
+    return bundler.bundle()
+      .on('error', function(err) {
+        gutil.log(gutil.colors.red(err.toString()));
+      })
+      .on('end', function() {
+        gutil.log(gutil.colors.green('Finished rebundling in', (Date.now() - start) + 'ms.'));
+      })
+      .pipe(source('bundle.js'))
+      .pipe(gulp.dest('static/dist'))
+      .pipe(streamify(uglify({ mangle: false })))
+      .pipe(rename({
+        extname: '.min.js'
+      }))
+      .pipe(gulp.dest('static/dist/min'));
+  }
+
+  /*
+  return browserify('app/main.js')
+    .transform(babelify, {
+      presets: ['es2015', 'react']
+    })
+    .bundle()
+    .pipe(source('bundle.js'))
+    .pipe(gulp.dest('static/dist'))
+    .pipe(streamify(uglify({ mangle: false })))
+    .pipe(rename({
+      extname: '.min.js'
+    }))
+    .pipe(gulp.dest('static/dist/min'));*/
+});
+
+/*
+var deps = [
+  'react',
+  'react-dom',
+  'react-router'
+];
+
+gulp.task('vendor-browserify', function() {
+  browserify()
+    .require(deps)
+    .bundle()
+    .pipe(source('vendor.bundle.js'))
+    .pipe(gulp.dest('static/dist'))
+    .pipe(streamify(uglify({ mangle: false })))
+    .pipe(rename({
+      extname: '.min.js'
+    }))
+    .pipe(gulp.dest('static/dist'));
+});*/
+
+
+gulp.task('server', function() {
+  gulp.src('app.js')
+    .pipe(babel({
+      presets: ['es2015', 'react']
+    }))
+    .pipe(rename('server.js'))
+    .pipe(gulp.dest('./'));
+});
+
+gulp.task('scripts', ['deps.js', 'js', 'browserify', 'server']);
+
+///// WATCH && RUN /////
+
+gulp.task('watch', function() {
+  gulp.watch('stylesheets/stylus/*.*', ['stylus']);
+  gulp.watch('stylesheets/**/*.css', ['css']);
+  gulp.watch('scripts/**/*.js', ['js']);
+  gulp.watch('app.js', ['server']);
+});
+
+gulp.task('start', ['stylesheets', 'scripts', 'watch'], function() {
   nodemon({
-    script: 'app.js',
+    script: 'server.js',
     ext: 'js html css',
     env: {
-      NODE_ENV: 'development'
-//      NODE_ENV: 'production'
+      NODE_ENV: !PRODUCTION ? 'development' : 'production'
     },
-    ignore: ['stylesheets/', 'scripts/']
+    ignore: ['stylesheets/', 'scripts/', 'app/', 'static/dist/min', 'app.js']
   });
-
-  gulp.watch('stylesheets/**/*.*', ['stylesheets']);
-  gulp.watch('scripts/**/*.*', ['scripts']);
 });
 
 gulp.task('default', function() {

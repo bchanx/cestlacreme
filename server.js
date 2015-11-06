@@ -1,3 +1,5 @@
+'use strict';
+
 require('babel-core/register')({
   presets: ['es2015', 'react']
 });
@@ -38,19 +40,16 @@ var Router = require('react-router');
 var RoutingContext = Router.RoutingContext;
 var routes = require('./app/routes').default();
 
-app.use(function(req, res) {
-  Router.match({ routes: routes, location: req.url }, function(err, redirectLocation, renderProps) {
+app.use(function (req, res) {
+  Router.match({ routes: routes, location: req.url }, function (err, redirectLocation, renderProps) {
     if (err) {
       res.status(500).send(err.message);
-    }
-    else if (redirectLocation) {
+    } else if (redirectLocation) {
       res.status(301).redirect(redirectLocation.pathname + redirectLocation.search);
-    }
-    else if (!renderProps) {
+    } else if (!renderProps) {
       res.status(404).send('Not found');
-    }
-    else {
-      var html = ReactDOM.renderToString(<RoutingContext {...renderProps} />);
+    } else {
+      var html = ReactDOM.renderToString(React.createElement(RoutingContext, renderProps));
       res.render('index', { html: html });
     }
   });
