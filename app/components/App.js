@@ -1,13 +1,17 @@
 import React from 'react';
+import Navigation from './Navigation';
 
-class App extends React.Component {
-  render() {
+var App = React.createClass({
+  render: function() {
     return (
-      <div>
-        {this.props.children}
+      <div className="container">
+        <Navigation/>
+        <div className="content">
+          {this.props.children}
+        </div>
       </div>
     );
   }
-}
+});
 
 export default App;

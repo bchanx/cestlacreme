@@ -4,6 +4,7 @@ var browserify = require('browserify');
 var babelify = require('babelify');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
+var merge = require('merge-stream');
 var nodemon = require('gulp-nodemon');
 var order = require('gulp-order');
 var concat = require('gulp-concat');
@@ -22,27 +23,32 @@ const STATIC = 'static/dist';
 const VENDOR_DEPS = [
   'react',
   'react-dom',
-  'react-router'
+  'react-router',
+  'request'
 ];
 
 ///// STYLESHEETS /////
 
 gulp.task('stylus', function() {
-  return gulp.src('stylesheets/stylus/root.styl')
-    .pipe(stylus())
-    .pipe(rename('stylus.css'))
-    .pipe(gulp.dest('stylesheets'));
+  var styles = {
+    splash: gulp.src('stylesheets/stylus/splash.styl'),
+    main: gulp.src('stylesheets/stylus/root.styl')
+  };
+  Object.keys(styles).forEach(function(style) {
+    styles[style].pipe(stylus())
+      .pipe(rename(style + '.css'))
+      .pipe(gulp.dest('stylesheets'));
+  });
+
+  return merge(Object.keys(styles).map(function(x) { return styles[x]; }));
 });
 
 gulp.task('css', function() {
-  return gulp.src(['stylesheets/**/*.css'])
-    .pipe(order([
-      'stylus.css',
-      '*.css'
-    ]))
-    .pipe(concat('main.css'))
-    .pipe(autoprefixer({
-      browsers: ['last 2 versions'],
+  var splash = gulp.src('stylesheets/splash.css');
+  var main = gulp.src('stylesheets/main.css');
+  [splash, main].forEach(function(src) {
+    src.pipe(autoprefixer({
+      browsers: ['last 2 version'],
       cascade: false
     }))
     .pipe(gulp.dest(STATIC))
@@ -51,6 +57,9 @@ gulp.task('css', function() {
       extname: '.min.css'
     }))
     .pipe(gulp.dest(STATIC));
+  });
+
+  return merge(splash, main);
 });
 
 gulp.task('fonts', function() {

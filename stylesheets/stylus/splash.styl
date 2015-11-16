@@ -1,3 +1,10 @@
+@import 'base'
+@import 'colors'
+
+html
+  background-color: $gray1
+  color: $orange
+
 .container
   text-align: center
   display: flex
@@ -20,6 +27,17 @@
 
 .social
   font-size: 30px
+  .ion-icon
+    margin: 0 10px
 
-.social .ion
-  margin: 0 10px
+a,
+a:link,
+a:visited,
+a:active,
+a:focus
+  color: $gray3
+  font-weight: 400
+  text-decoration: none
+
+a:hover
+  color: $gray1

@@ -1,53 +1,64 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var App = (function (_React$Component) {
-  _inherits(App, _React$Component);
-
-  function App() {
-    _classCallCheck(this, App);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
+var About = _react2.default.createClass({
+  render: function render() {
+    return _react2.default.createElement(
+      "div",
+      { className: "about" },
+      "This is the about page"
+    );
   }
+});
 
-  _createClass(App, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        null,
-        this.props.children
-      );
-    }
-  }]);
-
-  return App;
-})(_react2.default.Component);
-
-exports.default = App;
+exports.default = About;
 
 },{"react":"react"}],2:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Navigation = require('./Navigation');
+
+var _Navigation2 = _interopRequireDefault(_Navigation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var App = _react2.default.createClass({
+  render: function render() {
+    return _react2.default.createElement(
+      'div',
+      { className: 'container' },
+      _react2.default.createElement(_Navigation2.default, null),
+      _react2.default.createElement(
+        'div',
+        { className: 'content' },
+        this.props.children
+      )
+    );
+  }
+});
+
+exports.default = App;
+
+},{"./Navigation":6,"react":"react"}],3:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -57,40 +68,197 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _Instagram = require('./Instagram');
+
+var _Instagram2 = _interopRequireDefault(_Instagram);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Home = (function (_React$Component) {
-  _inherits(Home, _React$Component);
-
-  function Home() {
-    _classCallCheck(this, Home);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Home).apply(this, arguments));
+var Home = _react2.default.createClass({
+  render: function render() {
+    return _react2.default.createElement(
+      'div',
+      { className: 'home' },
+      'Hello from home.',
+      _react2.default.createElement(_Instagram2.default, null)
+    );
   }
-
-  _createClass(Home, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        { className: 'alert alert-info' },
-        'Hello from Home Component'
-      );
-    }
-  }]);
-
-  return Home;
-})(_react2.default.Component);
+});
 
 exports.default = Home;
 
-},{"react":"react"}],3:[function(require,module,exports){
+},{"./Instagram":4,"react":"react"}],4:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _request = require('request');
+
+var _request2 = _interopRequireDefault(_request);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Instagram = _react2.default.createClass({
+  getInitialState: function getInitialState() {
+    return {
+      recent: []
+    };
+  },
+  componentDidMount: function componentDidMount() {
+    var _this = this;
+
+    (0, _request2.default)({
+      method: 'GET',
+      json: true,
+      url: window.location.origin + '/instagram/recent'
+    }, function (error, response, body) {
+      _this.setState({ recent: body });
+    });
+  },
+  render: function render() {
+    console.log("-->> this.state:", this.state);
+    var thumbnails = this.state.recent.map(function (r) {
+      return _react2.default.createElement(
+        'a',
+        { href: r.link, target: '_blank', key: r.link },
+        _react2.default.createElement(
+          'div',
+          { className: 'instagram-thumbnail' },
+          _react2.default.createElement('img', { src: r.image.url })
+        )
+      );
+    });
+    return _react2.default.createElement(
+      'div',
+      { className: 'instagram' },
+      thumbnails
+    );
+  }
+});
+
+exports.default = Instagram;
+
+},{"react":"react","request":"request"}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Menu = _react2.default.createClass({
+  render: function render() {
+    return _react2.default.createElement(
+      "div",
+      { className: "menu" },
+      "This is the menu of brulee's"
+    );
+  }
+});
+
+exports.default = Menu;
+
+},{"react":"react"}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
+
+var _Social = require('./Social');
+
+var _Social2 = _interopRequireDefault(_Social);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Navigation = _react2.default.createClass({
+  render: function render() {
+    return _react2.default.createElement(
+      'div',
+      { className: 'navigation' },
+      _react2.default.createElement(
+        'div',
+        { className: 'brand' },
+        _react2.default.createElement(
+          _reactRouter.IndexLink,
+          { to: '/' },
+          'c\'est la creme'
+        )
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'links' },
+        _react2.default.createElement(
+          'div',
+          { className: 'link' },
+          _react2.default.createElement(
+            _reactRouter.Link,
+            { to: '/menu', activeClassName: 'active' },
+            'menu'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'link' },
+          _react2.default.createElement(
+            _reactRouter.Link,
+            { to: '/about', activeClassName: 'active' },
+            'about'
+          )
+        )
+      ),
+      _react2.default.createElement(_Social2.default, null)
+    );
+  }
+});
+
+exports.default = Navigation;
+
+},{"./Social":7,"react":"react","react-router":"react-router"}],7:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Social = _react2.default.createClass({
+  render: function render() {
+    return _react2.default.createElement(
+      "div",
+      { className: "social" },
+      _react2.default.createElement("a", { href: "https://www.instagram.com/cestlacreme/", target: "_blank", className: "ion-icon ion-social-instagram" }),
+      _react2.default.createElement("a", { href: "https://www.facebook.com/cestlacreme", target: "_blank", className: "ion-icon ion-social-facebook" }),
+      _react2.default.createElement("a", { href: "https://www.twitter.com/cestlacreme", target: "_blank", className: "ion-icon ion-social-twitter" })
+    );
+  }
+});
+
+exports.default = Social;
+
+},{"react":"react"}],8:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -123,7 +291,7 @@ _reactDom2.default.render(_react2.default.createElement(
   (0, _routes2.default)()
 ), document.getElementById('app'));
 
-},{"./routes":4,"history/lib/createBrowserHistory":11,"react":"react","react-dom":"react-dom","react-router":"react-router"}],4:[function(require,module,exports){
+},{"./routes":9,"history/lib/createBrowserHistory":16,"react":"react","react-dom":"react-dom","react-router":"react-router"}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -133,8 +301,10 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function () {
   return _react2.default.createElement(
     _reactRouter.Route,
-    { component: _App2.default },
-    _react2.default.createElement(_reactRouter.Route, { path: '/', component: _Home2.default })
+    { path: '/', component: _App2.default },
+    _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: '/menu', component: _Menu2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: '/about', component: _About2.default })
   );
 };
 
@@ -152,9 +322,17 @@ var _Home = require('./components/Home');
 
 var _Home2 = _interopRequireDefault(_Home);
 
+var _About = require('./components/About');
+
+var _About2 = _interopRequireDefault(_About);
+
+var _Menu = require('./components/Menu');
+
+var _Menu2 = _interopRequireDefault(_Menu);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./components/App":1,"./components/Home":2,"react":"react","react-router":"react-router"}],5:[function(require,module,exports){
+},{"./components/About":1,"./components/App":2,"./components/Home":3,"./components/Menu":5,"react":"react","react-router":"react-router"}],10:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -247,7 +425,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],6:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /**
  * Indicates that navigation was caused by a call to history.push.
  */
@@ -279,7 +457,7 @@ exports['default'] = {
   REPLACE: REPLACE,
   POP: POP
 };
-},{}],7:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -306,7 +484,7 @@ function loopAsync(turns, work, callback) {
 
   next();
 }
-},{}],8:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /*eslint-disable no-empty */
 'use strict';
 
@@ -355,7 +533,7 @@ function readState(key) {
 
   return null;
 }
-},{"warning":22}],9:[function(require,module,exports){
+},{"warning":27}],14:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -431,13 +609,13 @@ function supportsGoWithoutReloadUsingHash() {
   var ua = navigator.userAgent;
   return ua.indexOf('Firefox') === -1;
 }
-},{}],10:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
 var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 exports.canUseDOM = canUseDOM;
-},{}],11:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -610,7 +788,7 @@ function createBrowserHistory() {
 
 exports['default'] = createBrowserHistory;
 module.exports = exports['default'];
-},{"./Actions":6,"./DOMStateStorage":8,"./DOMUtils":9,"./ExecutionEnvironment":10,"./createDOMHistory":12,"invariant":21}],12:[function(require,module,exports){
+},{"./Actions":11,"./DOMStateStorage":13,"./DOMUtils":14,"./ExecutionEnvironment":15,"./createDOMHistory":17,"invariant":26}],17:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -651,7 +829,7 @@ function createDOMHistory(options) {
 
 exports['default'] = createDOMHistory;
 module.exports = exports['default'];
-},{"./DOMUtils":9,"./ExecutionEnvironment":10,"./createHistory":13,"invariant":21}],13:[function(require,module,exports){
+},{"./DOMUtils":14,"./ExecutionEnvironment":15,"./createHistory":18,"invariant":26}],18:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -899,7 +1077,7 @@ function createHistory() {
 
 exports['default'] = createHistory;
 module.exports = exports['default'];
-},{"./Actions":6,"./AsyncUtils":7,"./createLocation":14,"./deprecate":15,"./runTransitionHook":17,"deep-equal":18}],14:[function(require,module,exports){
+},{"./Actions":11,"./AsyncUtils":12,"./createLocation":19,"./deprecate":20,"./runTransitionHook":22,"deep-equal":23}],19:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -936,7 +1114,7 @@ function createLocation() {
 
 exports['default'] = createLocation;
 module.exports = exports['default'];
-},{"./Actions":6,"./parsePath":16}],15:[function(require,module,exports){
+},{"./Actions":11,"./parsePath":21}],20:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -956,7 +1134,7 @@ function deprecate(fn, message) {
 
 exports['default'] = deprecate;
 module.exports = exports['default'];
-},{"warning":22}],16:[function(require,module,exports){
+},{"warning":27}],21:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1005,7 +1183,7 @@ function parsePath(path) {
 
 exports['default'] = parsePath;
 module.exports = exports['default'];
-},{"warning":22}],17:[function(require,module,exports){
+},{"warning":27}],22:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1030,7 +1208,7 @@ function runTransitionHook(hook, location, callback) {
 
 exports['default'] = runTransitionHook;
 module.exports = exports['default'];
-},{"warning":22}],18:[function(require,module,exports){
+},{"warning":27}],23:[function(require,module,exports){
 var pSlice = Array.prototype.slice;
 var objectKeys = require('./lib/keys.js');
 var isArguments = require('./lib/is_arguments.js');
@@ -1126,7 +1304,7 @@ function objEquiv(a, b, opts) {
   return typeof a === typeof b;
 }
 
-},{"./lib/is_arguments.js":19,"./lib/keys.js":20}],19:[function(require,module,exports){
+},{"./lib/is_arguments.js":24,"./lib/keys.js":25}],24:[function(require,module,exports){
 var supportsArgumentsClass = (function(){
   return Object.prototype.toString.call(arguments)
 })() == '[object Arguments]';
@@ -1148,7 +1326,7 @@ function unsupported(object){
     false;
 };
 
-},{}],20:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 exports = module.exports = typeof Object.keys === 'function'
   ? Object.keys : shim;
 
@@ -1159,7 +1337,7 @@ function shim (obj) {
   return keys;
 }
 
-},{}],21:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -1216,7 +1394,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":5}],22:[function(require,module,exports){
+},{"_process":10}],27:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -1280,4 +1458,4 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":5}]},{},[3]);
+},{"_process":10}]},{},[8]);

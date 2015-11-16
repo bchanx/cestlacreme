@@ -6,15 +6,8 @@ html
 
     link(rel="icon", type="image/x-icon", href="/favicon.ico")
     link(rel="stylesheet", href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" type="text/css")
-    link(rel="stylesheet", href="/dist/deps#{min}.css")
-    link(rel="stylesheet", href="/dist/main#{min}.css")
     block stylesheets
 
   body
     block content
-
-    script(src="/dist/deps#{min}.js")
-    script(src="/dist/vendor#{min}.js")
-    script(src="/dist/bundle#{min}.js")
-    script(src="/dist/main#{min}.js")
     block scripts

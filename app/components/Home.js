@@ -1,13 +1,15 @@
 import React from 'react';
+import Instagram from './Instagram';
 
-class Home extends React.Component {
-  render() {
+var Home = React.createClass({
+  render: function() {
     return (
-      <div className='alert alert-info'>
-        Hello from Home Component
+      <div className="home">
+        Hello from home.
+        <Instagram />
       </div>
     );
   }
-}
+})
 
 export default Home;

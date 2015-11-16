@@ -7,6 +7,7 @@ require('babel-core/register')({
 var express = require('express');
 var favicon = require('serve-favicon');
 var path = require('path');
+var fs = require('fs');
 var compress = require('compression');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
@@ -28,20 +29,33 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'static')));
 
+// Setup global view variables
 app.locals = {
   env: ENV,
   title: 'C\'est la Creme',
   min: ENV === 'production' ? '.min' : ''
 };
 
+// Setup custom routes
+var ROUTE_DIR = './routes';
+var customRoutes = fs.readdirSync(ROUTE_DIR);
+customRoutes.forEach(function (r) {
+  if (r.endsWith('.js')) {
+    var filepath = ROUTE_DIR + '/' + r;
+    var routename = '/' + (r.startsWith('index') ? '' : r.split('.js')[0]);
+    app.use(routename, require(filepath).router);
+  }
+});
+
+// Setup server side react router
 var React = require('react');
 var ReactDOM = require('react-dom/server');
 var Router = require('react-router');
 var RoutingContext = Router.RoutingContext;
-var routes = require('./app/routes').default();
+var reactRoutes = require('./app/routes').default();
 
 app.use(function (req, res) {
-  Router.match({ routes: routes, location: req.url }, function (err, redirectLocation, renderProps) {
+  Router.match({ routes: reactRoutes, location: req.url }, function (err, redirectLocation, renderProps) {
     if (err) {
       res.status(500).send(err.message);
     } else if (redirectLocation) {
