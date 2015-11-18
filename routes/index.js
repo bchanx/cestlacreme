@@ -1,6 +1,12 @@
 var router = require('express').Router();
 
-router.get('/splash', function(req, res, next) {
+if (process.env.NODE_ENV === 'production') {
+  router.get('/', function(req, res) {
+    res.render('splash');
+  });
+}
+
+router.get('/splash', function(req, res) {
   res.render('splash');
 });
 
