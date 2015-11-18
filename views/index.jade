@@ -4,12 +4,14 @@ block stylesheets
   link(rel="stylesheet", href="/dist/deps#{min}.css")
   link(rel="stylesheet", href="/dist/main#{min}.css")
 
-block scripts
-  script(src="/dist/deps#{min}.js")
+block scriptshead
   script(src="/dist/vendor#{min}.js")
-  script(src="/dist/bundle#{min}.js")
-  script(src="/dist/main#{min}.js")
 
 block content
   div#app #{html}
+
+block scripts
+  script(src="/dist/deps#{min}.js")
+  script(src="/dist/bundle#{min}.js")
+  script(src="/dist/main#{min}.js")
 
