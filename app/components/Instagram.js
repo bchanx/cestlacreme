@@ -1,5 +1,5 @@
 import React from 'react';
-import request from 'request';
+import request from 'superagent';
 
 var Instagram = React.createClass({
   getInitialState: function() {
@@ -8,13 +8,13 @@ var Instagram = React.createClass({
     };
   },
   componentDidMount: function() {
-    request({
-      method: 'GET',
-      json: true,
-      url: window.location.origin + '/instagram/recent'
-    }, (error, response, body) => {
-      this.setState({ recent: body });
-    });
+    request.get(window.location.origin + '/instagram/recent')
+      .accept('json')
+      .end((error, response) => {
+        if (response && response.body) {
+          this.setState({ recent: response.body });
+        }
+      });
   },
   render: function() {
     var thumbnails = this.state.recent.map(r => {

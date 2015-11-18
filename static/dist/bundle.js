@@ -211,9 +211,9 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _request = require('request');
+var _superagent = require('superagent');
 
-var _request2 = _interopRequireDefault(_request);
+var _superagent2 = _interopRequireDefault(_superagent);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -226,12 +226,10 @@ var Instagram = _react2.default.createClass({
   componentDidMount: function componentDidMount() {
     var _this = this;
 
-    (0, _request2.default)({
-      method: 'GET',
-      json: true,
-      url: window.location.origin + '/instagram/recent'
-    }, function (error, response, body) {
-      _this.setState({ recent: body });
+    _superagent2.default.get(window.location.origin + '/instagram/recent').accept('json').end(function (error, response) {
+      if (response && response.body) {
+        _this.setState({ recent: response.body });
+      }
     });
   },
   render: function render() {
@@ -256,7 +254,7 @@ var Instagram = _react2.default.createClass({
 
 exports.default = Instagram;
 
-},{"react":"react","request":"request"}],7:[function(require,module,exports){
+},{"react":"react","superagent":"superagent"}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

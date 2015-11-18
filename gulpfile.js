@@ -24,7 +24,7 @@ const VENDOR_DEPS = [
   'react',
   'react-dom',
   'react-router',
-  'request'
+  'superagent'
 ];
 
 ///// STYLESHEETS /////
@@ -90,7 +90,7 @@ gulp.task('deps.js', function() {
     'bower_components/jquery/dist/jquery.js'
   ]).pipe(concat('deps.js'))
     .pipe(gulp.dest(STATIC))
-    .pipe(uglify({ mangle: false }))
+    .pipe(uglify({ mangle: true }))
     .pipe(rename({
       extname: '.min.js'
     }))
@@ -109,12 +109,12 @@ gulp.task('js', function() {
 });
 
 gulp.task('vendor', function() {
-  browserify()
+  browserify({ debug: false })
     .require(VENDOR_DEPS)
     .bundle()
     .pipe(source('vendor.js'))
     .pipe(gulp.dest(STATIC))
-    .pipe(streamify(uglify({ mangle: false })))
+    .pipe(streamify(uglify({ mangle: true })))
     .pipe(rename({
       extname: '.min.js'
     }))
@@ -122,7 +122,7 @@ gulp.task('vendor', function() {
 });
 
 gulp.task('browserify', function() {
-  var bundler = watchify(browserify('app/main.js'))
+  var bundler = watchify(browserify('app/main.js', { debug: false }))
     .external(VENDOR_DEPS)
     .transform(babelify, {
       presets: ['es2015', 'react']
@@ -141,7 +141,7 @@ gulp.task('browserify', function() {
       })
       .pipe(source('bundle.js'))
       .pipe(gulp.dest(STATIC))
-      .pipe(streamify(uglify({ mangle: false })))
+      .pipe(streamify(uglify({ mangle: true })))
       .pipe(rename({
         extname: '.min.js'
       }))
