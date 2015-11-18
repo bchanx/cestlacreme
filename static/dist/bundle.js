@@ -257,49 +257,62 @@ var Instagram = _react2.default.createClass({
 exports.default = Instagram;
 
 },{"react":"react","request":"request"}],7:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _Common = require('./Common');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Menu = _react2.default.createClass({
   render: function render() {
     return _react2.default.createElement(
-      "div",
-      { className: "menu" },
+      'div',
+      { className: 'menu' },
       _react2.default.createElement(
-        "div",
+        'div',
         null,
-        "Vanilla"
+        'Vanilla'
       ),
+      _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
-        "div",
+        'div',
         null,
-        "Matcha"
+        'Matcha'
       ),
+      _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
-        "div",
+        'div',
         null,
-        "Earl Grey"
+        'Earl Grey'
       ),
+      _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
-        "div",
+        'div',
         null,
-        "Our creme brulee's are sold at a flat rate of $5 each. Because of logistics, we are currently only taking a minimum order of four brulee's with every purchase. Therefore, each order must be a minimum $20 purchase.",
-        _react2.default.createElement("br", null),
-        "Flavors can be mixed and matched to your preference."
+        'Our creme brulee\'s are sold at a flat rate of $5 each. However due to logistics, we are requiring a minimum order of four brulee\'s with every purchase. Therefore, each order must be a ',
+        _react2.default.createElement(
+          'span',
+          { className: 'bold' },
+          'minimum $20 purchase'
+        ),
+        '.',
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        'Flavors can be mixed and matched to your preference.'
       ),
+      _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
-        "div",
+        'div',
         null,
-        "Ready to order? Pay with Stripe."
+        'Ready to order? Pay with Stripe.'
       )
     );
   }
@@ -307,7 +320,7 @@ var Menu = _react2.default.createClass({
 
 exports.default = Menu;
 
-},{"react":"react"}],8:[function(require,module,exports){
+},{"./Common":3,"react":"react"}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
