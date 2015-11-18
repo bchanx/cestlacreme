@@ -2,19 +2,20 @@ $app-width = 1000px
 
 html
   background-color: $gray1
-  color: $orange
+  color: $black
+  font-size: 18px
 
 a,
 a:link,
 a:visited,
 a:active
 a:focus
-  color: $gray7
-  font-weight: 300
+  color: $orange
+  font-weight: 400
   text-decoration: none
 
 a:hover
-  color: $gray5
+  color: $orange-dark
 
 #app
   height: 100%
@@ -36,6 +37,15 @@ a:hover
   display: flex
   flex-direction: column
   border-right: 2px $gray3 solid;
+  a,
+  a:link,
+  a:visited,
+  a:active
+  a:focus
+    font-weight: 300
+    color: $gray5
+  a:hover
+    color: $gray7
 
 .brand
   height: 80px
@@ -44,13 +54,15 @@ a:hover
   font-size: 30px
   letter-spacing: 2px
   a
-    font-weight: 700
+    font-weight: 700 !important
+    color: $gray7 !important
 
 .content
   position: relative
   padding: 60px 40px
   padding-right: "calc((100vw - %s)/2 + 40px)" % $app-width;
   flex-grow: 1
+  text-align: center
   overflow: scroll
   background-color: $gray1
 
@@ -63,13 +75,36 @@ a:hover
   display: block
   margin-bottom: 10px
   .active
-    color: $gray5
+    color: $gray7 !important
     position: relative
     &:after
       content: "\2022"
       position: absolute
       right: -20px
-      color: $gray4
+      color: $gray6 !important
+
+.bold
+  font-weight: 400
+
+.break
+  width: 2px
+  height: 2px
+  background-color: $gray4
+  opacity: 0.5
+  position: relative
+  margin: 25px auto
+  &:before,
+  &:after
+    content: ""
+    position: absolute
+    width: 50px
+    height: 2px
+    background-color: $gray4
+    opacity: 0.3
+  &:before
+    left: -53px
+  &:after
+    right: -53px
 
 .social
   font-size: 30px
@@ -79,24 +114,33 @@ a:hover
     margin-left: 20px
 
 .instagram
-  outline: 1px red solid
   text-align: center
 
-.instagram-thumbnail
-  outline: 1px blue solid
+.thumbnail-link
+  font-size: 0
+
+.thumbnail
   display: inline-block
-  margin: 10px
+  margin: 5px 10px
   width: 180px
   height: 180px
   overflow: hidden
-  opacity: 0.6
+  opacity: 0.8
   img
-    width: 240px
-    height: 240px
-    margin-top: -30px
-    margin-left: -30px
+    width: 226px
+    height: 226px
+    margin-top: -23px
+    margin-left: -23px
   &:hover
     opacity: 1
+
+.footer
+  line-height: 38px
+  font-size: 0.8em
+  a
+    font-weight: 300
+  .site
+    margin-left: 15px
 
 @media screen and (max-width: $app-width)
   .container
@@ -105,13 +149,13 @@ a:hover
     width: 100%
     max-width: none
     margin-left: initial;
-    padding: 20px 40px
+    padding: 2vw 4vw
     border-right: none;
     border-bottom: 2px $gray3 solid;
     flex-direction: row
   .brand
     text-align: center
-    padding-right: 40px
+    padding-right: 4vw
     font-size: 3vw
     line-height: 38px
     height: initial
@@ -133,9 +177,11 @@ a:hover
     a
       line-height: 38px
   .content
-    padding: 40px
+    padding: 4vw
 
 @media screen and (max-width: 600px)
+  html
+    font-size: 16px
   .navigation
     padding: 10px 20px
   .content
@@ -148,3 +194,21 @@ a:hover
     font-size: 18px
   .social
     font-size: 18px
+
+@media screen and (max-width: 440px)
+  .thumbnail-link:nth-child(n + 4)
+    display: none
+  .thumbnail-link:nth-child(n + 3)
+    .thumbnail
+      margin-bottom: 0
+  .thumbnail
+    width: 60vw
+    height: 60vw
+    overflow: hidden
+    opacity: 1
+    margin-bottom: 20px
+    img
+      width: 80vw
+      height: 80vw
+      margin-top: -10vw
+      margin-left: -10vw      

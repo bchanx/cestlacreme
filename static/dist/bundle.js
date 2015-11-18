@@ -57,7 +57,71 @@ var App = _react2.default.createClass({
 
 exports.default = App;
 
-},{"./Navigation":6,"react":"react"}],3:[function(require,module,exports){
+},{"./Navigation":8,"react":"react"}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Break = undefined;
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Break = exports.Break = _react2.default.createClass({
+  render: function render() {
+    return _react2.default.createElement("div", { className: "break" });
+  }
+});
+
+},{"react":"react"}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Footer = _react2.default.createClass({
+  render: function render() {
+    return _react2.default.createElement(
+      "div",
+      { className: "footer" },
+      _react2.default.createElement(
+        "span",
+        { className: "email" },
+        "email: ",
+        _react2.default.createElement(
+          "a",
+          { href: "mailto:cestlacreme@gmail.com" },
+          "cestlacreme@gmail.com"
+        )
+      ),
+      _react2.default.createElement(
+        "span",
+        { className: "site" },
+        "site: ",
+        _react2.default.createElement(
+          "a",
+          { href: "http://bchanx.com", target: "_blank" },
+          "@bchanx"
+        )
+      )
+    );
+  }
+});
+
+exports.default = Footer;
+
+},{"react":"react"}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -68,9 +132,17 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouter = require('react-router');
+
 var _Instagram = require('./Instagram');
 
 var _Instagram2 = _interopRequireDefault(_Instagram);
+
+var _Common = require('./Common');
+
+var _Footer = require('./Footer');
+
+var _Footer2 = _interopRequireDefault(_Footer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -79,15 +151,56 @@ var Home = _react2.default.createClass({
     return _react2.default.createElement(
       'div',
       { className: 'home' },
-      'Hello from home.',
-      _react2.default.createElement(_Instagram2.default, null)
+      _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'span',
+          { className: 'bold' },
+          'C\'est la Creme'
+        ),
+        ' is a online creme brulee shop, crafting quality desserts for lucky folks in the Vancouver area. Our goal is to source the freshest local ingredients and deliver an indulgence to your taste buds with every bite.'
+      ),
+      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement(_Instagram2.default, null),
+      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'span',
+          { className: 'bold' },
+          'How it works:'
+        ),
+        ' We accept online orders each week between Monday to Thursday. We gather the necessary ingredients on Friday, and make the magic happen on Saturday. Sunday, the happy little brulee\'s will get delivered right to your doorstep.'
+      ),
+      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement(
+        'div',
+        null,
+        'We take pride in supporting local farmers and using the best ingredients British Columbia has to offer. - Avalon dairy - granville island vanilla - specialized sugar?'
+      ),
+      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement(
+        'div',
+        null,
+        'Interested? Check out our ',
+        _react2.default.createElement(
+          _reactRouter.Link,
+          { to: '/menu' },
+          'menu'
+        ),
+        ' and see what\'s available for ordering!'
+      ),
+      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement(_Footer2.default, null)
     );
   }
 });
 
 exports.default = Home;
 
-},{"./Instagram":4,"react":"react"}],4:[function(require,module,exports){
+},{"./Common":3,"./Footer":4,"./Instagram":6,"react":"react","react-router":"react-router"}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -122,14 +235,13 @@ var Instagram = _react2.default.createClass({
     });
   },
   render: function render() {
-    console.log("-->> this.state:", this.state);
     var thumbnails = this.state.recent.map(function (r) {
       return _react2.default.createElement(
         'a',
-        { href: r.link, target: '_blank', key: r.link },
+        { className: 'thumbnail-link', href: r.link, target: '_blank', key: r.link },
         _react2.default.createElement(
           'div',
-          { className: 'instagram-thumbnail' },
+          { className: 'thumbnail' },
           _react2.default.createElement('img', { src: r.image.url })
         )
       );
@@ -144,7 +256,7 @@ var Instagram = _react2.default.createClass({
 
 exports.default = Instagram;
 
-},{"react":"react","request":"request"}],5:[function(require,module,exports){
+},{"react":"react","request":"request"}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -162,14 +274,40 @@ var Menu = _react2.default.createClass({
     return _react2.default.createElement(
       "div",
       { className: "menu" },
-      "This is the menu of brulee's"
+      _react2.default.createElement(
+        "div",
+        null,
+        "Vanilla"
+      ),
+      _react2.default.createElement(
+        "div",
+        null,
+        "Matcha"
+      ),
+      _react2.default.createElement(
+        "div",
+        null,
+        "Earl Grey"
+      ),
+      _react2.default.createElement(
+        "div",
+        null,
+        "Our creme brulee's are sold at a flat rate of $5 each. Because of logistics, we are currently only taking a minimum order of four brulee's with every purchase. Therefore, each order must be a minimum $20 purchase.",
+        _react2.default.createElement("br", null),
+        "Flavors can be mixed and matched to your preference."
+      ),
+      _react2.default.createElement(
+        "div",
+        null,
+        "Ready to order? Pay with Stripe."
+      )
     );
   }
 });
 
 exports.default = Menu;
 
-},{"react":"react"}],6:[function(require,module,exports){
+},{"react":"react"}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -231,7 +369,7 @@ var Navigation = _react2.default.createClass({
 
 exports.default = Navigation;
 
-},{"./Social":7,"react":"react","react-router":"react-router"}],7:[function(require,module,exports){
+},{"./Social":9,"react":"react","react-router":"react-router"}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -258,7 +396,7 @@ var Social = _react2.default.createClass({
 
 exports.default = Social;
 
-},{"react":"react"}],8:[function(require,module,exports){
+},{"react":"react"}],10:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -291,7 +429,7 @@ _reactDom2.default.render(_react2.default.createElement(
   (0, _routes2.default)()
 ), document.getElementById('app'));
 
-},{"./routes":9,"history/lib/createBrowserHistory":16,"react":"react","react-dom":"react-dom","react-router":"react-router"}],9:[function(require,module,exports){
+},{"./routes":11,"history/lib/createBrowserHistory":18,"react":"react","react-dom":"react-dom","react-router":"react-router"}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -332,7 +470,7 @@ var _Menu2 = _interopRequireDefault(_Menu);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./components/About":1,"./components/App":2,"./components/Home":3,"./components/Menu":5,"react":"react","react-router":"react-router"}],10:[function(require,module,exports){
+},{"./components/About":1,"./components/App":2,"./components/Home":5,"./components/Menu":7,"react":"react","react-router":"react-router"}],12:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -425,7 +563,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /**
  * Indicates that navigation was caused by a call to history.push.
  */
@@ -457,7 +595,7 @@ exports['default'] = {
   REPLACE: REPLACE,
   POP: POP
 };
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -484,7 +622,7 @@ function loopAsync(turns, work, callback) {
 
   next();
 }
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /*eslint-disable no-empty */
 'use strict';
 
@@ -533,7 +671,7 @@ function readState(key) {
 
   return null;
 }
-},{"warning":27}],14:[function(require,module,exports){
+},{"warning":29}],16:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -609,13 +747,13 @@ function supportsGoWithoutReloadUsingHash() {
   var ua = navigator.userAgent;
   return ua.indexOf('Firefox') === -1;
 }
-},{}],15:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
 var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 exports.canUseDOM = canUseDOM;
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -788,7 +926,7 @@ function createBrowserHistory() {
 
 exports['default'] = createBrowserHistory;
 module.exports = exports['default'];
-},{"./Actions":11,"./DOMStateStorage":13,"./DOMUtils":14,"./ExecutionEnvironment":15,"./createDOMHistory":17,"invariant":26}],17:[function(require,module,exports){
+},{"./Actions":13,"./DOMStateStorage":15,"./DOMUtils":16,"./ExecutionEnvironment":17,"./createDOMHistory":19,"invariant":28}],19:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -829,7 +967,7 @@ function createDOMHistory(options) {
 
 exports['default'] = createDOMHistory;
 module.exports = exports['default'];
-},{"./DOMUtils":14,"./ExecutionEnvironment":15,"./createHistory":18,"invariant":26}],18:[function(require,module,exports){
+},{"./DOMUtils":16,"./ExecutionEnvironment":17,"./createHistory":20,"invariant":28}],20:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1077,7 +1215,7 @@ function createHistory() {
 
 exports['default'] = createHistory;
 module.exports = exports['default'];
-},{"./Actions":11,"./AsyncUtils":12,"./createLocation":19,"./deprecate":20,"./runTransitionHook":22,"deep-equal":23}],19:[function(require,module,exports){
+},{"./Actions":13,"./AsyncUtils":14,"./createLocation":21,"./deprecate":22,"./runTransitionHook":24,"deep-equal":25}],21:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1114,7 +1252,7 @@ function createLocation() {
 
 exports['default'] = createLocation;
 module.exports = exports['default'];
-},{"./Actions":11,"./parsePath":21}],20:[function(require,module,exports){
+},{"./Actions":13,"./parsePath":23}],22:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1134,7 +1272,7 @@ function deprecate(fn, message) {
 
 exports['default'] = deprecate;
 module.exports = exports['default'];
-},{"warning":27}],21:[function(require,module,exports){
+},{"warning":29}],23:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1183,7 +1321,7 @@ function parsePath(path) {
 
 exports['default'] = parsePath;
 module.exports = exports['default'];
-},{"warning":27}],22:[function(require,module,exports){
+},{"warning":29}],24:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1208,7 +1346,7 @@ function runTransitionHook(hook, location, callback) {
 
 exports['default'] = runTransitionHook;
 module.exports = exports['default'];
-},{"warning":27}],23:[function(require,module,exports){
+},{"warning":29}],25:[function(require,module,exports){
 var pSlice = Array.prototype.slice;
 var objectKeys = require('./lib/keys.js');
 var isArguments = require('./lib/is_arguments.js');
@@ -1304,7 +1442,7 @@ function objEquiv(a, b, opts) {
   return typeof a === typeof b;
 }
 
-},{"./lib/is_arguments.js":24,"./lib/keys.js":25}],24:[function(require,module,exports){
+},{"./lib/is_arguments.js":26,"./lib/keys.js":27}],26:[function(require,module,exports){
 var supportsArgumentsClass = (function(){
   return Object.prototype.toString.call(arguments)
 })() == '[object Arguments]';
@@ -1326,7 +1464,7 @@ function unsupported(object){
     false;
 };
 
-},{}],25:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 exports = module.exports = typeof Object.keys === 'function'
   ? Object.keys : shim;
 
@@ -1337,7 +1475,7 @@ function shim (obj) {
   return keys;
 }
 
-},{}],26:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -1394,7 +1532,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":10}],27:[function(require,module,exports){
+},{"_process":12}],29:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -1458,4 +1596,4 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":10}]},{},[8]);
+},{"_process":12}]},{},[10]);

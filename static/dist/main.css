@@ -18,19 +18,20 @@ body {
 }
 html {
   background-color: #f8f8f8;
-  color: #f5b367;
+  color: #222;
+  font-size: 18px;
 }
 a,
 a:link,
 a:visited,
 a:active,
 a:focus {
-  color: #303030;
-  font-weight: 300;
+  color: #f5b367;
+  font-weight: 400;
   text-decoration: none;
 }
 a:hover {
-  color: #9d9d9d;
+  color: #e5810f;
 }
 #app {
   height: 100%;
@@ -63,6 +64,17 @@ a:hover {
   flex-direction: column;
   border-right: 2px #e8e8e8 solid;
 }
+.navigation a,
+.navigation a:link,
+.navigation a:visited,
+.navigation a:active,
+.navigation a:focus {
+  font-weight: 300;
+  color: #9d9d9d;
+}
+.navigation a:hover {
+  color: #303030;
+}
 .brand {
   height: 80px;
   line-height: 80px;
@@ -71,7 +83,8 @@ a:hover {
   letter-spacing: 2px;
 }
 .brand a {
-  font-weight: 700;
+  font-weight: 700 !important;
+  color: #303030 !important;
 }
 .content {
   position: relative;
@@ -80,6 +93,7 @@ a:hover {
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
   flex-grow: 1;
+  text-align: center;
   overflow: scroll;
   background-color: #f8f8f8;
 }
@@ -95,14 +109,40 @@ a:hover {
   margin-bottom: 10px;
 }
 .link .active {
-  color: #9d9d9d;
+  color: #303030 !important;
   position: relative;
 }
 .link .active:after {
   content: "\2022";
   position: absolute;
   right: -20px;
-  color: #b0b0b0;
+  color: #808080 !important;
+}
+.bold {
+  font-weight: 400;
+}
+.break {
+  width: 2px;
+  height: 2px;
+  background-color: #b0b0b0;
+  opacity: 0.5;
+  position: relative;
+  margin: 25px auto;
+}
+.break:before,
+.break:after {
+  content: "";
+  position: absolute;
+  width: 50px;
+  height: 2px;
+  background-color: #b0b0b0;
+  opacity: 0.3;
+}
+.break:before {
+  left: -53px;
+}
+.break:after {
+  right: -53px;
 }
 .social {
   font-size: 30px;
@@ -115,26 +155,37 @@ a:hover {
   margin-left: 20px;
 }
 .instagram {
-  outline: 1px #f00 solid;
   text-align: center;
 }
-.instagram-thumbnail {
-  outline: 1px #00f solid;
+.thumbnail-link {
+  font-size: 0;
+}
+.thumbnail {
   display: inline-block;
-  margin: 10px;
+  margin: 5px 10px;
   width: 180px;
   height: 180px;
   overflow: hidden;
-  opacity: 0.6;
+  opacity: 0.8;
 }
-.instagram-thumbnail img {
-  width: 240px;
-  height: 240px;
-  margin-top: -30px;
-  margin-left: -30px;
+.thumbnail img {
+  width: 226px;
+  height: 226px;
+  margin-top: -23px;
+  margin-left: -23px;
 }
-.instagram-thumbnail:hover {
+.thumbnail:hover {
   opacity: 1;
+}
+.footer {
+  line-height: 38px;
+  font-size: 0.8em;
+}
+.footer a {
+  font-weight: 300;
+}
+.footer .site {
+  margin-left: 15px;
 }
 @media screen and (max-width: 1000px) {
   .container {
@@ -146,7 +197,7 @@ a:hover {
     width: 100%;
     max-width: none;
     margin-left: initial;
-    padding: 20px 40px;
+    padding: 2vw 4vw;
     border-right: none;
     border-bottom: 2px #e8e8e8 solid;
     -webkit-flex-direction: row;
@@ -155,7 +206,7 @@ a:hover {
   }
   .brand {
     text-align: center;
-    padding-right: 40px;
+    padding-right: 4vw;
     font-size: 3vw;
     line-height: 38px;
     height: initial;
@@ -183,10 +234,13 @@ a:hover {
     line-height: 38px;
   }
   .content {
-    padding: 40px;
+    padding: 4vw;
   }
 }
 @media screen and (max-width: 600px) {
+  html {
+    font-size: 16px;
+  }
   .navigation {
     padding: 10px 20px;
   }
@@ -203,5 +257,26 @@ a:hover {
   }
   .social {
     font-size: 18px;
+  }
+}
+@media screen and (max-width: 440px) {
+  .thumbnail-link:nth-child(n + 4) {
+    display: none;
+  }
+  .thumbnail-link:nth-child(n + 3) .thumbnail {
+    margin-bottom: 0;
+  }
+  .thumbnail {
+    width: 60vw;
+    height: 60vw;
+    overflow: hidden;
+    opacity: 1;
+    margin-bottom: 20px;
+  }
+  .thumbnail img {
+    width: 80vw;
+    height: 80vw;
+    margin-top: -10vw;
+    margin-left: -10vw;
   }
 }
