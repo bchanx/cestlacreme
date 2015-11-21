@@ -14,7 +14,18 @@ html {
 body {
   width: 100%;
   height: 100%;
-  overflow: scroll;
+}
+a,
+a:link,
+a:visited,
+a:active,
+a:focus {
+  color: #e8e8e8;
+  font-weight: 400;
+  text-decoration: none;
+}
+a:hover {
+  color: #f8f8f8;
 }
 html {
   background-color: #f8f8f8;

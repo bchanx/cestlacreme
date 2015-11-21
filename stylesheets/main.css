@@ -14,7 +14,18 @@ html {
 body {
   width: 100%;
   height: 100%;
-  overflow: scroll;
+}
+a,
+a:link,
+a:visited,
+a:active,
+a:focus {
+  color: #e8e8e8;
+  font-weight: 400;
+  text-decoration: none;
+}
+a:hover {
+  color: #f8f8f8;
 }
 html {
   background-color: #f8f8f8;
@@ -82,7 +93,7 @@ a:hover {
   padding-right: calc((100vw - 1000px)/2 + 40px);
   flex-grow: 1;
   text-align: center;
-  overflow: scroll;
+  overflow-y: scroll;
   background-color: #f8f8f8;
 }
 .links {
@@ -170,6 +181,10 @@ a:hover {
 }
 .footer .site {
   margin-left: 15px;
+}
+.stripe {
+  outline: 1px #f00 solid;
+  display: none;
 }
 @media screen and (max-width: 1000px) {
   .container {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Break } from './Common';
+import Stripe from './Stripe';
 
 var Menu = React.createClass({
   render: function() {
@@ -27,6 +28,8 @@ var Menu = React.createClass({
         <div>
           Ready to order? Pay with Stripe.
         </div>
+        <Break/>
+        <Stripe/>
       </div>
     );
   }

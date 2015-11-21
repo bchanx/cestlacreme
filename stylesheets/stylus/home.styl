@@ -63,7 +63,7 @@ a:hover
   padding-right: "calc((100vw - %s)/2 + 40px)" % $app-width;
   flex-grow: 1
   text-align: center
-  overflow: scroll
+  overflow-y: scroll
   background-color: $gray1
 
 .links
@@ -141,6 +141,11 @@ a:hover
     font-weight: 300
   .site
     margin-left: 15px
+
+.stripe
+  outline: 1px red solid
+  display: none
+
 
 @media screen and (max-width: $app-width)
   .container
