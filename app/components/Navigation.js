@@ -7,7 +7,9 @@ var Navigation = React.createClass({
     return (
       <div className="navigation">
         <div className="brand">
-          <IndexLink to="/">c'est la creme</IndexLink>
+          <IndexLink to="/">
+            <div className="logo"></div>
+          </IndexLink>
         </div>
         <div className="links">
           <div className="link">

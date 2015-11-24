@@ -76,16 +76,14 @@ a:hover {
 .navigation a:hover {
   color: #303030;
 }
-.brand {
-  height: 80px;
-  line-height: 80px;
-  text-align: right;
-  font-size: 30px;
-  letter-spacing: 2px;
-}
-.brand a {
-  font-weight: 700 !important;
-  color: #303030 !important;
+.logo {
+  background-image: url("/images/logo-dark.png");
+  background-size: 135%;
+  background-repeat: no-repeat;
+  background-position: -40px -50px;
+  height: 175px;
+  width: 220px;
+  margin-top: -20px;
 }
 .content {
   position: relative;
@@ -97,6 +95,7 @@ a:hover {
   background-color: #f8f8f8;
 }
 .links {
+  margin-top: 20px;
   font-size: 30px;
   text-align: right;
   flex-grow: 1;
@@ -145,6 +144,7 @@ a:hover {
   font-size: 30px;
   text-align: right;
   flex-shrink: 0;
+  margin-top: 10px;
 }
 .social .ion-icon {
   margin-left: 20px;
@@ -184,7 +184,6 @@ a:hover {
 }
 .stripe {
   outline: 1px #f00 solid;
-  display: none;
 }
 @media screen and (max-width: 1000px) {
   .container {
@@ -200,13 +199,18 @@ a:hover {
     flex-direction: row;
   }
   .brand {
-    text-align: center;
     padding-right: 4vw;
-    font-size: 3vw;
     line-height: 38px;
-    height: initial;
+  }
+  .logo {
+    background-size: 135%;
+    background-position: -33px -155px;
+    height: 38px;
+    width: 185px;
+    margin-top: 0;
   }
   .links {
+    margin-top: 0;
     text-align: left;
     font-size: 3vw;
   }
@@ -223,6 +227,7 @@ a:hover {
     text-align: center;
   }
   .social {
+    margin-top: 0;
     font-size: 3vw;
   }
   .social a {
@@ -243,9 +248,13 @@ a:hover {
     padding: 20px;
   }
   .brand {
-    font-size: 18px;
-    letter-spacing: 1px;
     padding-right: 20px;
+  }
+  .logo {
+    background-size: 250%;
+    height: 38px;
+    width: 38px;
+    background-position: 50% 28%;
   }
   .link {
     font-size: 18px;
