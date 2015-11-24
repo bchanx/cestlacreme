@@ -20,7 +20,7 @@ var babel = require('gulp-babel');
 var spawn = require('child_process').spawn;
 var config = require('./config');
 
-const PRODUCTION = 1;
+const PRODUCTION = 0;
 const STATIC = 'static/dist';
 const VENDOR_DEPS = [
   'react',
