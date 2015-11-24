@@ -1,29 +1,42 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _Common = require('./Common');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var About = _react2.default.createClass({
   render: function render() {
     return _react2.default.createElement(
-      "div",
-      { className: "about" },
-      "This is the about page"
+      'div',
+      { className: 'about' },
+      _react2.default.createElement(
+        'div',
+        null,
+        'We\'re C\'est la Creme! Started in 2015.'
+      ),
+      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement(
+        'div',
+        null,
+        'We take pride in supporting local farmers and using the best ingredients British Columbia has to offer. - Avalon dairy - Vanilla - Sugar'
+      ),
+      _react2.default.createElement(_Common.Break, null)
     );
   }
 });
 
 exports.default = About;
 
-},{"react":"react"}],2:[function(require,module,exports){
+},{"./Common":3,"react":"react"}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -173,12 +186,6 @@ var Home = _react2.default.createClass({
           'How it works:'
         ),
         ' We accept online orders each week between Monday to Thursday. We gather the necessary ingredients on Friday, and make the magic happen on Saturday. Sunday, the happy little brulee\'s will get delivered right to your doorstep.'
-      ),
-      _react2.default.createElement(_Common.Break, null),
-      _react2.default.createElement(
-        'div',
-        null,
-        'We take pride in supporting local farmers and using the best ingredients British Columbia has to offer. - Avalon dairy - granville island vanilla - specialized sugar?'
       ),
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
@@ -436,18 +443,37 @@ var Stripe = _react2.default.createClass({
   },
 
   onScriptLoaded: function onScriptLoaded() {
-    console.log("-->> HI STRIPE:", Stripe);
+    this.setState({
+      loading: false,
+      error: !Stripe
+    });
+    if (Stripe) {
+      console.log("-->> stripe good!", Stripe);
+      console.log("-->> process.env:", "pk_test_IaT5HSSG1P7dpsq44cKF4Ypr");
+    }
   },
 
   onScriptError: function onScriptError() {
     console.log("-->> ERROR!");
+    this.setState({
+      loading: false,
+      error: true
+    });
+  },
+
+  getInitialState: function getInitialState() {
+    return {
+      loading: true,
+      error: false
+    };
   },
 
   render: function render() {
+    var test = this.state.loading ? 'Loading...' : this.state.error ? 'An Error Occured...' : 'STRIPE!';
     return _react2.default.createElement(
       'div',
       { className: 'stripe' },
-      'STRIPE'
+      test
     );
   }
 });

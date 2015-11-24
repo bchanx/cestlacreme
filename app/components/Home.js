@@ -19,13 +19,6 @@ var Home = React.createClass({
         </div>
         <Break/>
         <div>
-          We take pride in supporting local farmers and using the best ingredients British Columbia has to offer.
-          - Avalon dairy
-          - granville island vanilla
-          - specialized sugar?
-        </div>
-        <Break/>
-        <div>
           Interested? Check out our&nbsp;
           <Link to="/menu">menu</Link>
           &nbsp;and see what's available for ordering!

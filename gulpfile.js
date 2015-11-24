@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var path = require('path');
 var browserify = require('browserify');
 var babelify = require('babelify');
+var envify = require('envify');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
 var merge = require('merge-stream');
@@ -17,8 +18,9 @@ var streamify = require('gulp-streamify');
 var gutil = require('gulp-util');
 var babel = require('gulp-babel');
 var spawn = require('child_process').spawn;
+var config = require('./config');
 
-const PRODUCTION = 0;
+const PRODUCTION = 1;
 const STATIC = 'static/dist';
 const VENDOR_DEPS = [
   'react',
@@ -30,36 +32,30 @@ const VENDOR_DEPS = [
 ///// STYLESHEETS /////
 
 gulp.task('stylus', function() {
-  var styles = {
-    splash: gulp.src('stylesheets/stylus/splash.styl'),
-    main: gulp.src('stylesheets/stylus/root.styl')
-  };
-  Object.keys(styles).forEach(function(style) {
-    styles[style].pipe(stylus())
-      .pipe(rename(style + '.css'))
+  var styls = ['splash', 'main'].map(function(s) {
+    return gulp.src('stylesheets/stylus/' + s + '.styl')
+      .pipe(stylus())
+      .pipe(rename(s + '.css'))
       .pipe(gulp.dest('stylesheets'));
   });
-
-  return merge(Object.keys(styles).map(function(x) { return styles[x]; }));
+  return merge(styls);
 });
 
 gulp.task('css', function() {
-  var splash = gulp.src('stylesheets/splash.css');
-  var main = gulp.src('stylesheets/main.css');
-  [splash, main].forEach(function(src) {
-    src.pipe(autoprefixer({
-      browsers: ['last 2 version'],
-      cascade: false
-    }))
-    .pipe(gulp.dest(STATIC))
-    .pipe(cssmin())
-    .pipe(rename({
-      extname: '.min.css'
-    }))
-    .pipe(gulp.dest(STATIC));
+  var css = ['splash', 'main'].map(function(c) {
+    return gulp.src('stylesheets/' + c + '.css')
+      .pipe(autoprefixer({
+        browsers: ['last 2 version'],
+        cascade: false
+      }))
+      .pipe(gulp.dest(STATIC))
+      .pipe(cssmin())
+      .pipe(rename({
+        extname: '.min.css'
+      }))
+      .pipe(gulp.dest(STATIC));
   });
-
-  return merge(splash, main);
+  return merge(css);
 });
 
 gulp.task('fonts', function() {
@@ -109,16 +105,25 @@ gulp.task('js', function() {
 });
 
 gulp.task('vendor', function() {
-  browserify({ debug: false })
-    .require(VENDOR_DEPS)
-    .bundle()
-    .pipe(source('vendor.js'))
-    .pipe(gulp.dest(STATIC))
-    .pipe(streamify(uglify({ mangle: true })))
-    .pipe(rename({
-      extname: '.min.js'
-    }))
-    .pipe(gulp.dest(STATIC));
+  var envs = ['development', 'production'];
+  envs = envs.map(function(env) {
+    var vendor = browserify({ debug: false })
+      .require(VENDOR_DEPS)
+      .transform(envify, {
+        NODE_ENV: env
+      })
+      .bundle()
+      .pipe(source('vendor.js'));
+    if (env === 'production') {
+      vendor = vendor.pipe(streamify(uglify({ mangle: true })))
+      .pipe(rename({
+        extname: '.min.js'
+      }));
+    }
+    vendor = vendor.pipe(gulp.dest(STATIC));
+    return vendor;
+  });
+  return merge(envs);
 });
 
 gulp.task('browserify', function() {
@@ -127,6 +132,7 @@ gulp.task('browserify', function() {
     .transform(babelify, {
       presets: ['es2015', 'react']
     })
+    .transform(envify, config.all())
     .on('update', rebundle);
   return rebundle();
 

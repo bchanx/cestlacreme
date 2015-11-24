@@ -14,13 +14,20 @@ try {
   });
 }
 catch (e) {
+  console.error("-->> YO WTF?!?", e);
   // No .env file on server, continue
 }
 
 var get = function(key) {
+  console.log("-->> PROPERTIES:", PROPERTIES);
   return process.env[key] || PROPERTIES[key];
 };
 
+var all = function() {
+  return JSON.parse(JSON.stringify(PROPERTIES));
+};
+
 module.exports = {
-  get: get
+  get: get,
+  all: all
 };
