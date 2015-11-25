@@ -168,14 +168,25 @@ var StripeReact = React.createClass({
       this.setState({
         submitInProgress: true
       });
-      Stripe.card.createToken({
-        number: this.state.form.number,
-        name: this.state.form.name,
-        exp: this.state.form.expiry,
-        cvc: this.state.form.cvc
-      }, this.onCreateResponse);
+      // TODO turn this on for prod
+      if (process.env.NODE_ENV === 'development') {
+        Stripe.card.createToken({
+          number: this.state.form.number,
+          name: this.state.form.name,
+          exp: this.state.form.expiry,
+          cvc: this.state.form.cvc
+        }, this.onCreateResponse);
+      }
     }
     console.log("-->> formStates after:", this.state.formStates);
+  },
+
+  onBlurChange: function(type) {
+    if (!this.state.submitInProgress && type === 'cvc') {
+      let formStates = this.state.formStates;
+      formStates.focused = 'number';
+      this.setState(formStates);
+    }
   },
 
   render: function() {
@@ -184,7 +195,8 @@ var StripeReact = React.createClass({
       let placeholder = p.placeholder;
       let onChangeHandler = this.onFormChange.bind(this, type);
       let onFocusHandler = this.onFocusChange.bind(this, type);
-      return <input key={type} text="text" placeholder={placeholder} name={type} value={this.state.form[type]} onChange={onChangeHandler} onFocus={onFocusHandler}/>;
+      let onBlurHandler = this.onBlurChange.bind(this, type);
+      return <input key={type} text="text" placeholder={placeholder} name={type} value={this.state.form[type]} onChange={onChangeHandler} onFocus={onFocusHandler} onBlur={onBlurHandler}/>;
     });
     let payment = (
       <div>

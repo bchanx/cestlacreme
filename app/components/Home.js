@@ -15,10 +15,17 @@ var Home = React.createClass({
         <Instagram/>
         <Break/>
         <div>
-          <span className="bold">How it works:</span> We accept online orders each week between Monday to Thursday. We gather the necessary ingredients on Friday, and make the magic happen on Saturday. Sunday, the happy little brulee's will get delivered right to your doorstep.
+          We operate solely through online purchases, market pop-ups, and catering for events and weddings.
         </div>
         <Break/>
         <div>
+          <span className="bold">How it works:</span> We take regular orders online throughout the week, with orders closing weekly at 8pm every Tuesday. Thursday is pickup day! Current pickup point is located at the McDonalds parking lot, next to the Main Skytrain station. 1527 Main St, Vancouver, BC V6A 2W5. 
+        </div>
+        <Break/>
+        <div>
+          Lastly, please bear with us as we are limited by the current size of our operations and may sell out!
+          <br/>
+          <br/>
           Interested? Check out our&nbsp;
           <Link to="/menu">menu</Link>
           &nbsp;and see what's available for ordering!

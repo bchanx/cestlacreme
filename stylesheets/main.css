@@ -115,6 +115,9 @@ a:hover {
   .content {
     padding: 4vw;
   }
+  .footer {
+    line-height: normal;
+  }
 }
 @media screen and (max-width: 600px) {
   html {
@@ -122,6 +125,7 @@ a:hover {
   }
   .content {
     padding: 20px;
+    padding-bottom: 40px;
   }
 }
 .nav {

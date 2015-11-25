@@ -23,15 +23,107 @@ var About = _react2.default.createClass({
       _react2.default.createElement(
         'div',
         null,
-        'We\'re C\'est la Creme! Started in 2015.'
+        _react2.default.createElement(
+          'span',
+          { className: 'bold' },
+          'Hi! I\'m Samson, creator of C\'est la Creme!'
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        'I love food. For as long as I can remember I\'ve been eating my way through all different ethnic cuisines! I started cooking for myself ever since I was little and have always been cooking as a hobby. One day I decided to make my mom\'s favorite dessert - the Creme Brulee.',
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        'As an engineer by day, and an amateur foodie at night, I\'ve often dreamt about making something special and sharing it with everyone.',
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        'Well, here it is: My goal is to make the absolute best creme brulee I can make with the best ingredients I can find. That\'s it!'
       ),
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
         'div',
         null,
-        'We take pride in supporting local farmers and using the best ingredients British Columbia has to offer. - Avalon dairy - Vanilla - Sugar'
-      ),
-      _react2.default.createElement(_Common.Break, null)
+        _react2.default.createElement(
+          'span',
+          { className: 'bold' },
+          'F.A.Q'
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'span',
+            { className: 'bold' },
+            '[How do I finish the sugar layer on top?]'
+          ),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('br', null),
+          'Dab the surface with a paper towel if there is any moisture on top, and spread 3/4 to a 1 teaspoon of white sugar on top evenly. Best way is to use a torch to gently melt the sugar! Alternatively you can set the oven to "Broil", set the temperature to 500F, and place the creme brulee on the top rack for 5-10 minutes or until golden brown and bubbling.',
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('br', null),
+          'Let sit for 10 minutes and eat! Or, if a cold creme brulee is desired, place the jars back into the fridge for up to 30 minutes and serve. The longer you wait, the softer the sugar crust gets though.',
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('br', null),
+          '*Please be safe!!! If you are torching and have an open flame, please do so at your own risk and have a fire extinguisher nearby.*'
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'span',
+            { className: 'bold' },
+            '[Can I have different flavors?]'
+          ),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('br', null),
+          'Yes! Mix and match! Leave us a note in your order and we will be happy to accommodate.'
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'span',
+            { className: 'bold' },
+            '[Can you make me a custom flavor?]'
+          ),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('br', null),
+          'Email us! Let\'s make it happen! *Please note we do try our best to accommodate but may be restricted by minimum quantities and flavor limitations.*'
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'span',
+            { className: 'bold' },
+            '[Can I order more than 4?]'
+          ),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('br', null),
+          'Yes! However for orders of more than a dozen please email and inquire in advance.'
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'span',
+            { className: 'bold' },
+            '[Can we keep the jars?]'
+          ),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('br', null),
+          'Of course! However we\'d gladly accept returns as we can clean and sustainably re-use the jars.'
+        )
+      )
     );
   }
 });
@@ -190,17 +282,26 @@ var Home = _react2.default.createClass({
       _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(
-          'span',
-          { className: 'bold' },
-          'How it works:'
-        ),
-        ' We accept online orders each week between Monday to Thursday. We gather the necessary ingredients on Friday, and make the magic happen on Saturday. Sunday, the happy little brulee\'s will get delivered right to your doorstep.'
+        'We operate solely through online purchases, market pop-ups, and catering for events and weddings.'
       ),
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
         'div',
         null,
+        _react2.default.createElement(
+          'span',
+          { className: 'bold' },
+          'How it works:'
+        ),
+        ' We take regular orders online throughout the week, with orders closing weekly at 8pm every Tuesday. Thursday is pickup day! Current pickup point is located at the McDonalds parking lot, next to the Main Skytrain station. 1527 Main St, Vancouver, BC V6A 2W5.'
+      ),
+      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement(
+        'div',
+        null,
+        'Lastly, please bear with us as we are limited by the current size of our operations and may sell out!',
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
         'Interested? Check out our ',
         _react2.default.createElement(
           _reactRouter.Link,
@@ -353,7 +454,7 @@ var Menu = _react2.default.createClass({
           { href: 'mailto:cestlacreme@gmail.com' },
           'email us'
         ),
-        ' to set up a specialty order)'
+        ' to set up a specialty order.)'
       ),
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(_Selection2.default, { constraints: CONSTRAINTS, selected: this.state.selected, onSelectionChange: this.onSelectionChange }),
@@ -584,6 +685,7 @@ var Social = _react2.default.createClass({
 exports.default = Social;
 
 },{"react":"react"}],11:[function(require,module,exports){
+(function (process){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -767,14 +869,25 @@ var StripeReact = _react2.default.createClass({
       this.setState({
         submitInProgress: true
       });
-      Stripe.card.createToken({
-        number: this.state.form.number,
-        name: this.state.form.name,
-        exp: this.state.form.expiry,
-        cvc: this.state.form.cvc
-      }, this.onCreateResponse);
+      // TODO turn this on for prod
+      if (process.env.NODE_ENV === 'development') {
+        Stripe.card.createToken({
+          number: this.state.form.number,
+          name: this.state.form.name,
+          exp: this.state.form.expiry,
+          cvc: this.state.form.cvc
+        }, this.onCreateResponse);
+      }
     }
     console.log("-->> formStates after:", this.state.formStates);
+  },
+
+  onBlurChange: function onBlurChange(type) {
+    if (!this.state.submitInProgress && type === 'cvc') {
+      var formStates = this.state.formStates;
+      formStates.focused = 'number';
+      this.setState(formStates);
+    }
   },
 
   render: function render() {
@@ -785,7 +898,8 @@ var StripeReact = _react2.default.createClass({
       var placeholder = p.placeholder;
       var onChangeHandler = _this2.onFormChange.bind(_this2, type);
       var onFocusHandler = _this2.onFocusChange.bind(_this2, type);
-      return _react2.default.createElement('input', { key: type, text: 'text', placeholder: placeholder, name: type, value: _this2.state.form[type], onChange: onChangeHandler, onFocus: onFocusHandler });
+      var onBlurHandler = _this2.onBlurChange.bind(_this2, type);
+      return _react2.default.createElement('input', { key: type, text: 'text', placeholder: placeholder, name: type, value: _this2.state.form[type], onChange: onChangeHandler, onFocus: onFocusHandler, onBlur: onBlurHandler });
     });
     var payment = _react2.default.createElement(
       'div',
@@ -844,7 +958,8 @@ var StripeReact = _react2.default.createClass({
 
 exports.default = StripeReact;
 
-},{"react":"react","react-credit-card":"react-credit-card","react-script-loader":33,"superagent":"superagent"}],12:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":14,"react":"react","react-credit-card":"react-credit-card","react-script-loader":33,"superagent":"superagent"}],12:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');

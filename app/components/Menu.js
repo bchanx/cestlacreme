@@ -37,7 +37,7 @@ var Menu = React.createClass({
           Flavors can be mixed and matched to your preference.
           <br/>
           <br/>
-          (For orders of more than a dozen, please <a href="mailto:cestlacreme@gmail.com">email us</a> to set up a specialty order)
+          (For orders of more than a dozen, please <a href="mailto:cestlacreme@gmail.com">email us</a> to set up a specialty order.)
         </div>
         <Break/>
         <Selection constraints={CONSTRAINTS} selected={this.state.selected} onSelectionChange={this.onSelectionChange}/>
