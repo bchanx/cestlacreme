@@ -26,6 +26,8 @@ const VENDOR_DEPS = [
   'react',
   'react-dom',
   'react-router',
+  'react-select',
+  'react-credit-card',
   'superagent'
 ];
 
@@ -66,7 +68,9 @@ gulp.task('fonts', function() {
 gulp.task('deps.css', ['fonts'], function() {
   return gulp.src([
     'bower_components/normalize-css/normalize.css',
-    'bower_components/Ionicons/css/ionicons.css'
+    'bower_components/Ionicons/css/ionicons.css',
+    'node_modules/react-credit-card/source/card*.css',
+    'node_modules/react-select/dist/react-select.css',
   ]).pipe(concat('deps.css'))
     .pipe(gulp.dest(STATIC))
     .pipe(cssmin())

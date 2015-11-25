@@ -14,6 +14,8 @@ var _Common = require('./Common');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var About = _react2.default.createClass({
+  displayName: 'About',
+
   render: function render() {
     return _react2.default.createElement(
       'div',
@@ -54,6 +56,8 @@ var _Navigation2 = _interopRequireDefault(_Navigation);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var App = _react2.default.createClass({
+  displayName: 'App',
+
   render: function render() {
     return _react2.default.createElement(
       'div',
@@ -85,6 +89,8 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Break = exports.Break = _react2.default.createClass({
+  displayName: "Break",
+
   render: function render() {
     return _react2.default.createElement("div", { className: "break" });
   }
@@ -104,6 +110,8 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Footer = _react2.default.createClass({
+  displayName: "Footer",
+
   render: function render() {
     return _react2.default.createElement(
       "div",
@@ -160,6 +168,8 @@ var _Footer2 = _interopRequireDefault(_Footer);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Home = _react2.default.createClass({
+  displayName: 'Home',
+
   render: function render() {
     return _react2.default.createElement(
       'div',
@@ -225,6 +235,8 @@ var _superagent2 = _interopRequireDefault(_superagent);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Instagram = _react2.default.createClass({
+  displayName: 'Instagram',
+
   getInitialState: function getInitialState() {
     return {
       recent: []
@@ -243,10 +255,10 @@ var Instagram = _react2.default.createClass({
     var thumbnails = this.state.recent.map(function (r) {
       return _react2.default.createElement(
         'a',
-        { className: 'thumbnail-link', href: r.link, target: '_blank', key: r.link },
+        { className: 'instagram-link', href: r.link, target: '_blank', key: r.link },
         _react2.default.createElement(
           'div',
-          { className: 'thumbnail' },
+          { className: 'instagram-thumbnail' },
           _react2.default.createElement('img', { src: r.image.url })
         )
       );
@@ -278,9 +290,38 @@ var _Stripe = require('./Stripe');
 
 var _Stripe2 = _interopRequireDefault(_Stripe);
 
+var _Selection = require('./Selection');
+
+var _Selection2 = _interopRequireDefault(_Selection);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var CONSTRAINTS = {
+  price: 5.00,
+  minimum: 4,
+  maximum: 12
+};
+
 var Menu = _react2.default.createClass({
+  displayName: 'Menu',
+
+  getInitialState: function getInitialState() {
+    return {
+      selected: {
+        vanilla: 0,
+        matcha: 0,
+        earlgrey: 0
+      }
+    };
+  },
+
+  onSelectionChange: function onSelectionChange(name, val) {
+    console.log("-->> selection changed:", name, val);
+    var selected = this.state.selected;
+    selected[name] = val.value;
+    this.setState(selected);
+  },
+
   render: function render() {
     return _react2.default.createElement(
       'div',
@@ -288,40 +329,45 @@ var Menu = _react2.default.createClass({
       _react2.default.createElement(
         'div',
         null,
-        'Vanilla'
-      ),
-      _react2.default.createElement(_Common.Break, null),
-      _react2.default.createElement(
-        'div',
-        null,
-        'Matcha'
-      ),
-      _react2.default.createElement(_Common.Break, null),
-      _react2.default.createElement(
-        'div',
-        null,
-        'Earl Grey'
-      ),
-      _react2.default.createElement(_Common.Break, null),
-      _react2.default.createElement(
-        'div',
-        null,
-        'Our creme brulee\'s are sold at a flat rate of $5 each. However due to logistics, we are requiring a minimum order of four brulee\'s with every purchase. Therefore, each order must be a ',
+        'Our creme brulee\'s are sold at a flat rate of $',
+        CONSTRAINTS.price,
+        ' each. However due to the nature of our business, we require at least ',
+        CONSTRAINTS.minimum,
+        ' brulee\'s per order, meaning a ',
         _react2.default.createElement(
           'span',
           { className: 'bold' },
-          'minimum $20 purchase'
+          'minimum $',
+          CONSTRAINTS.price * CONSTRAINTS.minimum,
+          ' purchase'
         ),
         '.',
         _react2.default.createElement('br', null),
         _react2.default.createElement('br', null),
-        'Flavors can be mixed and matched to your preference.'
+        'Flavors can be mixed and matched to your preference.',
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        '(For orders of more than a dozen, please ',
+        _react2.default.createElement(
+          'a',
+          { href: 'mailto:cestlacreme@gmail.com' },
+          'email us'
+        ),
+        ' to set up a specialty order)'
       ),
+      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement(_Selection2.default, { constraints: CONSTRAINTS, selected: this.state.selected, onSelectionChange: this.onSelectionChange }),
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
         'div',
         null,
-        'Ready to order? Pay with Stripe.'
+        'You have currently selected: ',
+        this.state.selected.vanilla,
+        ' Vanilla, ',
+        this.state.selected.matcha,
+        ' Matcha, and ',
+        this.state.selected.earlgrey,
+        ' Earl Grey.'
       ),
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(_Stripe2.default, null)
@@ -331,7 +377,7 @@ var Menu = _react2.default.createClass({
 
 exports.default = Menu;
 
-},{"./Common":3,"./Stripe":10,"react":"react"}],8:[function(require,module,exports){
+},{"./Common":3,"./Selection":9,"./Stripe":11,"react":"react"}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -351,25 +397,27 @@ var _Social2 = _interopRequireDefault(_Social);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Navigation = _react2.default.createClass({
+  displayName: 'Navigation',
+
   render: function render() {
     return _react2.default.createElement(
       'div',
-      { className: 'navigation' },
+      { className: 'nav' },
       _react2.default.createElement(
         'div',
-        { className: 'brand' },
+        { className: 'nav-brand' },
         _react2.default.createElement(
           _reactRouter.IndexLink,
           { to: '/' },
-          _react2.default.createElement('div', { className: 'logo' })
+          _react2.default.createElement('div', { className: 'nav-logo' })
         )
       ),
       _react2.default.createElement(
         'div',
-        { className: 'links' },
+        { className: 'nav-links' },
         _react2.default.createElement(
           'div',
-          { className: 'link' },
+          { className: 'nav-link' },
           _react2.default.createElement(
             _reactRouter.Link,
             { to: '/menu', activeClassName: 'active' },
@@ -378,7 +426,7 @@ var Navigation = _react2.default.createClass({
         ),
         _react2.default.createElement(
           'div',
-          { className: 'link' },
+          { className: 'nav-link' },
           _react2.default.createElement(
             _reactRouter.Link,
             { to: '/about', activeClassName: 'active' },
@@ -393,7 +441,120 @@ var Navigation = _react2.default.createClass({
 
 exports.default = Navigation;
 
-},{"./Social":9,"react":"react","react-router":"react-router"}],9:[function(require,module,exports){
+},{"./Social":10,"react":"react","react-router":"react-router"}],9:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Common = require('./Common');
+
+var _reactSelect = require('react-select');
+
+var _reactSelect2 = _interopRequireDefault(_reactSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Selection = _react2.default.createClass({
+  displayName: 'Selection',
+
+  getDefaultProps: function getDefaultProps() {
+    return {
+      contraints: null,
+      selected: null,
+      onSelectionChange: null
+    };
+  },
+
+  handleSelectChange: function handleSelectChange(name) {
+    return (function (val) {
+      this.props.onSelectionChange(name, val);
+    }).bind(this);
+  },
+
+  getOptions: function getOptions(name) {
+    var _this = this;
+
+    var othersSelected = Object.keys(this.props.selected).filter(function (s) {
+      return s !== name;
+    }).map(function (s) {
+      return _this.props.selected[s];
+    }).reduce(function (a, b) {
+      return a + b;
+    });
+    var options = [];
+    for (var i = 0; i <= this.props.constraints.maximum - othersSelected; i++) {
+      options.push({
+        value: i,
+        label: String(i)
+      });
+    }
+    return options;
+  },
+
+  render: function render() {
+    var _this2 = this;
+
+    var options = [];
+    Object.keys(this.props.selected).forEach(function (type) {
+      options[type] = _this2.getOptions(type);
+    });
+    return _react2.default.createElement(
+      'div',
+      { className: 'selection' },
+      _react2.default.createElement(
+        'div',
+        null,
+        'Vanilla',
+        _react2.default.createElement(_reactSelect2.default, {
+          name: 'select-vanilla',
+          searchable: false,
+          clearable: false,
+          value: this.props.selected.vanilla,
+          options: options.vanilla,
+          onChange: this.handleSelectChange('vanilla')
+        })
+      ),
+      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement(
+        'div',
+        null,
+        'Matcha',
+        _react2.default.createElement(_reactSelect2.default, {
+          name: 'select-matcha',
+          searchable: false,
+          clearable: false,
+          value: this.props.selected.matcha,
+          options: options.matcha,
+          onChange: this.handleSelectChange('matcha')
+        })
+      ),
+      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement(
+        'div',
+        null,
+        'Earl Grey',
+        _react2.default.createElement(_reactSelect2.default, {
+          name: 'select-earlgrey',
+          searchable: false,
+          clearable: false,
+          value: this.props.selected.earlgrey,
+          options: options.earlgrey,
+          onChange: this.handleSelectChange('earlgrey')
+        })
+      )
+    );
+  }
+});
+
+exports.default = Selection;
+
+},{"./Common":3,"react":"react","react-select":"react-select"}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -407,10 +568,12 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Social = _react2.default.createClass({
+  displayName: "Social",
+
   render: function render() {
     return _react2.default.createElement(
       "div",
-      { className: "social" },
+      { className: "nav-social" },
       _react2.default.createElement("a", { href: "https://www.instagram.com/cestlacreme/", target: "_blank", className: "ion-icon ion-social-instagram" }),
       _react2.default.createElement("a", { href: "https://www.facebook.com/cestlacreme", target: "_blank", className: "ion-icon ion-social-facebook" }),
       _react2.default.createElement("a", { href: "https://www.twitter.com/cestlacreme", target: "_blank", className: "ion-icon ion-social-twitter" })
@@ -420,7 +583,7 @@ var Social = _react2.default.createClass({
 
 exports.default = Social;
 
-},{"react":"react"}],10:[function(require,module,exports){
+},{"react":"react"}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -433,9 +596,19 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactScriptLoader = require('react-script-loader');
 
+var _reactCreditCard = require('react-credit-card');
+
+var _reactCreditCard2 = _interopRequireDefault(_reactCreditCard);
+
+var _superagent = require('superagent');
+
+var _superagent2 = _interopRequireDefault(_superagent);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Stripe = _react2.default.createClass({
+var StripeReact = _react2.default.createClass({
+  displayName: 'StripeReact',
+
   mixins: [_reactScriptLoader.ReactScriptLoaderMixin],
 
   getScriptURL: function getScriptURL() {
@@ -443,13 +616,14 @@ var Stripe = _react2.default.createClass({
   },
 
   onScriptLoaded: function onScriptLoaded() {
+    // TODO: prod/test key
+    var ready = Stripe && "pk_test_IaT5HSSG1P7dpsq44cKF4Ypr";
     this.setState({
       loading: false,
-      error: !Stripe
+      loadingError: !ready
     });
-    if (Stripe) {
-      console.log("-->> stripe good!", Stripe);
-      console.log("-->> process.env:", "pk_test_IaT5HSSG1P7dpsq44cKF4Ypr");
+    if (ready) {
+      Stripe.setPublishableKey("pk_test_IaT5HSSG1P7dpsq44cKF4Ypr");
     }
   },
 
@@ -457,30 +631,220 @@ var Stripe = _react2.default.createClass({
     console.log("-->> ERROR!");
     this.setState({
       loading: false,
-      error: true
+      loadingError: true
     });
+  },
+
+  getDefaultProps: function getDefaultProps() {
+    return {
+      formParams: [{
+        type: 'number',
+        placeholder: 'Card number'
+      }, {
+        type: 'name',
+        placeholder: 'Full name'
+      }, {
+        type: 'expiry',
+        placeholder: 'MM/YY'
+      }, {
+        type: 'cvc',
+        placeholder: 'CVC'
+      }],
+      cardDisclosure: 'We do not store any credit card information on our servers. All payments are securely handled with Stripe. Learn more at stripe.com/about.'
+    };
   },
 
   getInitialState: function getInitialState() {
     return {
       loading: true,
-      error: false
+      loadingError: false,
+      showPayments: false,
+      showSuccess: false,
+      submitInProgress: false,
+      form: {
+        number: '',
+        name: '',
+        expiry: '',
+        cvc: ''
+      },
+      formStates: {
+        focused: 'number',
+        numberInvalid: false,
+        nameInvalid: false,
+        expiryInvalid: false,
+        cvcInvalid: false
+      }
     };
   },
 
+  togglePayments: function togglePayments() {
+    this.setState({
+      showPayments: !this.state.showPayments
+    });
+  },
+
+  onFormChange: function onFormChange(type, event) {
+    if (!this.state.submitInProgress) {
+      var form = this.state.form;
+      form[type] = event.target.value;
+      this.setState(form);
+    }
+  },
+
+  onFocusChange: function onFocusChange(type) {
+    if (!this.state.submitInProgress) {
+      var formStates = this.state.formStates;
+      formStates.focused = type;
+      this.setState(formStates);
+    }
+  },
+
+  validateForm: function validateForm() {
+    var formStates = this.state.formStates;
+    var error = null;
+    ['number', 'expiry', 'cvc', 'name'].forEach(function (type) {
+      // Reset form states
+      formStates[type + 'Invalid'] = false;
+    });
+    if (!Stripe.card.validateCardNumber(this.state.form.number)) {
+      formStates.numberInvalid = true;
+      error = 'Card number is invalid';
+    } else if (!this.state.form.name) {
+      formStates.nameInvalid = true;
+      error = 'Name is invalid';
+    } else if (!Stripe.card.validateExpiry(this.state.form.expiry)) {
+      formStates.expiryInvalid = true;
+      error = 'Expiry is invalid';
+    } else if (!Stripe.card.validateCVC(this.state.form.cvc)) {
+      formStates.cvcInvalid = true;
+      error = 'CVC is invalid';
+    }
+    // Update formstates
+    this.setState(formStates);
+    // Returns error if any, otherwise null
+    return error;
+  },
+
+  onCreateResponse: function onCreateResponse(status, response) {
+    var _this = this;
+
+    if (response.error) {
+      // Stripe error
+      this.setState({
+        submitInProgress: false
+      });
+      console.log("-->> SOMETHING WENT WRONG ...");
+    } else {
+      // Send form data to server for charge
+      _superagent2.default.post(window.location.origin + '/stripe/order').send({
+        stripeToken: response.id,
+        created: response.created,
+        livemode: response.livemode
+      }).accept('json').end(function (error, response) {
+        _this.setState({
+          submitInProgress: false,
+          showSuccess: true,
+          showPayments: false
+        });
+      });
+    }
+  },
+
+  onFormError: function onFormError(error) {
+    console.log("-->> FORM ERRORED with: ", error);
+  },
+
+  createOrder: function createOrder() {
+    console.log("-->> create!", this.state.form);
+    console.log("-->> formStates before:", this.state.formStates);
+    var error = this.validateForm();
+    if (error) {
+      console.log("-->> things are invalid...");
+      this.onFormError(error);
+    } else {
+      // Things look good, submit!
+      console.log("-->> CREATE TOKEN!!");
+      this.setState({
+        submitInProgress: true
+      });
+      Stripe.card.createToken({
+        number: this.state.form.number,
+        name: this.state.form.name,
+        exp: this.state.form.expiry,
+        cvc: this.state.form.cvc
+      }, this.onCreateResponse);
+    }
+    console.log("-->> formStates after:", this.state.formStates);
+  },
+
   render: function render() {
-    var test = this.state.loading ? 'Loading...' : this.state.error ? 'An Error Occured...' : 'STRIPE!';
+    var _this2 = this;
+
+    var formParams = this.props.formParams.map(function (p) {
+      var type = p.type;
+      var placeholder = p.placeholder;
+      var onChangeHandler = _this2.onFormChange.bind(_this2, type);
+      var onFocusHandler = _this2.onFocusChange.bind(_this2, type);
+      return _react2.default.createElement('input', { key: type, text: 'text', placeholder: placeholder, name: type, value: _this2.state.form[type], onChange: onChangeHandler, onFocus: onFocusHandler });
+    });
+    var payment = _react2.default.createElement(
+      'div',
+      null,
+      this.state.showPayments ? _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'div',
+          { className: 'stripe-card' },
+          _react2.default.createElement(_reactCreditCard2.default, {
+            number: this.state.form.number,
+            name: this.state.form.name,
+            expiry: this.state.form.expiry,
+            cvc: this.state.form.cvc,
+            focused: this.state.formStates.focused,
+            shinyAfterBack: this.props.cardDisclosure })
+        ),
+        _react2.default.createElement(
+          'form',
+          { className: 'stripe-form' },
+          formParams,
+          _react2.default.createElement(
+            'div',
+            { onClick: this.createOrder },
+            'Submit'
+          ),
+          _react2.default.createElement(
+            'div',
+            { onClick: this.togglePayments },
+            'Cancel'
+          )
+        )
+      ) : this.state.showSuccess ? _react2.default.createElement(
+        'div',
+        null,
+        'Success!',
+        _react2.default.createElement(
+          'div',
+          { onClick: this.togglePayments },
+          'Make another order?'
+        )
+      ) : _react2.default.createElement(
+        'div',
+        { onClick: this.togglePayments },
+        'Ready to order?'
+      )
+    );
     return _react2.default.createElement(
       'div',
       { className: 'stripe' },
-      test
+      this.state.loading ? 'Loading...' : this.state.loadingError ? 'An Error Occured...' : payment
     );
   }
 });
 
-exports.default = Stripe;
+exports.default = StripeReact;
 
-},{"react":"react","react-script-loader":31}],11:[function(require,module,exports){
+},{"react":"react","react-credit-card":"react-credit-card","react-script-loader":33,"superagent":"superagent"}],12:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -513,7 +877,7 @@ _reactDom2.default.render(_react2.default.createElement(
   (0, _routes2.default)()
 ), document.getElementById('app'));
 
-},{"./routes":12,"history/lib/createBrowserHistory":19,"react":"react","react-dom":"react-dom","react-router":"react-router"}],12:[function(require,module,exports){
+},{"./routes":13,"history/lib/createBrowserHistory":20,"react":"react","react-dom":"react-dom","react-router":"react-router"}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -554,7 +918,7 @@ var _Menu2 = _interopRequireDefault(_Menu);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./components/About":1,"./components/App":2,"./components/Home":5,"./components/Menu":7,"react":"react","react-router":"react-router"}],13:[function(require,module,exports){
+},{"./components/About":1,"./components/App":2,"./components/Home":5,"./components/Menu":7,"react":"react","react-router":"react-router"}],14:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -647,7 +1011,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /**
  * Indicates that navigation was caused by a call to history.push.
  */
@@ -679,7 +1043,7 @@ exports['default'] = {
   REPLACE: REPLACE,
   POP: POP
 };
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -706,7 +1070,8 @@ function loopAsync(turns, work, callback) {
 
   next();
 }
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
+(function (process){
 /*eslint-disable no-empty */
 'use strict';
 
@@ -722,6 +1087,7 @@ var _warning2 = _interopRequireDefault(_warning);
 
 var KeyPrefix = '@@History/';
 var QuotaExceededError = 'QuotaExceededError';
+var SecurityError = 'SecurityError';
 
 function createKey(key) {
   return KeyPrefix + key;
@@ -731,9 +1097,17 @@ function saveState(key, state) {
   try {
     window.sessionStorage.setItem(createKey(key), JSON.stringify(state));
   } catch (error) {
-    if (error.name === QuotaExceededError || window.sessionStorage.length === 0) {
-      // Probably in Safari "private mode" where sessionStorage quota is 0. #42
-      _warning2['default'](false, '[history] Unable to save state; sessionStorage is not available in Safari private mode');
+    if (error.name === SecurityError) {
+      // Blocking cookies in Chrome/Firefox/Safari throws SecurityError on any
+      // attempt to access window.sessionStorage.
+      process.env.NODE_ENV !== 'production' ? _warning2['default'](false, '[history] Unable to save state; sessionStorage is not available due to security settings') : undefined;
+
+      return;
+    }
+
+    if (error.name === QuotaExceededError && window.sessionStorage.length === 0) {
+      // Safari "private mode" throws QuotaExceededError.
+      process.env.NODE_ENV !== 'production' ? _warning2['default'](false, '[history] Unable to save state; sessionStorage is not available in Safari private mode') : undefined;
 
       return;
     }
@@ -743,7 +1117,18 @@ function saveState(key, state) {
 }
 
 function readState(key) {
-  var json = window.sessionStorage.getItem(createKey(key));
+  var json = undefined;
+  try {
+    json = window.sessionStorage.getItem(createKey(key));
+  } catch (error) {
+    if (error.name === SecurityError) {
+      // Blocking cookies in Chrome/Firefox/Safari throws SecurityError on any
+      // attempt to access window.sessionStorage.
+      process.env.NODE_ENV !== 'production' ? _warning2['default'](false, '[history] Unable to read state; sessionStorage is not available due to security settings') : undefined;
+
+      return null;
+    }
+  }
 
   if (json) {
     try {
@@ -755,7 +1140,8 @@ function readState(key) {
 
   return null;
 }
-},{"warning":30}],17:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":14,"warning":32}],18:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -831,13 +1217,14 @@ function supportsGoWithoutReloadUsingHash() {
   var ua = navigator.userAgent;
   return ua.indexOf('Firefox') === -1;
 }
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
 var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 exports.canUseDOM = canUseDOM;
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -874,7 +1261,7 @@ var _createDOMHistory2 = _interopRequireDefault(_createDOMHistory);
 function createBrowserHistory() {
   var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-  _invariant2['default'](_ExecutionEnvironment.canUseDOM, 'Browser history needs a DOM');
+  !_ExecutionEnvironment.canUseDOM ? process.env.NODE_ENV !== 'production' ? _invariant2['default'](false, 'Browser history needs a DOM') : _invariant2['default'](false) : undefined;
 
   var forceRefresh = options.forceRefresh;
 
@@ -1010,7 +1397,9 @@ function createBrowserHistory() {
 
 exports['default'] = createBrowserHistory;
 module.exports = exports['default'];
-},{"./Actions":14,"./DOMStateStorage":16,"./DOMUtils":17,"./ExecutionEnvironment":18,"./createDOMHistory":20,"invariant":29}],20:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./Actions":15,"./DOMStateStorage":17,"./DOMUtils":18,"./ExecutionEnvironment":19,"./createDOMHistory":21,"_process":14,"invariant":31}],21:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -1039,7 +1428,7 @@ function createDOMHistory(options) {
   }));
 
   function listen(listener) {
-    _invariant2['default'](_ExecutionEnvironment.canUseDOM, 'DOM history needs a DOM');
+    !_ExecutionEnvironment.canUseDOM ? process.env.NODE_ENV !== 'production' ? _invariant2['default'](false, 'DOM history needs a DOM') : _invariant2['default'](false) : undefined;
 
     return history.listen(listener);
   }
@@ -1051,7 +1440,8 @@ function createDOMHistory(options) {
 
 exports['default'] = createDOMHistory;
 module.exports = exports['default'];
-},{"./DOMUtils":17,"./ExecutionEnvironment":18,"./createHistory":21,"invariant":29}],21:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./DOMUtils":18,"./ExecutionEnvironment":19,"./createHistory":22,"_process":14,"invariant":31}],22:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1194,6 +1584,19 @@ function createHistory() {
       if (pendingLocation !== nextLocation) return; // Transition was interrupted.
 
       if (ok) {
+        // treat PUSH to current path like REPLACE to be consistent with browsers
+        if (nextLocation.action === _Actions.PUSH) {
+          var _getCurrentLocation = getCurrentLocation();
+
+          var pathname = _getCurrentLocation.pathname;
+          var search = _getCurrentLocation.search;
+
+          var currentPath = pathname + search;
+          var path = nextLocation.pathname + nextLocation.search;
+
+          if (currentPath === path) nextLocation.action = _Actions.REPLACE;
+        }
+
         if (finishTransition(nextLocation) !== false) updateLocation(nextLocation);
       } else if (location && nextLocation.action === _Actions.POP) {
         var prevIndex = allKeys.indexOf(location.key);
@@ -1208,8 +1611,16 @@ function createHistory() {
     transitionTo(createLocation(path, state, _Actions.PUSH, createKey()));
   }
 
+  function push(path) {
+    pushState(null, path);
+  }
+
   function replaceState(state, path) {
     transitionTo(createLocation(path, state, _Actions.REPLACE, createKey()));
+  }
+
+  function replace(path) {
+    replaceState(null, path);
   }
 
   function goBack() {
@@ -1283,6 +1694,8 @@ function createHistory() {
     transitionTo: transitionTo,
     pushState: pushState,
     replaceState: replaceState,
+    push: push,
+    replace: replace,
     go: go,
     goBack: goBack,
     goForward: goForward,
@@ -1299,7 +1712,7 @@ function createHistory() {
 
 exports['default'] = createHistory;
 module.exports = exports['default'];
-},{"./Actions":14,"./AsyncUtils":15,"./createLocation":22,"./deprecate":23,"./runTransitionHook":25,"deep-equal":26}],22:[function(require,module,exports){
+},{"./Actions":15,"./AsyncUtils":16,"./createLocation":23,"./deprecate":24,"./runTransitionHook":27,"deep-equal":28}],23:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1336,7 +1749,8 @@ function createLocation() {
 
 exports['default'] = createLocation;
 module.exports = exports['default'];
-},{"./Actions":14,"./parsePath":24}],23:[function(require,module,exports){
+},{"./Actions":15,"./parsePath":26}],24:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -1349,14 +1763,30 @@ var _warning2 = _interopRequireDefault(_warning);
 
 function deprecate(fn, message) {
   return function () {
-    _warning2['default'](false, '[history] ' + message);
+    process.env.NODE_ENV !== 'production' ? _warning2['default'](false, '[history] ' + message) : undefined;
     return fn.apply(this, arguments);
   };
 }
 
 exports['default'] = deprecate;
 module.exports = exports['default'];
-},{"warning":30}],24:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":14,"warning":32}],25:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+function extractPath(string) {
+  var match = string.match(/^https?:\/\/[^\/]*/);
+
+  if (match == null) return string;
+
+  return string.substring(match[0].length);
+}
+
+exports["default"] = extractPath;
+module.exports = exports["default"];
+},{}],26:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -1367,20 +1797,16 @@ var _warning = require('warning');
 
 var _warning2 = _interopRequireDefault(_warning);
 
-function extractPath(string) {
-  var match = string.match(/^https?:\/\/[^\/]*/);
+var _extractPath = require('./extractPath');
 
-  if (match == null) return string;
-
-  _warning2['default'](false, 'A path must be pathname + search + hash only, not a fully qualified URL like "%s"', string);
-
-  return string.substring(match[0].length);
-}
+var _extractPath2 = _interopRequireDefault(_extractPath);
 
 function parsePath(path) {
-  var pathname = extractPath(path);
+  var pathname = _extractPath2['default'](path);
   var search = '';
   var hash = '';
+
+  process.env.NODE_ENV !== 'production' ? _warning2['default'](path === pathname, 'A path must be pathname + search + hash only, not a fully qualified URL like "%s"', path) : undefined;
 
   var hashIndex = pathname.indexOf('#');
   if (hashIndex !== -1) {
@@ -1405,7 +1831,9 @@ function parsePath(path) {
 
 exports['default'] = parsePath;
 module.exports = exports['default'];
-},{"warning":30}],25:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./extractPath":25,"_process":14,"warning":32}],27:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -1424,13 +1852,14 @@ function runTransitionHook(hook, location, callback) {
     // call the callback with the return value.
     callback(result);
   } else {
-    _warning2['default'](result === undefined, 'You should not "return" in a transition hook with a callback argument; call the callback instead');
+    process.env.NODE_ENV !== 'production' ? _warning2['default'](result === undefined, 'You should not "return" in a transition hook with a callback argument; call the callback instead') : undefined;
   }
 }
 
 exports['default'] = runTransitionHook;
 module.exports = exports['default'];
-},{"warning":30}],26:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":14,"warning":32}],28:[function(require,module,exports){
 var pSlice = Array.prototype.slice;
 var objectKeys = require('./lib/keys.js');
 var isArguments = require('./lib/is_arguments.js');
@@ -1526,7 +1955,7 @@ function objEquiv(a, b, opts) {
   return typeof a === typeof b;
 }
 
-},{"./lib/is_arguments.js":27,"./lib/keys.js":28}],27:[function(require,module,exports){
+},{"./lib/is_arguments.js":29,"./lib/keys.js":30}],29:[function(require,module,exports){
 var supportsArgumentsClass = (function(){
   return Object.prototype.toString.call(arguments)
 })() == '[object Arguments]';
@@ -1548,7 +1977,7 @@ function unsupported(object){
     false;
 };
 
-},{}],28:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 exports = module.exports = typeof Object.keys === 'function'
   ? Object.keys : shim;
 
@@ -1559,7 +1988,7 @@ function shim (obj) {
   return keys;
 }
 
-},{}],29:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -1568,8 +1997,6 @@ function shim (obj) {
  * This source code is licensed under the BSD-style license found in the
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
- *
- * @providesModule invariant
  */
 
 'use strict';
@@ -1603,9 +2030,9 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
       var args = [a, b, c, d, e, f];
       var argIndex = 0;
       error = new Error(
-        'Invariant Violation: ' +
         format.replace(/%s/g, function() { return args[argIndex++]; })
       );
+      error.name = 'Invariant Violation';
     }
 
     error.framesToPop = 1; // we don't care about invariant's own frame
@@ -1616,7 +2043,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":13}],30:[function(require,module,exports){
+},{"_process":14}],32:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -1680,7 +2107,7 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":13}],31:[function(require,module,exports){
+},{"_process":14}],33:[function(require,module,exports){
 
 // A dictionary mapping script URLs to a dictionary mapping
 // component key to component for all components that are waiting
@@ -1800,4 +2227,4 @@ var ReactScriptLoaderMixin = {
 exports.ReactScriptLoaderMixin = ReactScriptLoaderMixin;
 exports.ReactScriptLoader = ReactScriptLoader;
 
-},{}]},{},[11]);
+},{}]},{},[12]);

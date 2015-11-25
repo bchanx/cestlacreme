@@ -27,9 +27,17 @@ a:focus {
 a:hover {
   color: #f8f8f8;
 }
+::-moz-selection {
+  background: #faedcb;
+  text-shadow: none;
+}
+::selection {
+  background: #faedcb;
+  text-shadow: none;
+}
 html {
   background-color: #f8f8f8;
-  color: #f5b367;
+  color: #ecb937;
 }
 .container {
   text-align: center;

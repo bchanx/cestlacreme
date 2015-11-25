@@ -5,17 +5,17 @@ import Social from './Social';
 var Navigation = React.createClass({
   render: function() {
     return (
-      <div className="navigation">
-        <div className="brand">
+      <div className="nav">
+        <div className="nav-brand">
           <IndexLink to="/">
-            <div className="logo"></div>
+            <div className="nav-logo"></div>
           </IndexLink>
         </div>
-        <div className="links">
-          <div className="link">
+        <div className="nav-links">
+          <div className="nav-link">
             <Link to="/menu" activeClassName="active">menu</Link>
           </div>
-          <div className="link">
+          <div className="nav-link">
             <Link to="/about" activeClassName="active">about</Link>
           </div>
         </div>

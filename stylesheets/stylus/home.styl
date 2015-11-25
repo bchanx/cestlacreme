@@ -28,34 +28,6 @@ a:hover
   display: flex
   flex-direction: row
 
-.navigation
-  width: $app-width * 0.3
-  margin-left: "calc((100vw - %s)/2)" % $app-width
-  position: relative
-  flex-shrink: 0
-  padding: 60px 40px
-  display: flex
-  flex-direction: column
-  border-right: 2px $gray3 solid;
-  a,
-  a:link,
-  a:visited,
-  a:active
-  a:focus
-    font-weight: 300
-    color: $gray5
-  a:hover
-    color: $gray7
-
-.logo
-  background-image: url('/images/logo-light.png')
-  background-size: 135%
-  background-repeat: no-repeat
-  background-position: -40px -50px
-  height: 175px
-  width: 220px
-  margin-top: -20px
-
 .content
   position: relative
   padding: 60px 40px
@@ -64,24 +36,6 @@ a:hover
   text-align: center
   overflow-y: scroll
   background-color: $gray1
-
-.links
-  margin-top: 20px
-  font-size: 30px
-  text-align: right
-  flex-grow: 1
-
-.link
-  display: block
-  margin-bottom: 10px
-  .active
-    color: $gray7 !important
-    position: relative
-    &:after
-      content: "\2022"
-      position: absolute
-      right: -20px
-      color: $gray6 !important
 
 .bold
   font-weight: 400
@@ -106,35 +60,6 @@ a:hover
   &:after
     right: -53px
 
-.social
-  font-size: 30px
-  text-align: right
-  flex-shrink: 0
-  margin-top: 10px
-  .ion-icon
-    margin-left: 20px
-
-.instagram
-  text-align: center
-
-.thumbnail-link
-  font-size: 0
-
-.thumbnail
-  display: inline-block
-  margin: 5px 10px
-  width: 180px
-  height: 180px
-  overflow: hidden
-  opacity: 0.8
-  img
-    width: 226px
-    height: 226px
-    margin-top: -23px
-    margin-left: -23px
-  &:hover
-    opacity: 1
-
 .footer
   line-height: 38px
   font-size: 0.8em
@@ -143,85 +68,15 @@ a:hover
   .site
     margin-left: 15px
 
-.stripe
-  outline: 1px red solid
-
-
 @media screen and (max-width: $app-width)
   .container
     flex-direction: column
-  .navigation
-    width: 100%
-    max-width: none
-    margin-left: initial;
-    padding: 2vw 4vw
-    border-right: none;
-    border-bottom: 2px $gray3 solid;
-    flex-direction: row
-  .brand
-    padding-right: 4vw
-    line-height: 38px
-  .logo
-    background-size: 135%
-    background-position: -33px -155px
-    height: 38px
-    width: 185px
-    margin-top: 0
-  .links
-    margin-top: 0
-    text-align: left
-    font-size: 3vw
-  .link
-    margin-bottom: 0;
-    margin-right: 15px
-    display: inline-block
-    line-height: 38px
-    .active:after
-      right: 0
-      bottom: -24px
-      width: 100%
-      text-align: center
-  .social
-    margin-top: 0
-    font-size: 3vw
-    a
-      line-height: 38px
   .content
     padding: 4vw
 
 @media screen and (max-width: 600px)
   html
     font-size: 16px
-  .navigation
-    padding: 10px 20px
   .content
     padding: 20px
-  .brand
-    padding-right: 20px
-  .logo
-    background-size: 250%
-    height: 38px
-    width: 38px
-    background-position: 50% 28%
-  .link
-    font-size: 18px
-  .social
-    font-size: 18px
 
-@media screen and (max-width: 440px)
-  .thumbnail-link:nth-child(n + 4)
-    display: none
-  .thumbnail-link:nth-child(n + 3)
-    .thumbnail
-      margin-bottom: 0
-  .thumbnail
-    width: 60vw
-    height: 60vw
-    overflow: hidden
-    opacity: 1
-    margin-bottom: 20px
-    img
-      width: 80vw
-      height: 80vw
-      margin-top: -10vw
-      margin-left: -10vw      

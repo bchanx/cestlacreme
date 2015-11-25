@@ -19,8 +19,8 @@ var Instagram = React.createClass({
   render: function() {
     var thumbnails = this.state.recent.map(r => {
       return (
-        <a className="thumbnail-link" href={r.link} target="_blank" key={r.link}>
-          <div className="thumbnail">
+        <a className="instagram-link" href={r.link} target="_blank" key={r.link}>
+          <div className="instagram-thumbnail">
             <img src={r.image.url}/>
           </div>
         </a>

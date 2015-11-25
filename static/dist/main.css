@@ -27,6 +27,14 @@ a:focus {
 a:hover {
   color: #f8f8f8;
 }
+::-moz-selection {
+  background: #faedcb;
+  text-shadow: none;
+}
+::selection {
+  background: #faedcb;
+  text-shadow: none;
+}
 html {
   background-color: #f8f8f8;
   color: #222;
@@ -37,12 +45,12 @@ a:link,
 a:visited,
 a:active,
 a:focus {
-  color: #f5b367;
+  color: #ecb937;
   font-weight: 400;
   text-decoration: none;
 }
 a:hover {
-  color: #e5810f;
+  color: #be8e12;
 }
 #app {
   height: 100%;
@@ -59,42 +67,6 @@ a:hover {
   -ms-flex-direction: row;
   flex-direction: row;
 }
-.navigation {
-  width: 300px;
-  margin-left: calc((100vw - 1000px)/2);
-  position: relative;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  padding: 60px 40px;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  border-right: 2px #e8e8e8 solid;
-}
-.navigation a,
-.navigation a:link,
-.navigation a:visited,
-.navigation a:active,
-.navigation a:focus {
-  font-weight: 300;
-  color: #9d9d9d;
-}
-.navigation a:hover {
-  color: #303030;
-}
-.logo {
-  background-image: url("/images/logo-light.png");
-  background-size: 135%;
-  background-repeat: no-repeat;
-  background-position: -40px -50px;
-  height: 175px;
-  width: 220px;
-  margin-top: -20px;
-}
 .content {
   position: relative;
   padding: 60px 40px;
@@ -105,28 +77,6 @@ a:hover {
   text-align: center;
   overflow-y: scroll;
   background-color: #f8f8f8;
-}
-.links {
-  margin-top: 20px;
-  font-size: 30px;
-  text-align: right;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-}
-.link {
-  display: block;
-  margin-bottom: 10px;
-}
-.link .active {
-  color: #303030 !important;
-  position: relative;
-}
-.link .active:after {
-  content: "\2022";
-  position: absolute;
-  right: -20px;
-  color: #808080 !important;
 }
 .bold {
   font-weight: 400;
@@ -154,40 +104,6 @@ a:hover {
 .break:after {
   right: -53px;
 }
-.social {
-  font-size: 30px;
-  text-align: right;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  margin-top: 10px;
-}
-.social .ion-icon {
-  margin-left: 20px;
-}
-.instagram {
-  text-align: center;
-}
-.thumbnail-link {
-  font-size: 0;
-}
-.thumbnail {
-  display: inline-block;
-  margin: 5px 10px;
-  width: 180px;
-  height: 180px;
-  overflow: hidden;
-  opacity: 0.8;
-}
-.thumbnail img {
-  width: 226px;
-  height: 226px;
-  margin-top: -23px;
-  margin-left: -23px;
-}
-.thumbnail:hover {
-  opacity: 1;
-}
 .footer {
   line-height: 38px;
   font-size: 0.8em;
@@ -198,16 +114,84 @@ a:hover {
 .footer .site {
   margin-left: 15px;
 }
-.stripe {
-  outline: 1px #f00 solid;
-}
 @media screen and (max-width: 1000px) {
   .container {
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
     flex-direction: column;
   }
-  .navigation {
+  .content {
+    padding: 4vw;
+  }
+}
+@media screen and (max-width: 600px) {
+  html {
+    font-size: 16px;
+  }
+  .content {
+    padding: 20px;
+  }
+}
+.nav {
+  width: 300px;
+  margin-left: calc((100vw - 1000px)/2);
+  position: relative;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  padding: 60px 40px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  border-right: 2px #e8e8e8 solid;
+}
+.nav a,
+.nav a:link,
+.nav a:visited,
+.nav a:active,
+.nav a:focus {
+  font-weight: 300;
+  color: #9d9d9d;
+}
+.nav a:hover {
+  color: #303030;
+}
+.nav-logo {
+  background-image: url("/images/logo-light.png");
+  background-size: 135%;
+  background-repeat: no-repeat;
+  background-position: -40px -50px;
+  height: 175px;
+  width: 220px;
+  margin-top: -20px;
+}
+.nav-links {
+  margin-top: 20px;
+  font-size: 30px;
+  text-align: right;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+.nav-link {
+  display: block;
+  margin-bottom: 10px;
+}
+.nav-link .active {
+  color: #303030 !important;
+  position: relative;
+}
+.nav-link .active:after {
+  content: "\2022";
+  position: absolute;
+  right: -20px;
+  color: #808080 !important;
+}
+@media screen and (max-width: 1000px) {
+  .nav {
     width: 100%;
     max-width: none;
     margin-left: initial;
@@ -218,89 +202,188 @@ a:hover {
     -ms-flex-direction: row;
     flex-direction: row;
   }
-  .brand {
+  .nav-brand {
     padding-right: 4vw;
     line-height: 38px;
   }
-  .logo {
+  .nav-logo {
     background-size: 135%;
     background-position: -33px -155px;
     height: 38px;
     width: 185px;
     margin-top: 0;
   }
-  .links {
+  .nav-links {
     margin-top: 0;
     text-align: left;
     font-size: 3vw;
   }
-  .link {
+  .nav-link {
     margin-bottom: 0;
     margin-right: 15px;
     display: inline-block;
     line-height: 38px;
   }
-  .link .active:after {
+  .nav-link .active:after {
     right: 0;
     bottom: -24px;
     width: 100%;
     text-align: center;
   }
-  .social {
-    margin-top: 0;
-    font-size: 3vw;
-  }
-  .social a {
-    line-height: 38px;
-  }
-  .content {
-    padding: 4vw;
-  }
 }
 @media screen and (max-width: 600px) {
-  html {
-    font-size: 16px;
-  }
-  .navigation {
+  .nav {
     padding: 10px 20px;
   }
-  .content {
-    padding: 20px;
-  }
-  .brand {
+  .nav-brand {
     padding-right: 20px;
   }
-  .logo {
+  .nav-logo {
     background-size: 250%;
     height: 38px;
     width: 38px;
     background-position: 50% 28%;
   }
-  .link {
-    font-size: 18px;
-  }
-  .social {
+  .nav-link {
     font-size: 18px;
   }
 }
+.nav-social {
+  font-size: 30px;
+  text-align: right;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  margin-top: 10px;
+}
+.nav-social .ion-icon {
+  margin-left: 20px;
+}
+@media screen and (max-width: 1000px) {
+  .nav-social {
+    margin-top: 0;
+    font-size: 3vw;
+  }
+  .nav-social a {
+    line-height: 38px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .nav-social {
+    font-size: 18px;
+  }
+}
+.instagram {
+  text-align: center;
+}
+.instagram-link {
+  font-size: 0;
+}
+.instagram-thumbnail {
+  display: inline-block;
+  margin: 5px 10px;
+  width: 180px;
+  height: 180px;
+  overflow: hidden;
+  opacity: 0.8;
+}
+.instagram-thumbnail img {
+  width: 226px;
+  height: 226px;
+  margin-top: -23px;
+  margin-left: -23px;
+}
+.instagram-thumbnail:hover {
+  opacity: 1;
+}
 @media screen and (max-width: 440px) {
-  .thumbnail-link:nth-child(n + 4) {
+  .instagram-link:nth-child(n + 4) {
     display: none;
   }
-  .thumbnail-link:nth-child(n + 3) .thumbnail {
+  .instagram-link:nth-child(n + 3) .instagram-thumbnail {
     margin-bottom: 0;
   }
-  .thumbnail {
+  .instagram-thumbnail {
     width: 60vw;
     height: 60vw;
     overflow: hidden;
     opacity: 1;
     margin-bottom: 20px;
   }
-  .thumbnail img {
+  .instagram-thumbnail img {
     width: 80vw;
     height: 80vw;
     margin-top: -10vw;
     margin-left: -10vw;
   }
+}
+.stripe {
+  outline: 1px #f00 solid;
+}
+.stripe-card {
+  text-align: left;
+}
+.stripe-form {
+  margin: 20px 0;
+}
+.react-credit-card {
+  min-width: 280px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.4);
+}
+.react-credit-card__container {
+  margin: 0 auto;
+}
+.react-credit-card__front,
+.react-credit-card__back {
+  background: #9d9d9d;
+}
+.react-credit-card__front {
+  opacity: 1;
+}
+.react-credit-card__back {
+  -webkit-transform: none;
+  transform: none;
+  opacity: 0;
+}
+.react-credit-card--focused {
+  font-weight: 400;
+}
+.react-credit-card--flipped {
+  -webkit-transform: none;
+  transform: none;
+}
+.react-credit-card--flipped .react-credit-card__front {
+  opacity: 0;
+}
+.react-credit-card--flipped .react-credit-card__back {
+  opacity: 1;
+}
+.react-credit-card__expiry {
+  text-align: right;
+}
+.react-credit-card__expiry:before {
+  margin-right: 3px;
+}
+.react-credit-card__expiry:after {
+  bottom: 5px;
+  margin-right: -11px;
+}
+.react-credit-card__name {
+  bottom: -4px;
+}
+.react-credit-card__container {
+  min-width: 280px;
+  max-width: 350px;
+  width: auto;
+}
+.selection .Select {
+  width: 65px;
+  text-align: left;
+}
+.selection .Select-value,
+.selection .Select-option {
+  padding-left: 20px !important;
+}
+.selection .Select-option.is-focused {
+  background-color: #fdf9ee;
 }
