@@ -28,6 +28,7 @@ const VENDOR_DEPS = [
   'react-router',
   'react-select',
   'react-credit-card',
+  'classnames',
   'superagent'
 ];
 

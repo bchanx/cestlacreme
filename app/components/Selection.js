@@ -1,29 +1,29 @@
 import React from 'react';
-import { Break } from './Common';
 import Select from 'react-select';
+import classNames from 'classnames';
 
 var Selection = React.createClass({
 
   getDefaultProps: function() {
     return {
-      contraints: null,
+      type: null, // earlgrey
+      name: null, // Earl Grey,
+      imageType: null,
+      imageTypes: null, // ['ingredients', 'torched', 'spoon']
       selected: null,
-      onSelectionChange: null
+      constraints: null,
+      onChange: null,
+      onMouseOver: null,
+      onMouseLeave: null
     };
   },
 
-  handleSelectChange: function(name) {
-    return function(val) {
-      this.props.onSelectionChange(name, val);
-    }.bind(this);
-  },
-
-  getOptions: function(name) {
-    let othersSelected = Object.keys(this.props.selected).filter(s => s !== name)
+  getOptions: function() {
+    let othersSelected = Object.keys(this.props.selected).   filter(s => s !== this.props.type)
       .map(s => this.props.selected[s])
       .reduce((a, b) => a + b);
     let options = [];
-    for (let i = 0; i <= this.props.constraints.maximum - othersSelected; i++) {
+    for (let i = 0; i <= this.props.constraints.maximum -    othersSelected; i++) {
       options.push({
         value: i,
         label: String(i)
@@ -33,45 +33,28 @@ var Selection = React.createClass({
   },
 
   render: function() {
-    let options = [];
-    Object.keys(this.props.selected).forEach(type => {
-      options[type] = this.getOptions(type);
-    });
     return (
-      <div className="selection">
-        <div>
-          Vanilla
-          <Select
-            name="select-vanilla"
-            searchable={false}
-            clearable={false}
-            value={this.props.selected.vanilla}
-            options={options.vanilla}
-            onChange={this.handleSelectChange('vanilla')}
-          />
+      <div>
+        <div className="menu-images"
+          onMouseOver={this.props.onMouseOver}
+          onMouseLeave={this.props.onMouseLeave}>
+          {this.props.imageTypes.map(type => {
+            return (
+              <div key={type} className={classNames('menu-image', this.props.type, type, {
+                'active': this.props.imageType === type 
+              })}></div>
+            );
+          })}
         </div>
-        <Break/>
-        <div>
-          Matcha
+        <div className="menu-options">
+          <div className="menu-caption">{this.props.name}</div>
           <Select
-            name="select-matcha"
+            name="vanilla-select"
             searchable={false}
             clearable={false}
-            value={this.props.selected.matcha}
-            options={options.matcha}
-            onChange={this.handleSelectChange('matcha')}
-          />
-        </div>
-        <Break/>
-        <div>
-          Earl Grey
-          <Select
-            name="select-earlgrey"
-            searchable={false}
-            clearable={false}
-            value={this.props.selected.earlgrey}
-            options={options.earlgrey}
-            onChange={this.handleSelectChange('earlgrey')}
+            value={this.props.selected[this.props.type]}
+            options={this.getOptions()}
+            onChange={this.props.onChange}
           />
         </div>
       </div>

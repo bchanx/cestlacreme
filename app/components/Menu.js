@@ -1,7 +1,7 @@
 import React from 'react';
 import { Break } from './Common';
 import Stripe from './Stripe';
-import Selection from './Selection';
+import MenuItems from './MenuItems';
 
 var CONSTRAINTS = {
   price: 5.00,
@@ -21,7 +21,6 @@ var Menu = React.createClass({
   },
 
   onSelectionChange: function(name, val) {
-    console.log("-->> selection changed:", name, val);
     let selected = this.state.selected;
     selected[name] = val.value;
     this.setState(selected);
@@ -40,7 +39,7 @@ var Menu = React.createClass({
           (For orders of more than a dozen, please <a href="mailto:cestlacreme@gmail.com">email us</a> to set up a specialty order.)
         </div>
         <Break/>
-        <Selection constraints={CONSTRAINTS} selected={this.state.selected} onSelectionChange={this.onSelectionChange}/>
+        <MenuItems constraints={CONSTRAINTS} selected={this.state.selected} onSelectionChange={this.onSelectionChange}/>
         <Break/>
         <div>
           You have currently selected: {this.state.selected.vanilla} Vanilla, {this.state.selected.matcha} Matcha, and {this.state.selected.earlgrey} Earl Grey.

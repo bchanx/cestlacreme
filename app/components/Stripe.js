@@ -1,10 +1,13 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { ReactScriptLoaderMixin } from 'react-script-loader';
 import ReactCreditCard from 'react-credit-card';
 import request from 'superagent';
 
 var StripeReact = React.createClass({
   mixins: [ReactScriptLoaderMixin],
+
+  paymentsToggleClicked: false,
 
   getScriptURL: function() {
     return 'https://js.stripe.com/v2/';
@@ -72,7 +75,18 @@ var StripeReact = React.createClass({
     };
   },
 
+  componentDidUpdate: function() {
+    if (this.paymentsToggleClicked) {
+      if (this.state.showPayments) {
+        let node = ReactDOM.findDOMNode(this).parentNode.parentNode;
+        node.scrollTop = node.scrollHeight;
+      }
+      this.paymentsToggleClicked = false;
+    }
+  },
+
   togglePayments: function() {
+    this.paymentsToggleClicked = true;
     this.setState({
       showPayments: !this.state.showPayments
     });

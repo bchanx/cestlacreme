@@ -76,6 +76,7 @@ a:hover {
   flex-grow: 1;
   text-align: center;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
   background-color: #f8f8f8;
 }
 .bold {
@@ -328,7 +329,7 @@ a:hover {
   text-align: left;
 }
 .stripe-form {
-  margin: 20px 0;
+  margin-top: 20px;
 }
 .react-credit-card {
   min-width: 280px;
@@ -380,7 +381,11 @@ a:hover {
   max-width: 350px;
   width: auto;
 }
+.react-credit-card__shiny:after {
+  width: 200px;
+}
 .selection .Select {
+  margin-top: 5px;
   width: 65px;
   text-align: left;
 }
@@ -390,4 +395,75 @@ a:hover {
 }
 .selection .Select-option.is-focused {
   background-color: #fdf9ee;
+}
+.menu-options {
+  margin-left: 20px;
+  display: inline-block;
+  vertical-align: top;
+  width: 82px;
+  height: 250px;
+  padding-top: 90px;
+  text-align: left;
+}
+.menu-caption {
+  font-size: 1.25em;
+}
+.menu-images {
+  width: 250px;
+  height: 250px;
+  opacity: 0.85;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+}
+.menu-image {
+  background-size: 100%;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: opacity 1s linear;
+}
+.menu-image.active {
+  opacity: 1;
+}
+.menu-image.vanilla.ingredients {
+  background-image: url("/images/vanilla/vanilla-ingredients-low.jpg");
+}
+.menu-image.vanilla.torched {
+  background-image: url("/images/vanilla/vanilla-torched-low.jpg");
+}
+.menu-image.vanilla.spoon {
+  background-image: url("/images/vanilla/vanilla-spoon-low.jpg");
+}
+.menu-image.matcha.ingredients {
+  background-image: url("/images/matcha/matcha-ingredients-low.jpg");
+}
+.menu-image.matcha.torched {
+  background-image: url("/images/matcha/matcha-torched-low.jpg");
+}
+.menu-image.matcha.spoon {
+  background-image: url("/images/matcha/matcha-spoon-low.jpg");
+}
+.menu-image.earlgrey.ingredients {
+  background-image: url("/images/earlgrey/earlgrey-ingredients-low.jpg");
+}
+.menu-image.earlgrey.torched {
+  background-image: url("/images/earlgrey/earlgrey-torched-low.jpg");
+}
+.menu-image.earlgrey.spoon {
+  background-image: url("/images/earlgrey/earlgrey-spoon-low.jpg");
+}
+@media screen and (max-width: 600px) {
+  .menu-images {
+    width: 200px;
+    height: 200px;
+  }
+  .menu-options {
+    height: 200px;
+    padding-top: 65px;
+  }
 }

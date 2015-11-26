@@ -166,13 +166,13 @@ var App = _react2.default.createClass({
 
 exports.default = App;
 
-},{"./Navigation":8,"react":"react"}],3:[function(require,module,exports){
+},{"./Navigation":9,"react":"react"}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Break = undefined;
+exports.SetIntervalMixin = exports.Bold = exports.Break = undefined;
 
 var _react = require("react");
 
@@ -187,6 +187,40 @@ var Break = exports.Break = _react2.default.createClass({
     return _react2.default.createElement("div", { className: "break" });
   }
 });
+
+var Bold = exports.Bold = _react2.default.createClass({
+  displayName: "Bold",
+
+  render: function render() {
+    return _react2.default.createElement(
+      "span",
+      { className: "bold" },
+      this.props.children
+    );
+  }
+});
+
+var SetIntervalMixin = exports.SetIntervalMixin = {
+  componentWillMount: function componentWillMount() {
+    this.intervals = [];
+  },
+  setInterval: (function (_setInterval) {
+    function setInterval() {
+      return _setInterval.apply(this, arguments);
+    }
+
+    setInterval.toString = function () {
+      return _setInterval.toString();
+    };
+
+    return setInterval;
+  })(function () {
+    this.intervals.push(setInterval.apply(null, arguments));
+  }),
+  componentWillUnmount: function componentWillUnmount() {
+    this.intervals.forEach(clearInterval);
+  }
+};
 
 },{"react":"react"}],4:[function(require,module,exports){
 "use strict";
@@ -284,7 +318,7 @@ var Home = _react2.default.createClass({
         null,
         'We operate solely through online purchases, market pop-ups, and catering for events and weddings.'
       ),
-      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement('br', null),
       _react2.default.createElement(
         'div',
         null,
@@ -295,13 +329,16 @@ var Home = _react2.default.createClass({
         ),
         ' We take regular orders online throughout the week, with orders closing weekly at 8pm every Tuesday. Thursday is pickup day! Current pickup point is located at the McDonalds parking lot, next to the Main Skytrain station. 1527 Main St, Vancouver, BC V6A 2W5.'
       ),
+      _react2.default.createElement('br', null),
+      _react2.default.createElement(
+        'div',
+        null,
+        'Lastly, please bear with us as we are limited by the current size of our operations and may sell out!'
+      ),
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
         'div',
         null,
-        'Lastly, please bear with us as we are limited by the current size of our operations and may sell out!',
-        _react2.default.createElement('br', null),
-        _react2.default.createElement('br', null),
         'Interested? Check out our ',
         _react2.default.createElement(
           _reactRouter.Link,
@@ -391,9 +428,9 @@ var _Stripe = require('./Stripe');
 
 var _Stripe2 = _interopRequireDefault(_Stripe);
 
-var _Selection = require('./Selection');
+var _MenuItems = require('./MenuItems');
 
-var _Selection2 = _interopRequireDefault(_Selection);
+var _MenuItems2 = _interopRequireDefault(_MenuItems);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -417,7 +454,6 @@ var Menu = _react2.default.createClass({
   },
 
   onSelectionChange: function onSelectionChange(name, val) {
-    console.log("-->> selection changed:", name, val);
     var selected = this.state.selected;
     selected[name] = val.value;
     this.setState(selected);
@@ -457,7 +493,7 @@ var Menu = _react2.default.createClass({
         ' to set up a specialty order.)'
       ),
       _react2.default.createElement(_Common.Break, null),
-      _react2.default.createElement(_Selection2.default, { constraints: CONSTRAINTS, selected: this.state.selected, onSelectionChange: this.onSelectionChange }),
+      _react2.default.createElement(_MenuItems2.default, { constraints: CONSTRAINTS, selected: this.state.selected, onSelectionChange: this.onSelectionChange }),
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
         'div',
@@ -478,7 +514,127 @@ var Menu = _react2.default.createClass({
 
 exports.default = Menu;
 
-},{"./Common":3,"./Selection":9,"./Stripe":11,"react":"react"}],8:[function(require,module,exports){
+},{"./Common":3,"./MenuItems":8,"./Stripe":12,"react":"react"}],8:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Common = require('./Common');
+
+var _reactSelect = require('react-select');
+
+var _reactSelect2 = _interopRequireDefault(_reactSelect);
+
+var _Selection = require('./Selection');
+
+var _Selection2 = _interopRequireDefault(_Selection);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var MenuItems = _react2.default.createClass({
+  displayName: 'MenuItems',
+
+  mixins: [_Common.SetIntervalMixin],
+
+  componentDidMount: function componentDidMount() {
+    var _this = this;
+
+    this.setInterval(function () {
+      if (!_this.state.imageHovered) {
+        var newImageType = _this.props.imageTypes[(_this.props.imageTypes.indexOf(_this.state.imageType) + 1) % _this.props.imageTypes.length];
+        _this.setState({
+          imageType: newImageType
+        });
+      }
+    }, 5000);
+  },
+
+  getInitialState: function getInitialState() {
+    return {
+      imageType: this.props.imageTypes[0],
+      imageHovered: false
+    };
+  },
+
+  getDefaultProps: function getDefaultProps() {
+    return {
+      contraints: null,
+      selected: null,
+      onSelectionChange: null,
+      imageTypes: ['ingredients', 'torched', 'spoon']
+    };
+  },
+
+  handleSelectChange: function handleSelectChange(name) {
+    return (function (val) {
+      this.props.onSelectionChange(name, val);
+    }).bind(this);
+  },
+
+  handleMouseOver: function handleMouseOver() {
+    this.setState({
+      imageHovered: true
+    });
+  },
+
+  handleMouseLeave: function handleMouseLeave() {
+    this.setState({
+      imageHovered: false
+    });
+  },
+
+  render: function render() {
+    return _react2.default.createElement(
+      'div',
+      { className: 'selection' },
+      _react2.default.createElement(_Selection2.default, {
+        type: 'vanilla',
+        name: 'Vanilla',
+        constraints: this.props.constraints,
+        selected: this.props.selected,
+        imageType: this.state.imageType,
+        imageTypes: this.props.imageTypes,
+        onChange: this.handleSelectChange('vanilla'),
+        onMouseOver: this.handleMouseOver,
+        onMouseLeave: this.handleMouseLeave
+      }),
+      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement(_Selection2.default, {
+        type: 'matcha',
+        name: 'Matcha',
+        constraints: this.props.constraints,
+        selected: this.props.selected,
+        imageType: this.state.imageType,
+        imageTypes: this.props.imageTypes,
+        onChange: this.handleSelectChange('matcha'),
+        onMouseOver: this.handleMouseOver,
+        onMouseLeave: this.handleMouseLeave
+      }),
+      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement(_Selection2.default, {
+        type: 'earlgrey',
+        name: 'Earl Grey',
+        constraints: this.props.constraints,
+        selected: this.props.selected,
+        imageType: this.state.imageType,
+        imageTypes: this.props.imageTypes,
+        onChange: this.handleSelectChange('earlgrey'),
+        onMouseOver: this.handleMouseOver,
+        onMouseLeave: this.handleMouseLeave
+      })
+    );
+  }
+});
+
+exports.default = MenuItems;
+
+},{"./Common":3,"./Selection":10,"react":"react","react-select":"react-select"}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -542,7 +698,7 @@ var Navigation = _react2.default.createClass({
 
 exports.default = Navigation;
 
-},{"./Social":10,"react":"react","react-router":"react-router"}],9:[function(require,module,exports){
+},{"./Social":11,"react":"react","react-router":"react-router"}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -553,11 +709,13 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Common = require('./Common');
-
 var _reactSelect = require('react-select');
 
 var _reactSelect2 = _interopRequireDefault(_reactSelect);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -566,23 +724,23 @@ var Selection = _react2.default.createClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      contraints: null,
+      type: null, // earlgrey
+      name: null, // Earl Grey,
+      imageType: null,
+      imageTypes: null, // ['ingredients', 'torched', 'spoon']
       selected: null,
-      onSelectionChange: null
+      constraints: null,
+      onChange: null,
+      onMouseOver: null,
+      onMouseLeave: null
     };
   },
 
-  handleSelectChange: function handleSelectChange(name) {
-    return (function (val) {
-      this.props.onSelectionChange(name, val);
-    }).bind(this);
-  },
-
-  getOptions: function getOptions(name) {
+  getOptions: function getOptions() {
     var _this = this;
 
     var othersSelected = Object.keys(this.props.selected).filter(function (s) {
-      return s !== name;
+      return s !== _this.props.type;
     }).map(function (s) {
       return _this.props.selected[s];
     }).reduce(function (a, b) {
@@ -601,52 +759,35 @@ var Selection = _react2.default.createClass({
   render: function render() {
     var _this2 = this;
 
-    var options = [];
-    Object.keys(this.props.selected).forEach(function (type) {
-      options[type] = _this2.getOptions(type);
-    });
     return _react2.default.createElement(
       'div',
-      { className: 'selection' },
+      null,
       _react2.default.createElement(
         'div',
-        null,
-        'Vanilla',
-        _react2.default.createElement(_reactSelect2.default, {
-          name: 'select-vanilla',
-          searchable: false,
-          clearable: false,
-          value: this.props.selected.vanilla,
-          options: options.vanilla,
-          onChange: this.handleSelectChange('vanilla')
+        { className: 'menu-images',
+          onMouseOver: this.props.onMouseOver,
+          onMouseLeave: this.props.onMouseLeave },
+        this.props.imageTypes.map(function (type) {
+          return _react2.default.createElement('div', { key: type, className: (0, _classnames2.default)('menu-image', _this2.props.type, type, {
+              'active': _this2.props.imageType === type
+            }) });
         })
       ),
-      _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
         'div',
-        null,
-        'Matcha',
+        { className: 'menu-options' },
+        _react2.default.createElement(
+          'div',
+          { className: 'menu-caption' },
+          this.props.name
+        ),
         _react2.default.createElement(_reactSelect2.default, {
-          name: 'select-matcha',
+          name: 'vanilla-select',
           searchable: false,
           clearable: false,
-          value: this.props.selected.matcha,
-          options: options.matcha,
-          onChange: this.handleSelectChange('matcha')
-        })
-      ),
-      _react2.default.createElement(_Common.Break, null),
-      _react2.default.createElement(
-        'div',
-        null,
-        'Earl Grey',
-        _react2.default.createElement(_reactSelect2.default, {
-          name: 'select-earlgrey',
-          searchable: false,
-          clearable: false,
-          value: this.props.selected.earlgrey,
-          options: options.earlgrey,
-          onChange: this.handleSelectChange('earlgrey')
+          value: this.props.selected[this.props.type],
+          options: this.getOptions(),
+          onChange: this.props.onChange
         })
       )
     );
@@ -655,7 +796,7 @@ var Selection = _react2.default.createClass({
 
 exports.default = Selection;
 
-},{"./Common":3,"react":"react","react-select":"react-select"}],10:[function(require,module,exports){
+},{"classnames":"classnames","react":"react","react-select":"react-select"}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -684,7 +825,7 @@ var Social = _react2.default.createClass({
 
 exports.default = Social;
 
-},{"react":"react"}],11:[function(require,module,exports){
+},{"react":"react"}],12:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -695,6 +836,10 @@ Object.defineProperty(exports, "__esModule", {
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
 
 var _reactScriptLoader = require('react-script-loader');
 
@@ -712,6 +857,8 @@ var StripeReact = _react2.default.createClass({
   displayName: 'StripeReact',
 
   mixins: [_reactScriptLoader.ReactScriptLoaderMixin],
+
+  paymentsToggleClicked: false,
 
   getScriptURL: function getScriptURL() {
     return 'https://js.stripe.com/v2/';
@@ -779,7 +926,18 @@ var StripeReact = _react2.default.createClass({
     };
   },
 
+  componentDidUpdate: function componentDidUpdate() {
+    if (this.paymentsToggleClicked) {
+      if (this.state.showPayments) {
+        var node = _reactDom2.default.findDOMNode(this).parentNode.parentNode;
+        node.scrollTop = node.scrollHeight;
+      }
+      this.paymentsToggleClicked = false;
+    }
+  },
+
   togglePayments: function togglePayments() {
+    this.paymentsToggleClicked = true;
     this.setState({
       showPayments: !this.state.showPayments
     });
@@ -959,7 +1117,7 @@ var StripeReact = _react2.default.createClass({
 exports.default = StripeReact;
 
 }).call(this,require('_process'))
-},{"_process":14,"react":"react","react-credit-card":"react-credit-card","react-script-loader":33,"superagent":"superagent"}],12:[function(require,module,exports){
+},{"_process":15,"react":"react","react-credit-card":"react-credit-card","react-dom":"react-dom","react-script-loader":34,"superagent":"superagent"}],13:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -992,7 +1150,7 @@ _reactDom2.default.render(_react2.default.createElement(
   (0, _routes2.default)()
 ), document.getElementById('app'));
 
-},{"./routes":13,"history/lib/createBrowserHistory":20,"react":"react","react-dom":"react-dom","react-router":"react-router"}],13:[function(require,module,exports){
+},{"./routes":14,"history/lib/createBrowserHistory":21,"react":"react","react-dom":"react-dom","react-router":"react-router"}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1033,7 +1191,7 @@ var _Menu2 = _interopRequireDefault(_Menu);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./components/About":1,"./components/App":2,"./components/Home":5,"./components/Menu":7,"react":"react","react-router":"react-router"}],14:[function(require,module,exports){
+},{"./components/About":1,"./components/App":2,"./components/Home":5,"./components/Menu":7,"react":"react","react-router":"react-router"}],15:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -1126,7 +1284,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /**
  * Indicates that navigation was caused by a call to history.push.
  */
@@ -1158,7 +1316,7 @@ exports['default'] = {
   REPLACE: REPLACE,
   POP: POP
 };
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -1185,7 +1343,7 @@ function loopAsync(turns, work, callback) {
 
   next();
 }
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function (process){
 /*eslint-disable no-empty */
 'use strict';
@@ -1256,7 +1414,7 @@ function readState(key) {
   return null;
 }
 }).call(this,require('_process'))
-},{"_process":14,"warning":32}],18:[function(require,module,exports){
+},{"_process":15,"warning":33}],19:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1332,13 +1490,13 @@ function supportsGoWithoutReloadUsingHash() {
   var ua = navigator.userAgent;
   return ua.indexOf('Firefox') === -1;
 }
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
 var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 exports.canUseDOM = canUseDOM;
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1513,7 +1671,7 @@ function createBrowserHistory() {
 exports['default'] = createBrowserHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./Actions":15,"./DOMStateStorage":17,"./DOMUtils":18,"./ExecutionEnvironment":19,"./createDOMHistory":21,"_process":14,"invariant":31}],21:[function(require,module,exports){
+},{"./Actions":16,"./DOMStateStorage":18,"./DOMUtils":19,"./ExecutionEnvironment":20,"./createDOMHistory":22,"_process":15,"invariant":32}],22:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1556,7 +1714,7 @@ function createDOMHistory(options) {
 exports['default'] = createDOMHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./DOMUtils":18,"./ExecutionEnvironment":19,"./createHistory":22,"_process":14,"invariant":31}],22:[function(require,module,exports){
+},{"./DOMUtils":19,"./ExecutionEnvironment":20,"./createHistory":23,"_process":15,"invariant":32}],23:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1827,7 +1985,7 @@ function createHistory() {
 
 exports['default'] = createHistory;
 module.exports = exports['default'];
-},{"./Actions":15,"./AsyncUtils":16,"./createLocation":23,"./deprecate":24,"./runTransitionHook":27,"deep-equal":28}],23:[function(require,module,exports){
+},{"./Actions":16,"./AsyncUtils":17,"./createLocation":24,"./deprecate":25,"./runTransitionHook":28,"deep-equal":29}],24:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1864,7 +2022,7 @@ function createLocation() {
 
 exports['default'] = createLocation;
 module.exports = exports['default'];
-},{"./Actions":15,"./parsePath":26}],24:[function(require,module,exports){
+},{"./Actions":16,"./parsePath":27}],25:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1886,7 +2044,7 @@ function deprecate(fn, message) {
 exports['default'] = deprecate;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"_process":14,"warning":32}],25:[function(require,module,exports){
+},{"_process":15,"warning":33}],26:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -1900,7 +2058,7 @@ function extractPath(string) {
 
 exports["default"] = extractPath;
 module.exports = exports["default"];
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1947,7 +2105,7 @@ function parsePath(path) {
 exports['default'] = parsePath;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./extractPath":25,"_process":14,"warning":32}],27:[function(require,module,exports){
+},{"./extractPath":26,"_process":15,"warning":33}],28:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1974,7 +2132,7 @@ function runTransitionHook(hook, location, callback) {
 exports['default'] = runTransitionHook;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"_process":14,"warning":32}],28:[function(require,module,exports){
+},{"_process":15,"warning":33}],29:[function(require,module,exports){
 var pSlice = Array.prototype.slice;
 var objectKeys = require('./lib/keys.js');
 var isArguments = require('./lib/is_arguments.js');
@@ -2070,7 +2228,7 @@ function objEquiv(a, b, opts) {
   return typeof a === typeof b;
 }
 
-},{"./lib/is_arguments.js":29,"./lib/keys.js":30}],29:[function(require,module,exports){
+},{"./lib/is_arguments.js":30,"./lib/keys.js":31}],30:[function(require,module,exports){
 var supportsArgumentsClass = (function(){
   return Object.prototype.toString.call(arguments)
 })() == '[object Arguments]';
@@ -2092,7 +2250,7 @@ function unsupported(object){
     false;
 };
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 exports = module.exports = typeof Object.keys === 'function'
   ? Object.keys : shim;
 
@@ -2103,7 +2261,7 @@ function shim (obj) {
   return keys;
 }
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -2158,7 +2316,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":14}],32:[function(require,module,exports){
+},{"_process":15}],33:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -2222,7 +2380,7 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":14}],33:[function(require,module,exports){
+},{"_process":15}],34:[function(require,module,exports){
 
 // A dictionary mapping script URLs to a dictionary mapping
 // component key to component for all components that are waiting
@@ -2342,4 +2500,4 @@ var ReactScriptLoaderMixin = {
 exports.ReactScriptLoaderMixin = ReactScriptLoaderMixin;
 exports.ReactScriptLoader = ReactScriptLoader;
 
-},{}]},{},[12]);
+},{}]},{},[13]);
