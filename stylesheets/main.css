@@ -76,6 +76,11 @@ a:hover {
 .bold {
   font-weight: 400;
 }
+.note {
+  font-size: 0.8em;
+  font-style: italic;
+  color: #505050;
+}
 .break {
   width: 2px;
   height: 2px;
@@ -444,4 +449,34 @@ a:hover {
     height: 200px;
     padding-top: 65px;
   }
+}
+.faq-title {
+  padding-bottom: 10px;
+}
+.qa {
+  margin-top: 5px;
+}
+.qa.expanded {
+  margin-top: 0;
+  padding-bottom: 10px;
+}
+.qa.expanded .question {
+  background-color: #f0f0f0;
+  padding: 5px 0;
+}
+.question {
+  color: #ecb937;
+  line-height: 38px;
+  cursor: pointer;
+}
+.question:hover {
+  text-decoration: underline;
+}
+.answer {
+  padding: 10px 20px;
+  transition: max-height 0.2s ease-in;
+  border: 2px #f0f0f0 solid;
+  border-top: none;
+  overflow: hidden;
+  font-size: 0.8em;
 }

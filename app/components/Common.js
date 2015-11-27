@@ -16,6 +16,14 @@ export var Bold = React.createClass({
   }
 });
 
+export var Note = React.createClass({
+  render: function() {
+    return (
+      <span className="note">{this.props.children}</span>
+    );
+  }
+});
+
 export var SetIntervalMixin = {
   componentWillMount: function() {
     this.intervals = [];

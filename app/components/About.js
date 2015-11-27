@@ -1,12 +1,13 @@
 import React from 'react';
-import { Break } from './Common';
+import { Break, Bold, Note } from './Common';
+import FAQ from './FAQ';
 
 var About = React.createClass({
   render: function() {
     return (
       <div className="about">
         <div>
-          <span className="bold">Hi! I'm Samson, creator of C'est la Creme!</span>
+          <Bold>Hi! I'm Samson, creator of C'est la Creme!</Bold>
           <br/>
           <br/>
           I love food. For as long as I can remember I've been eating my way through all different ethnic cuisines! I started cooking for myself ever since I was little and have always been cooking as a hobby. One day I decided to make my mom's favorite dessert - the Creme Brulee. 
@@ -18,54 +19,41 @@ var About = React.createClass({
           Well, here it is: My goal is to make the absolute best creme brulee I can make with the best ingredients I can find. That's it!
         </div>
         <Break/>
-        <div>
-          <span className="bold">F.A.Q</span>
-          <br/>
-          <br/>
-          <div>
-            <span className="bold">[How do I finish the sugar layer on top?]</span>
-            <br/>
-            <br/>
-            Dab the surface with a paper towel if there is any moisture on top, and spread 3/4 to a 1 teaspoon of white sugar on top evenly. Best way is to use a torch to gently melt the sugar! Alternatively you can set the oven to "Broil", set the temperature to 500F, and place the creme brulee on the top rack for 5-10 minutes or until golden brown and bubbling.
-            <br/>
-            <br/>
-            Let sit for 10 minutes and eat! Or, if a cold creme brulee is desired, place the jars back into the fridge for up to 30 minutes and serve. The longer you wait, the softer the sugar crust gets though.
-            <br/>
-            <br/>
-            *Please be safe!!! If you are torching and have an open flame, please do so at your own risk and have a fire extinguisher nearby.*
+        <div className="faq">
+          <div className="faq-title">
+            <Bold>F.A.Q</Bold>
           </div>
-          <br/>
-          <br/>
-          <div>
-            <span className="bold">[Can I have different flavors?]</span>
+          <FAQ question={"How do I create the sugar glaze on top?"}>
+            Dab the surface of the creme brulee with a paper towel to rid of any moisture, then spread 3/4 to a 1 teaspoon of white sugar on top evenly.
             <br/>
             <br/>
-            Yes! Mix and match! Leave us a note in your order and we will be happy to accommodate.
-          </div>
-          <br/>
-          <br/>
-          <div>
-            <span className="bold">[Can you make me a custom flavor?]</span>
+            Next, grab a food torch on medium flame, and gently melt the sugar until browned! Alternatively, you can set the oven to "Broil" with the temperature at 500F, then place the creme brulee on the top rack for 5-10 minutes or until golden brown and bubbling.
             <br/>
             <br/>
-            Email us! Let's make it happen! *Please note we do try our best to accommodate but may be restricted by minimum quantities and flavor limitations.*
-          </div>
-          <br/>
-          <br/>
-          <div>
-            <span className="bold">[Can I order more than 4?]</span>
+            Let sit for 10 minutes and eat! Or, if a cold creme brulee is desired, place the jars back into the fridge for up to 30 minutes and serve. Although the longer you wait, the softer the sugar crust will get.
             <br/>
             <br/>
-            Yes! However for orders of more than a dozen please email and inquire in advance.
-          </div>
-          <br/>
-          <br/>
-          <div>
-            <span className="bold">[Can we keep the jars?]</span>
+            <Note>
+              *Please be safe!!! If you are torching and have an open flame, please do so at your own risk and have be fire safe ready.*
+            </Note>
+          </FAQ>
+          <FAQ question={"Can you make me a custom flavor?"}>
+            <a href="mailto:cestlacreme@gmail.com">Email us</a>! Let's make it happen!
             <br/>
             <br/>
-            Of course! However we'd gladly accept returns as we can clean and sustainably re-use the jars.
-          </div>
+            <Note>
+              *Please note, we will try our best to accommodate but may be restricted by minimum quantities and flavor limitations.*
+            </Note>
+          </FAQ>
+          <FAQ question={"How many can I order?"}>
+            Each order requires a <Bold>minimum of 4</Bold>, and a <Bold>maximum of 12</Bold> creme brulee's.
+            <br/>
+            <br/>
+            For larger quantities, please <a href="mailto:cestlacreme@gmail.com">email us</a> and request for a special order.
+          </FAQ>
+          <FAQ question={"Can we keep the jars?"}>
+            Of course! However we gladly accept returns as we can clean and sustainably re-use the jars. Meet us at our drop off if you decide to do so!
+          </FAQ>
         </div>
       </div>
     );

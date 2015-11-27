@@ -1,5 +1,5 @@
 import React from 'react';
-import { Break } from './Common';
+import { Break, Bold } from './Common';
 import Stripe from './Stripe';
 import MenuItems from './MenuItems';
 
@@ -30,7 +30,7 @@ var Menu = React.createClass({
     return (
       <div className="menu">
         <div>
-          Our creme brulee's are sold at a flat rate of ${CONSTRAINTS.price} each. However due to the nature of our business, we require at least {CONSTRAINTS.minimum} brulee's per order, meaning a <span className="bold">minimum ${CONSTRAINTS.price * CONSTRAINTS.minimum} purchase</span>.
+          Our creme brulee's are sold at a flat rate of ${CONSTRAINTS.price} each. However due to the nature of our business, we require at least {CONSTRAINTS.minimum} brulee's per order, meaning a <Bold>minimum ${CONSTRAINTS.price * CONSTRAINTS.minimum} purchase</Bold>.
           <br/>
           <br/>
           Flavors can be mixed and matched to your preference.

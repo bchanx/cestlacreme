@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Instagram from './Instagram';
-import { Break } from './Common';
+import { Break, Bold, Note } from './Common';
 import Footer from './Footer';
 
 var Home = React.createClass({
@@ -9,7 +9,7 @@ var Home = React.createClass({
     return (
       <div className="home">
         <div>
-          <span className="bold">C'est la Creme</span> is a online creme brulee shop, crafting quality desserts for lucky folks in the Vancouver area. Our goal is to source the freshest local ingredients and deliver an indulgence to your taste buds with every bite.
+          <Bold>C'est la Creme</Bold> is a online creme brulee shop, crafting quality desserts for lucky folks in the Vancouver area. Our goal is to source the freshest local ingredients and deliver an indulgence to your taste buds with every bite.
         </div>
         <Break/>
         <Instagram/>
@@ -19,12 +19,12 @@ var Home = React.createClass({
         </div>
         <br/>
         <div>
-          <span className="bold">How it works:</span> We take regular orders online throughout the week, with orders closing weekly at 8pm every Tuesday. Thursday is pickup day! Current pickup point is located at the McDonalds parking lot, next to the Main Skytrain station. 1527 Main St, Vancouver, BC V6A 2W5. 
+          <Bold>How it works:</Bold> We take regular orders online throughout the week, with orders closing weekly at 8pm every Tuesday. Thursday is pickup day! Current pickup point is located at the McDonalds parking lot, next to the Main Skytrain station. 1527 Main St, Vancouver, BC V6A 2W5. 
         </div>
         <br/>
-        <div>
-          Lastly, please bear with us as we are limited by the current size of our operations and may sell out!
-        </div>
+        <Note>
+          *Please bear with us as we are limited by the current size of our operations and may sell out!*
+        </Note>
         <Break/>
         <div>
           Interested? Check out our&nbsp;
