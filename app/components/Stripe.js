@@ -13,24 +13,34 @@ var StripeReact = React.createClass({
     return 'https://js.stripe.com/v2/';
   },
 
+  unmounted: false,
+
+  componentWillUnmount: function() {
+    this.unmounted = true;
+  },
+
   onScriptLoaded: function() {
     // TODO: prod/test key
-    var ready = Stripe && process.env.STRIPE_TEST_PUBLISHABLE_KEY;
-    this.setState({
-      loading: false,
-      loadingError: !ready
-    });
-    if (ready) {
-      Stripe.setPublishableKey(process.env.STRIPE_TEST_PUBLISHABLE_KEY);
+    if (!this.unmounted) {
+      var ready = Stripe && process.env.STRIPE_TEST_PUBLISHABLE_KEY;
+      this.setState({
+        loading: false,
+        loadingError: !ready
+      });
+      if (ready) {
+        Stripe.setPublishableKey(process.env.STRIPE_TEST_PUBLISHABLE_KEY);
+      }
     }
   },
 
   onScriptError: function() {
     console.log("-->> ERROR!");
-    this.setState({
-      loading: false,
-      loadingError: true
-    });
+    if (!this.unmounted) {
+      this.setState({
+        loading: false,
+        loadingError: true
+      });
+    }
   },
 
   getDefaultProps: function() {

@@ -169,52 +169,74 @@ var App = _react2.default.createClass({
 exports.default = App;
 
 },{"./Content":4,"./Navigation":11,"react":"react"}],3:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Note = exports.Bold = exports.Break = undefined;
+exports.Loading = exports.Note = exports.Bold = exports.Break = undefined;
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Break = exports.Break = _react2.default.createClass({
-  displayName: "Break",
+  displayName: 'Break',
 
   render: function render() {
-    return _react2.default.createElement("div", { className: "break" });
+    return _react2.default.createElement('div', { className: 'break' });
   }
 });
 
 var Bold = exports.Bold = _react2.default.createClass({
-  displayName: "Bold",
+  displayName: 'Bold',
 
   render: function render() {
     return _react2.default.createElement(
-      "span",
-      { className: "bold" },
+      'span',
+      { className: 'bold' },
       this.props.children
     );
   }
 });
 
 var Note = exports.Note = _react2.default.createClass({
-  displayName: "Note",
+  displayName: 'Note',
 
   render: function render() {
     return _react2.default.createElement(
-      "span",
-      { className: "note" },
+      'span',
+      { className: 'note' },
       this.props.children
     );
   }
 });
 
-},{"react":"react"}],4:[function(require,module,exports){
+var Loading = exports.Loading = _react2.default.createClass({
+  displayName: 'Loading',
+
+  getDefaultProps: function getDefaultProps() {
+    return {
+      size: 'small'
+    };
+  },
+
+  render: function render() {
+    return _react2.default.createElement(
+      'div',
+      { className: (0, _classnames2.default)("loading", this.props.size) },
+      _react2.default.createElement('span', { className: 'ion-load-c' })
+    );
+  }
+});
+
+},{"classnames":"classnames","react":"react"}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -489,6 +511,8 @@ var _superagent = require('superagent');
 
 var _superagent2 = _interopRequireDefault(_superagent);
 
+var _Common = require('./Common');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Instagram = _react2.default.createClass({
@@ -496,16 +520,27 @@ var Instagram = _react2.default.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      recent: []
+      recent: [],
+      loading: true,
+      showDefault: false
     };
   },
   componentDidMount: function componentDidMount() {
     var _this = this;
 
     _superagent2.default.get(window.location.origin + '/instagram/recent').accept('json').end(function (error, response) {
+      var newState = {
+        recent: [],
+        loading: false,
+        showDefault: true
+      };
       if (response && response.body) {
-        _this.setState({ recent: response.body });
+        newState.recent = response.body;
       }
+      if (newState.recent.length) {
+        newState.showDefault = false;
+      }
+      _this.setState(newState);
     });
   },
   render: function render() {
@@ -520,17 +555,18 @@ var Instagram = _react2.default.createClass({
         )
       );
     });
+    var defaultImage = _react2.default.createElement('img', { className: 'default-thumbnail', src: '/images/default-brulee-low.png' });
     return _react2.default.createElement(
       'div',
       { className: 'instagram' },
-      thumbnails
+      this.state.loading ? _react2.default.createElement(_Common.Loading, { size: 'large' }) : this.state.showDefault ? defaultImage : thumbnails
     );
   }
 });
 
 exports.default = Instagram;
 
-},{"react":"react","superagent":"superagent"}],9:[function(require,module,exports){
+},{"./Common":3,"react":"react","superagent":"superagent"}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -987,24 +1023,34 @@ var StripeReact = _react2.default.createClass({
     return 'https://js.stripe.com/v2/';
   },
 
+  unmounted: false,
+
+  componentWillUnmount: function componentWillUnmount() {
+    this.unmounted = true;
+  },
+
   onScriptLoaded: function onScriptLoaded() {
     // TODO: prod/test key
-    var ready = Stripe && "pk_test_IaT5HSSG1P7dpsq44cKF4Ypr";
-    this.setState({
-      loading: false,
-      loadingError: !ready
-    });
-    if (ready) {
-      Stripe.setPublishableKey("pk_test_IaT5HSSG1P7dpsq44cKF4Ypr");
+    if (!this.unmounted) {
+      var ready = Stripe && "pk_test_IaT5HSSG1P7dpsq44cKF4Ypr";
+      this.setState({
+        loading: false,
+        loadingError: !ready
+      });
+      if (ready) {
+        Stripe.setPublishableKey("pk_test_IaT5HSSG1P7dpsq44cKF4Ypr");
+      }
     }
   },
 
   onScriptError: function onScriptError() {
     console.log("-->> ERROR!");
-    this.setState({
-      loading: false,
-      loadingError: true
-    });
+    if (!this.unmounted) {
+      this.setState({
+        loading: false,
+        loadingError: true
+      });
+    }
   },
 
   getDefaultProps: function getDefaultProps() {

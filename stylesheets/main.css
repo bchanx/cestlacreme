@@ -35,6 +35,81 @@ a:hover {
   background: #faedcb;
   text-shadow: none;
 }
+.bold {
+  font-weight: 400;
+}
+.note {
+  font-size: 0.8em;
+  font-style: italic;
+  color: #505050;
+}
+.break {
+  width: 2px;
+  height: 2px;
+  background-color: #b0b0b0;
+  opacity: 0.5;
+  position: relative;
+  margin: 25px auto;
+}
+.break:before,
+.break:after {
+  content: "";
+  position: absolute;
+  width: 50px;
+  height: 2px;
+  background-color: #b0b0b0;
+  opacity: 0.3;
+}
+.break:before {
+  left: -53px;
+}
+.break:after {
+  right: -53px;
+}
+.loading {
+  display: inline-block;
+  color: #f7e1a9;
+  font-size: 2em;
+}
+.loading span {
+  animation: loading 1s linear infinite;
+}
+.loading.large {
+  line-height: 100px;
+  font-size: 2.5em;
+}
+@-moz-keyframes loading {
+  0% {
+    transform: rotateZ(0);
+  }
+  100% {
+    transform: rotateZ(359deg);
+  }
+}
+@-webkit-keyframes loading {
+  0% {
+    transform: rotateZ(0);
+  }
+  100% {
+    transform: rotateZ(359deg);
+  }
+}
+@-o-keyframes loading {
+  0% {
+    transform: rotateZ(0);
+  }
+  100% {
+    transform: rotateZ(359deg);
+  }
+}
+@keyframes loading {
+  0% {
+    transform: rotateZ(0);
+  }
+  100% {
+    transform: rotateZ(359deg);
+  }
+}
 html {
   background-color: #f8f8f8;
   color: #222;
@@ -72,37 +147,6 @@ a:hover {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   background-color: #f8f8f8;
-}
-.bold {
-  font-weight: 400;
-}
-.note {
-  font-size: 0.8em;
-  font-style: italic;
-  color: #505050;
-}
-.break {
-  width: 2px;
-  height: 2px;
-  background-color: #b0b0b0;
-  opacity: 0.5;
-  position: relative;
-  margin: 25px auto;
-}
-.break:before,
-.break:after {
-  content: "";
-  position: absolute;
-  width: 50px;
-  height: 2px;
-  background-color: #b0b0b0;
-  opacity: 0.3;
-}
-.break:before {
-  left: -53px;
-}
-.break:after {
-  right: -53px;
 }
 .footer {
   line-height: 38px;
@@ -285,6 +329,13 @@ a:hover {
 }
 .instagram-thumbnail:hover {
   opacity: 1;
+}
+.default-thumbnail {
+  display: inline-block;
+  width: 60%;
+  height: 60%;
+  max-width: 400px;
+  margin: 5px 0;
 }
 @media screen and (max-width: 440px) {
   .instagram-link:nth-child(n + 4) {
