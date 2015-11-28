@@ -1,36 +1,15 @@
 import React from 'react';
-import ReactTimerMixin from 'react-timer-mixin';
 import Select from 'react-select';
-import { Break } from './Common';
+import { Break, Carousel } from './Common';
 import Selection from './Selection';
 
 var MenuItems = React.createClass({
-  mixins: [ReactTimerMixin],
-
-  componentDidMount: function() {
-    this.setInterval(() => {
-      if (!this.state.imageHovered) {
-        let newImageType = this.props.imageTypes[(this.props.imageTypes.indexOf(this.state.imageType) + 1) % this.props.imageTypes.length];
-        this.setState({
-          imageType: newImageType
-        });
-      }
-    }, 5000);
-  },
-
-  getInitialState: function() {
-    return {
-      imageType: this.props.imageTypes[0],
-      imageHovered: false
-    };
-  },
 
   getDefaultProps: function() {
     return {
       contraints: null,
       selected: null,
-      onSelectionChange: null,
-      imageTypes: ['ingredients', 'torched', 'spoon']
+      onSelectionChange: null
     };
   },
 
@@ -38,18 +17,6 @@ var MenuItems = React.createClass({
     return function(val) {
       this.props.onSelectionChange(name, val);
     }.bind(this);
-  },
-
-  handleMouseOver: function() {
-    this.setState({
-      imageHovered: true
-    });
-  },
-
-  handleMouseLeave: function() {
-    this.setState({
-      imageHovered: false
-    });
   },
 
   render: function() {
@@ -60,11 +27,12 @@ var MenuItems = React.createClass({
           name="Vanilla"
           constraints={this.props.constraints}
           selected={this.props.selected}
-          imageType={this.state.imageType}
-          imageTypes={this.props.imageTypes}
           onChange={this.handleSelectChange('vanilla')}
-          onMouseOver={this.handleMouseOver}
-          onMouseLeave={this.handleMouseLeave}
+          images={[
+            '/images/vanilla/vanilla-ingredients-low.jpg',
+            '/images/vanilla/vanilla-torched-low.jpg',
+            '/images/vanilla/vanilla-spoon-low.jpg'
+          ]}
         />
         <Break/>
         <Selection
@@ -72,11 +40,12 @@ var MenuItems = React.createClass({
           name="Matcha"
           constraints={this.props.constraints}
           selected={this.props.selected}
-          imageType={this.state.imageType}
-          imageTypes={this.props.imageTypes}
           onChange={this.handleSelectChange('matcha')}
-          onMouseOver={this.handleMouseOver}
-          onMouseLeave={this.handleMouseLeave}
+          images={[
+            '/images/matcha/matcha-ingredients-low.jpg',
+            '/images/matcha/matcha-torched-low.jpg',
+            '/images/matcha/matcha-spoon-low.jpg'
+          ]}
         />
         <Break/>
         <Selection
@@ -84,11 +53,12 @@ var MenuItems = React.createClass({
           name="Earl Grey"
           constraints={this.props.constraints}
           selected={this.props.selected}
-          imageType={this.state.imageType}
-          imageTypes={this.props.imageTypes}
           onChange={this.handleSelectChange('earlgrey')}
-          onMouseOver={this.handleMouseOver}
-          onMouseLeave={this.handleMouseLeave}
+          images={[
+            '/images/earlgrey/earlgrey-ingredients-low.jpg',
+            '/images/earlgrey/earlgrey-torched-low.jpg',
+            '/images/earlgrey/earlgrey-spoon-low.jpg'
+          ]}
         />
       </div>
     );

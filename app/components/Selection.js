@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import classNames from 'classnames';
+import { Carousel } from './Common';
 
 var Selection = React.createClass({
 
@@ -8,13 +9,10 @@ var Selection = React.createClass({
     return {
       type: null, // earlgrey
       name: null, // Earl Grey,
-      imageType: null,
-      imageTypes: null, // ['ingredients', 'torched', 'spoon']
+      images: null,
       selected: null,
       constraints: null,
-      onChange: null,
-      onMouseOver: null,
-      onMouseLeave: null
+      onChange: null
     };
   },
 
@@ -23,7 +21,7 @@ var Selection = React.createClass({
       .map(s => this.props.selected[s])
       .reduce((a, b) => a + b);
     let options = [];
-    for (let i = 0; i <= this.props.constraints.maximum -    othersSelected; i++) {
+    for (let i = 0; i <= this.props.constraints.maximum - othersSelected; i++) {
       options.push({
         value: i,
         label: String(i)
@@ -35,16 +33,8 @@ var Selection = React.createClass({
   render: function() {
     return (
       <div>
-        <div className="menu-images"
-          onMouseOver={this.props.onMouseOver}
-          onMouseLeave={this.props.onMouseLeave}>
-          {this.props.imageTypes.map(type => {
-            return (
-              <div key={type} className={classNames('menu-image', this.props.type, type, {
-                'active': this.props.imageType === type 
-              })}></div>
-            );
-          })}
+        <div className="menu-images">
+          <Carousel images={this.props.images}/>
         </div>
         <div className="menu-options">
           <div className="menu-caption">{this.props.name}</div>

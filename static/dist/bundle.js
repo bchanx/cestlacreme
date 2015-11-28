@@ -174,11 +174,15 @@ exports.default = App;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Loading = exports.Note = exports.Bold = exports.Break = undefined;
+exports.Carousel = exports.Loading = exports.Note = exports.Bold = exports.Break = undefined;
 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _reactTimerMixin = require('react-timer-mixin');
+
+var _reactTimerMixin2 = _interopRequireDefault(_reactTimerMixin);
 
 var _classnames = require('classnames');
 
@@ -236,7 +240,93 @@ var Loading = exports.Loading = _react2.default.createClass({
   }
 });
 
-},{"classnames":"classnames","react":"react"}],4:[function(require,module,exports){
+var Carousel = exports.Carousel = _react2.default.createClass({
+  displayName: 'Carousel',
+
+  mixins: [_reactTimerMixin2.default],
+
+  componentDidMount: function componentDidMount() {
+    this.nextImageTimeout();
+  },
+
+  nextImageTimeout: function nextImageTimeout() {
+    var _this = this;
+
+    this.setTimeout(function () {
+      if (!_this.state.imageHovered) {
+        _this.nextImage();
+        _this.nextImageTimeout();
+      } else {
+        _this.setState({
+          transitionPending: true
+        });
+      }
+    }, this.props.timeout);
+  },
+
+  nextImage: function nextImage() {
+    var newState = {
+      transitionPending: false
+    };
+    if (this.props.images.length) {
+      var newIndex = (this.state.currentIndex + 1) % this.props.images.length;
+      newState.currentIndex = newIndex;
+    }
+    this.setState(newState);
+  },
+
+  getDefaultProps: function getDefaultProps() {
+    return {
+      images: [],
+      timeout: 5000,
+      startIndex: 0
+    };
+  },
+
+  getInitialState: function getInitialState() {
+    return {
+      currentIndex: this.props.startIndex,
+      imageHovered: false,
+      transitionPending: false
+    };
+  },
+
+  onMouseOver: function onMouseOver() {
+    this.setState({
+      imageHovered: true
+    });
+  },
+
+  onMouseLeave: function onMouseLeave() {
+    this.setState({
+      imageHovered: false
+    });
+    if (this.state.transitionPending) {
+      this.nextImage();
+      this.nextImageTimeout();
+    }
+  },
+
+  render: function render() {
+    var _this2 = this;
+
+    var images = this.props.images.map(function (imgURL, idx) {
+      var backgroundImage = {
+        backgroundImage: 'url(' + imgURL + ')'
+      };
+      return _react2.default.createElement('div', { key: imgURL, className: (0, _classnames2.default)("carousel-image", {
+          active: idx === _this2.state.currentIndex
+        }), style: backgroundImage });
+    });
+    return _react2.default.createElement(
+      'div',
+      { className: 'carousel-images' },
+      images
+    );
+  }
+});
+
+},{"classnames":"classnames","react":"react","react-timer-mixin":"react-timer-mixin"}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -680,10 +770,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactTimerMixin = require('react-timer-mixin');
-
-var _reactTimerMixin2 = _interopRequireDefault(_reactTimerMixin);
-
 var _reactSelect = require('react-select');
 
 var _reactSelect2 = _interopRequireDefault(_reactSelect);
@@ -699,34 +785,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var MenuItems = _react2.default.createClass({
   displayName: 'MenuItems',
 
-  mixins: [_reactTimerMixin2.default],
-
-  componentDidMount: function componentDidMount() {
-    var _this = this;
-
-    this.setInterval(function () {
-      if (!_this.state.imageHovered) {
-        var newImageType = _this.props.imageTypes[(_this.props.imageTypes.indexOf(_this.state.imageType) + 1) % _this.props.imageTypes.length];
-        _this.setState({
-          imageType: newImageType
-        });
-      }
-    }, 5000);
-  },
-
-  getInitialState: function getInitialState() {
-    return {
-      imageType: this.props.imageTypes[0],
-      imageHovered: false
-    };
-  },
-
   getDefaultProps: function getDefaultProps() {
     return {
       contraints: null,
       selected: null,
-      onSelectionChange: null,
-      imageTypes: ['ingredients', 'torched', 'spoon']
+      onSelectionChange: null
     };
   },
 
@@ -734,18 +797,6 @@ var MenuItems = _react2.default.createClass({
     return (function (val) {
       this.props.onSelectionChange(name, val);
     }).bind(this);
-  },
-
-  handleMouseOver: function handleMouseOver() {
-    this.setState({
-      imageHovered: true
-    });
-  },
-
-  handleMouseLeave: function handleMouseLeave() {
-    this.setState({
-      imageHovered: false
-    });
   },
 
   render: function render() {
@@ -757,11 +808,8 @@ var MenuItems = _react2.default.createClass({
         name: 'Vanilla',
         constraints: this.props.constraints,
         selected: this.props.selected,
-        imageType: this.state.imageType,
-        imageTypes: this.props.imageTypes,
         onChange: this.handleSelectChange('vanilla'),
-        onMouseOver: this.handleMouseOver,
-        onMouseLeave: this.handleMouseLeave
+        images: ['/images/vanilla/vanilla-ingredients-low.jpg', '/images/vanilla/vanilla-torched-low.jpg', '/images/vanilla/vanilla-spoon-low.jpg']
       }),
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(_Selection2.default, {
@@ -769,11 +817,8 @@ var MenuItems = _react2.default.createClass({
         name: 'Matcha',
         constraints: this.props.constraints,
         selected: this.props.selected,
-        imageType: this.state.imageType,
-        imageTypes: this.props.imageTypes,
         onChange: this.handleSelectChange('matcha'),
-        onMouseOver: this.handleMouseOver,
-        onMouseLeave: this.handleMouseLeave
+        images: ['/images/matcha/matcha-ingredients-low.jpg', '/images/matcha/matcha-torched-low.jpg', '/images/matcha/matcha-spoon-low.jpg']
       }),
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(_Selection2.default, {
@@ -781,11 +826,8 @@ var MenuItems = _react2.default.createClass({
         name: 'Earl Grey',
         constraints: this.props.constraints,
         selected: this.props.selected,
-        imageType: this.state.imageType,
-        imageTypes: this.props.imageTypes,
         onChange: this.handleSelectChange('earlgrey'),
-        onMouseOver: this.handleMouseOver,
-        onMouseLeave: this.handleMouseLeave
+        images: ['/images/earlgrey/earlgrey-ingredients-low.jpg', '/images/earlgrey/earlgrey-torched-low.jpg', '/images/earlgrey/earlgrey-spoon-low.jpg']
       })
     );
   }
@@ -793,7 +835,7 @@ var MenuItems = _react2.default.createClass({
 
 exports.default = MenuItems;
 
-},{"./Common":3,"./Selection":12,"react":"react","react-select":"react-select","react-timer-mixin":"react-timer-mixin"}],11:[function(require,module,exports){
+},{"./Common":3,"./Selection":12,"react":"react","react-select":"react-select"}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -876,6 +918,8 @@ var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
+var _Common = require('./Common');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Selection = _react2.default.createClass({
@@ -885,13 +929,10 @@ var Selection = _react2.default.createClass({
     return {
       type: null, // earlgrey
       name: null, // Earl Grey,
-      imageType: null,
-      imageTypes: null, // ['ingredients', 'torched', 'spoon']
+      images: null,
       selected: null,
       constraints: null,
-      onChange: null,
-      onMouseOver: null,
-      onMouseLeave: null
+      onChange: null
     };
   },
 
@@ -916,21 +957,13 @@ var Selection = _react2.default.createClass({
   },
 
   render: function render() {
-    var _this2 = this;
-
     return _react2.default.createElement(
       'div',
       null,
       _react2.default.createElement(
         'div',
-        { className: 'menu-images',
-          onMouseOver: this.props.onMouseOver,
-          onMouseLeave: this.props.onMouseLeave },
-        this.props.imageTypes.map(function (type) {
-          return _react2.default.createElement('div', { key: type, className: (0, _classnames2.default)('menu-image', _this2.props.type, type, {
-              'active': _this2.props.imageType === type
-            }) });
-        })
+        { className: 'menu-images' },
+        _react2.default.createElement(_Common.Carousel, { images: this.props.images })
       ),
       _react2.default.createElement(
         'div',
@@ -955,7 +988,7 @@ var Selection = _react2.default.createClass({
 
 exports.default = Selection;
 
-},{"classnames":"classnames","react":"react","react-select":"react-select"}],13:[function(require,module,exports){
+},{"./Common":3,"classnames":"classnames","react":"react","react-select":"react-select"}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
