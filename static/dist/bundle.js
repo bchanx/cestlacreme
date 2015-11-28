@@ -634,7 +634,9 @@ var Instagram = _react2.default.createClass({
     });
   },
   render: function render() {
+    var images = [];
     var thumbnails = this.state.recent.map(function (r) {
+      images.push(r.image.url);
       return _react2.default.createElement(
         'a',
         { className: 'instagram-link', href: r.link, target: '_blank', key: r.link },
@@ -649,7 +651,12 @@ var Instagram = _react2.default.createClass({
     return _react2.default.createElement(
       'div',
       { className: 'instagram' },
-      this.state.loading ? _react2.default.createElement(_Common.Loading, { size: 'large' }) : this.state.showDefault ? defaultImage : thumbnails
+      this.state.loading ? _react2.default.createElement(_Common.Loading, { size: 'large' }) : this.state.showDefault ? defaultImage : thumbnails,
+      _react2.default.createElement(
+        'div',
+        { className: 'instagram-carousel' },
+        _react2.default.createElement(_Common.Carousel, { images: images })
+      )
     );
   }
 });

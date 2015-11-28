@@ -357,25 +357,18 @@ a:hover {
   max-width: 400px;
   margin: 5px 0;
 }
+.instagram-carousel {
+  width: 60vw;
+  height: 60vw;
+  margin: 0 auto;
+  display: none;
+}
 @media screen and (max-width: 440px) {
-  .instagram-link:nth-child(n + 4) {
+  .instagram-carousel {
+    display: block;
+  }
+  .instagram-link {
     display: none;
-  }
-  .instagram-link:nth-child(n + 3) .instagram-thumbnail {
-    margin-bottom: 0;
-  }
-  .instagram-thumbnail {
-    width: 60vw;
-    height: 60vw;
-    overflow: hidden;
-    opacity: 1;
-    margin-bottom: 20px;
-  }
-  .instagram-thumbnail img {
-    width: 80vw;
-    height: 80vw;
-    margin-top: -10vw;
-    margin-left: -10vw;
   }
 }
 .stripe {

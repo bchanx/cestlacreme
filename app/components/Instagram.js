@@ -1,6 +1,6 @@
 import React from 'react';
 import request from 'superagent';
-import { Loading } from './Common';
+import { Loading, Carousel } from './Common';
 
 var Instagram = React.createClass({
   getInitialState: function() {
@@ -29,7 +29,9 @@ var Instagram = React.createClass({
       });
   },
   render: function() {
+    let images = [];
     let thumbnails = this.state.recent.map(r => {
+      images.push(r.image.url);
       return (
         <a className="instagram-link" href={r.link} target="_blank" key={r.link}>
           <div className="instagram-thumbnail">
@@ -44,6 +46,9 @@ var Instagram = React.createClass({
     return (
       <div className="instagram">
         {this.state.loading ? <Loading size="large"/> : this.state.showDefault ? defaultImage : thumbnails}
+        <div className="instagram-carousel">
+          <Carousel images={images}/>
+        </div>
       </div>
     );
   }
