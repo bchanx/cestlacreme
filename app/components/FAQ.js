@@ -1,47 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactTimerMixin from 'react-timer-mixin';
 import { Bold } from './Common';
 import classNames from 'classnames';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import ReactTransitionGroup from 'react-addons-transition-group';
-
-var Answer = React.createClass({
-
-  _setStyle: function(height) {
-    let node = ReactDOM.findDOMNode(this);
-    node.style.maxHeight = height;
-  },
-
-  componentWillEnter: function(cb) {
-    console.log("-->> will Enter:!!", cb);
-    this._setStyle("0");
-    cb();
-  },
-
-  componentDidEnter: function() {
-    console.log("-->> did enter");
-    this._setStyle("1000px");
-  },
-
-  componentWillLeave: function(cb) {
-    console.log("-->> will leave!");
-    this._setStyle("1000px");
-    cb();
-  },
-
-  componentDidLeave: function() {
-    console.log("-->> did leave");
-    this._setStyle("0");
-  },
-
-  render: function() {
-    return (
-      <div key="answer" className="answer">{this.props.children}</div>
-    );
-  }
-});
 
 var FAQ = React.createClass({
+  mixins: [ReactTimerMixin],
+
   getDefaultProps: function() {
     return {
       question: '?'
@@ -54,24 +19,36 @@ var FAQ = React.createClass({
     };
   },
 
+  questionExpanded: false,
+
+  componentDidUpdate: function() {
+    this.setTimeout(() => {
+      if (this.questionExpanded) {
+        let node = ReactDOM.findDOMNode(this);
+        let content = node.parentNode.parentNode.parentNode;
+        content.scrollTop = node.offsetTop - 10;
+      }
+    }, 100);
+  },
+
   toggleQuestion: function() {
+    let expanded = !this.state.expanded;
     this.setState({
-      expanded: !this.state.expanded
+      expanded: expanded,
+      classname: expanded ? 'expanded' : 'collapsed'
     });
+    this.questionExpanded = expanded;
   },
 
   render: function() {
     return (
-      <div className={classNames("qa", {
-        expanded: this.state.expanded
-      })}>
-        <div className="question" onClick={this.toggleQuestion}><Bold>{this.props.question}</Bold></div>
-        <ReactTransitionGroup
-          transitionName="answer"
-          transitionEnterTimeout={200}
-          transitionLeaveTimeout={200}>
-          {this.state.expanded ? <Answer>{this.props.children}</Answer> : null}
-        </ReactTransitionGroup>
+      <div className={classNames("qa", this.state.classname)}>
+        <div className="question" onClick={this.toggleQuestion}>
+          <Bold>{this.props.question}</Bold>
+        </div>
+        <div className="answer">
+          {this.props.children}
+        </div>
       </div>
     );
   }

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Break, SetIntervalMixin } from './Common';
+import ReactTimerMixin from 'react-timer-mixin';
 import Select from 'react-select';
+import { Break } from './Common';
 import Selection from './Selection';
 
 var MenuItems = React.createClass({
-  mixins: [SetIntervalMixin],
+  mixins: [ReactTimerMixin],
 
   componentDidMount: function() {
     this.setInterval(() => {

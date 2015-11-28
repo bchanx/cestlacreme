@@ -64,7 +64,7 @@ var About = _react2.default.createClass({
           'Next, grab a food torch on medium flame, and gently melt the sugar until browned! Alternatively, you can set the oven to "Broil" with the temperature at 500F, then place the creme brulee on the top rack for 5-10 minutes or until golden brown and bubbling.',
           _react2.default.createElement('br', null),
           _react2.default.createElement('br', null),
-          'Let sit for 10 minutes and eat! Or, if a cold creme brulee is desired, place the jars back into the fridge for up to 30 minutes and serve. Although the longer you wait, the softer the sugar crust will get.',
+          'Finally, let sit for 10 minutes and eat! Or, if a cold creme brulee is desired, place the jars back into the fridge for up to 30 minutes and serve. Although the longer you wait, the softer the sugar crust will get.',
           _react2.default.createElement('br', null),
           _react2.default.createElement('br', null),
           _react2.default.createElement(
@@ -174,7 +174,7 @@ exports.default = App;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SetIntervalMixin = exports.Note = exports.Bold = exports.Break = undefined;
+exports.Note = exports.Bold = exports.Break = undefined;
 
 var _react = require("react");
 
@@ -213,28 +213,6 @@ var Note = exports.Note = _react2.default.createClass({
     );
   }
 });
-
-var SetIntervalMixin = exports.SetIntervalMixin = {
-  componentWillMount: function componentWillMount() {
-    this.intervals = [];
-  },
-  setInterval: (function (_setInterval) {
-    function setInterval() {
-      return _setInterval.apply(this, arguments);
-    }
-
-    setInterval.toString = function () {
-      return _setInterval.toString();
-    };
-
-    return setInterval;
-  })(function () {
-    this.intervals.push(setInterval.apply(null, arguments));
-  }),
-  componentWillUnmount: function componentWillUnmount() {
-    this.intervals.forEach(clearInterval);
-  }
-};
 
 },{"react":"react"}],4:[function(require,module,exports){
 'use strict';
@@ -287,63 +265,22 @@ var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
+var _reactTimerMixin = require('react-timer-mixin');
+
+var _reactTimerMixin2 = _interopRequireDefault(_reactTimerMixin);
+
 var _Common = require('./Common');
 
 var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _reactAddonsCssTransitionGroup = require('react-addons-css-transition-group');
-
-var _reactAddonsCssTransitionGroup2 = _interopRequireDefault(_reactAddonsCssTransitionGroup);
-
-var _reactAddonsTransitionGroup = require('react-addons-transition-group');
-
-var _reactAddonsTransitionGroup2 = _interopRequireDefault(_reactAddonsTransitionGroup);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Answer = _react2.default.createClass({
-  displayName: 'Answer',
-
-  _setStyle: function _setStyle(height) {
-    var node = _reactDom2.default.findDOMNode(this);
-    node.style.maxHeight = height;
-  },
-
-  componentWillEnter: function componentWillEnter(cb) {
-    console.log("-->> will Enter:!!", cb);
-    this._setStyle("0");
-    cb();
-  },
-
-  componentDidEnter: function componentDidEnter() {
-    console.log("-->> did enter");
-    this._setStyle("1000px");
-  },
-
-  componentWillLeave: function componentWillLeave(cb) {
-    console.log("-->> will leave!");
-    this._setStyle("1000px");
-    cb();
-  },
-
-  componentDidLeave: function componentDidLeave() {
-    console.log("-->> did leave");
-    this._setStyle("0");
-  },
-
-  render: function render() {
-    return _react2.default.createElement(
-      'div',
-      { key: 'answer', className: 'answer' },
-      this.props.children
-    );
-  }
-});
 
 var FAQ = _react2.default.createClass({
   displayName: 'FAQ',
+
+  mixins: [_reactTimerMixin2.default],
 
   getDefaultProps: function getDefaultProps() {
     return {
@@ -357,18 +294,33 @@ var FAQ = _react2.default.createClass({
     };
   },
 
+  questionExpanded: false,
+
+  componentDidUpdate: function componentDidUpdate() {
+    var _this = this;
+
+    this.setTimeout(function () {
+      if (_this.questionExpanded) {
+        var node = _reactDom2.default.findDOMNode(_this);
+        var content = node.parentNode.parentNode.parentNode;
+        content.scrollTop = node.offsetTop - 10;
+      }
+    }, 100);
+  },
+
   toggleQuestion: function toggleQuestion() {
+    var expanded = !this.state.expanded;
     this.setState({
-      expanded: !this.state.expanded
+      expanded: expanded,
+      classname: expanded ? 'expanded' : 'collapsed'
     });
+    this.questionExpanded = expanded;
   },
 
   render: function render() {
     return _react2.default.createElement(
       'div',
-      { className: (0, _classnames2.default)("qa", {
-          expanded: this.state.expanded
-        }) },
+      { className: (0, _classnames2.default)("qa", this.state.classname) },
       _react2.default.createElement(
         'div',
         { className: 'question', onClick: this.toggleQuestion },
@@ -379,16 +331,9 @@ var FAQ = _react2.default.createClass({
         )
       ),
       _react2.default.createElement(
-        _reactAddonsTransitionGroup2.default,
-        {
-          transitionName: 'answer',
-          transitionEnterTimeout: 200,
-          transitionLeaveTimeout: 200 },
-        this.state.expanded ? _react2.default.createElement(
-          Answer,
-          null,
-          this.props.children
-        ) : null
+        'div',
+        { className: 'answer' },
+        this.props.children
       )
     );
   }
@@ -396,7 +341,7 @@ var FAQ = _react2.default.createClass({
 
 exports.default = FAQ;
 
-},{"./Common":3,"classnames":"classnames","react":"react","react-addons-css-transition-group":"react-addons-css-transition-group","react-addons-transition-group":"react-addons-transition-group","react-dom":"react-dom"}],6:[function(require,module,exports){
+},{"./Common":3,"classnames":"classnames","react":"react","react-dom":"react-dom","react-timer-mixin":"react-timer-mixin"}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -699,11 +644,15 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Common = require('./Common');
+var _reactTimerMixin = require('react-timer-mixin');
+
+var _reactTimerMixin2 = _interopRequireDefault(_reactTimerMixin);
 
 var _reactSelect = require('react-select');
 
 var _reactSelect2 = _interopRequireDefault(_reactSelect);
+
+var _Common = require('./Common');
 
 var _Selection = require('./Selection');
 
@@ -714,7 +663,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var MenuItems = _react2.default.createClass({
   displayName: 'MenuItems',
 
-  mixins: [_Common.SetIntervalMixin],
+  mixins: [_reactTimerMixin2.default],
 
   componentDidMount: function componentDidMount() {
     var _this = this;
@@ -808,7 +757,7 @@ var MenuItems = _react2.default.createClass({
 
 exports.default = MenuItems;
 
-},{"./Common":3,"./Selection":12,"react":"react","react-select":"react-select"}],11:[function(require,module,exports){
+},{"./Common":3,"./Selection":12,"react":"react","react-select":"react-select","react-timer-mixin":"react-timer-mixin"}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1291,7 +1240,7 @@ var StripeReact = _react2.default.createClass({
 exports.default = StripeReact;
 
 }).call(this,require('_process'))
-},{"_process":17,"react":"react","react-credit-card":"react-credit-card","react-dom":"react-dom","react-script-loader":36,"superagent":"superagent"}],15:[function(require,module,exports){
+},{"_process":17,"react":"react","react-credit-card":"react-credit-card","react-dom":"react-dom","react-script-loader":"react-script-loader","superagent":"superagent"}],15:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -2554,124 +2503,4 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":17}],36:[function(require,module,exports){
-
-// A dictionary mapping script URLs to a dictionary mapping
-// component key to component for all components that are waiting
-// for the script to load.
-var scriptObservers = {};
-
-// A dictionary mapping script URL to a boolean value indicating if the script
-// has already been loaded.
-var loadedScripts = {};
-
-// A dictionary mapping script URL to a boolean value indicating if the script
-// has failed to load.
-var erroredScripts = {};
-
-// A counter used to generate a unique id for each component that uses
-// ScriptLoaderMixin.
-var idCount = 0;
-
-var ReactScriptLoader = {
-	componentDidMount: function(key, component, scriptURL) {
-		if (typeof component.onScriptLoaded !== 'function') {
-			throw new Error('ScriptLoader: Component class must implement onScriptLoaded()');
-		}
-		if (typeof component.onScriptError !== 'function') {
-			throw new Error('ScriptLoader: Component class must implement onScriptError()');
-		}
-		if (loadedScripts[scriptURL]) {
-			component.onScriptLoaded();
-			return;
-		}
-		if (erroredScripts[scriptURL]) {
-			component.onScriptError();
-			return;
-		}
-
-		// If the script is loading, add the component to the script's observers
-		// and return. Otherwise, initialize the script's observers with the component
-		// and start loading the script.
-		if (scriptObservers[scriptURL]) {
-			scriptObservers[scriptURL][key] = component;
-			return;
-		}
-
-		var observers = {};
-		observers[key] = component;
-		scriptObservers[scriptURL] = observers;
-
-		var script = document.createElement('script');
-		script.src = scriptURL;
-
-		var callObserverFuncAndRemoveObserver = function(func) {
-			var observers = scriptObservers[scriptURL];
-			for (var key in observers) {
-				observer = observers[key];
-				var removeObserver = func(observer);
-				if (removeObserver) {
-					delete scriptObservers[scriptURL][key];
-				}
-			}
-			//delete scriptObservers[scriptURL];
-		}
-		script.onload = function() {
-			loadedScripts[scriptURL] = true;
-			callObserverFuncAndRemoveObserver(function(observer) {
-				if (observer.deferOnScriptLoaded && observer.deferOnScriptLoaded()) {
-					return false;
-				}
-				observer.onScriptLoaded();
-				return true;
-			});
-		};
-		script.onerror = function(event) {
-			erroredScripts[scriptURL] = true;
-			callObserverFuncAndRemoveObserver(function(observer) {
-				observer.onScriptError();
-				return true;
-			});
-		};
-		document.body.appendChild(script);
-	},
-	componentWillUnmount: function(key, scriptURL) {
-		// If the component is waiting for the script to load, remove the
-		// component from the script's observers before unmounting the component.
-		var observers = scriptObservers[scriptURL];
-		if (observers) {
-			delete observers[key];
-		}
-	},
-	triggerOnScriptLoaded: function(scriptURL) {
-		if (!loadedScripts[scriptURL]) {
-			throw new Error('Error: only call this function after the script has in fact loaded.');
-		}
-		var observers = scriptObservers[scriptURL];
-		for (var key in observers) {
-			var observer = observers[key];
-			observer.onScriptLoaded();
-		}
-		delete scriptObservers[scriptURL];
-	}
-};
-
-var ReactScriptLoaderMixin = {
-	componentDidMount: function() {
-		if (typeof this.getScriptURL !== 'function') {
-			throw new Error("ScriptLoaderMixin: Component class must implement getScriptURL().")
-		}
-		ReactScriptLoader.componentDidMount(this.__getScriptLoaderID(), this, this.getScriptURL());
-	},
-	componentWillUnmount: function() {
-		ReactScriptLoader.componentWillUnmount(this.__getScriptLoaderID(), this.getScriptURL());
-	},
-	__getScriptLoaderID: function() {
-		return 'id' + idCount++;
-	},
-};
-
-exports.ReactScriptLoaderMixin = ReactScriptLoaderMixin;
-exports.ReactScriptLoader = ReactScriptLoader;
-
-},{}]},{},[15]);
+},{"_process":17}]},{},[15]);

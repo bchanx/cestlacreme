@@ -1,27 +1,117 @@
 .faq-title
   padding-bottom: 10px
 
+$qa-timing = 0.3s
+
 .qa
   margin-top: 5px
+  padding-bottom: 0
   &.expanded
-    margin-top: 0
+    margin-top: 3px
     padding-bottom: 10px
     .question
       background-color: $gray2
-      padding: 5px 0
+      padding: 2px 0
+      animation: question-expanded $qa-timing
+    .answer
+      padding: 10px 20px
+      border: 2px $gray2 solid
+      border-top: none
+      max-height: 1000px
+      opacity: 1
+      animation: answer-expanded $qa-timing
+  &.collapsed
+    animation: qa-collapsed $qa-timing
+    .question
+      animation: question-collapsed $qa-timing
+    .answer
+      animation: answer-collapsed $qa-timing
+
+@keyframes qa-collapsed {
+  0% {
+    margin-top: 3px
+    padding-bottom: 10px
+  }
+  99% {
+    margin-top: 3px
+    padding-bottom: 10px
+  }
+  100% {
+    margin-top: 5px
+    padding-bottom: 0
+  }
+}
 
 .question
   color: $orange
   line-height: 38px
   cursor: pointer
+  background-color: initial
+  padding: 0
   &:hover
     text-decoration: underline
 
-.answer
-  padding: 10px 20px
-  transition: max-height .2s ease-in
-  border: 2px $gray2 solid
-  border-top: none
-  overflow: hidden
-  font-size: 0.8em
+@keyframes question-expanded {
+  0% {
+    background-color: initial
+    padding: 2px 0
+  }
+  100% {
+    background-color: $gray2
+    padding: 2px 0
+  }
+}
 
+@keyframes question-collapsed {
+  0% {
+    background-color: $gray2
+    padding: 2px 0
+  }
+  99% {
+    padding: 2px 0
+  }
+  100% {
+    background-color: initial
+    padding: 0
+  }
+}
+
+.answer
+  overflow: hidden
+  max-height: 0
+  font-size: 0.8em
+  padding: 0
+  max-height: 0
+  opacity: 0
+  border: none
+
+@keyframes answer-expanded {
+  0% {
+    opacity: 0
+    max-height: 0
+  }
+  100% {
+    max-height: 1000px
+  }
+}
+
+@keyframes answer-collapsed {
+  0% {
+    opacity: 1
+    padding: 10px 20px
+    max-height: 1000px
+    border: 2px $gray2 solid
+    border-top: none
+  }
+  99% {
+    padding: 10px 20px
+    border: 2px $gray2 solid
+    border-top: none
+  }
+  100% {
+    border: none
+    padding: 0
+    opacity: 0
+    max-height: 0
+  }
+}
