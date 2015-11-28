@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
-import { Break, Carousel } from './Common';
+import { Break } from './Common';
 import Selection from './Selection';
 
 var MenuItems = React.createClass({

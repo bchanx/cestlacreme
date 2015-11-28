@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import classNames from 'classnames';
-import { Carousel } from './Common';
+import Carousel from './Carousel';
 
 var Selection = React.createClass({
 

@@ -340,6 +340,7 @@ a:hover {
   text-align: center;
 }
 .instagram-link {
+  display: inline-block;
   font-size: 0;
 }
 .instagram-thumbnail {
@@ -349,6 +350,7 @@ a:hover {
   height: 180px;
   overflow: hidden;
   opacity: 0.8;
+  cursor: pointer;
 }
 .instagram-thumbnail img {
   width: 226px;
@@ -670,5 +672,129 @@ a:hover {
     padding: 0;
     opacity: 0;
     max-height: 0;
+  }
+}
+.carousel-images {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  position: relative;
+}
+.carousel-image {
+  background-size: 100%;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: opacity 1s linear;
+}
+.carousel-image.active {
+  opacity: 1;
+}
+.image-overlay {
+  z-index: 9001;
+  background-color: rgba(34,34,34,0.95);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  overflow: scroll;
+  min-height: 400px;
+  color: #fff;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s linear;
+}
+.image-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+.image-overlay-close {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  color: #b0b0b0;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+.image-overlay-close:hover {
+  color: #fff;
+}
+.image-overlay-container {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 80%;
+  height: 80%;
+  margin: 10vh auto;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  position: relative;
+}
+.image-overlay-container .image {
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position-x: 50%;
+  background-position-y: 50%;
+  max-width: 80vh;
+  min-width: 320px;
+}
+.image-overlay-container .chevron {
+  position: absolute;
+  color: #b0b0b0;
+  width: 5vw;
+  max-width: 50px;
+  height: 100%;
+  cursor: pointer;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  font-size: 2em;
+}
+.image-overlay-container .chevron:hover {
+  color: #fff;
+}
+.image-overlay-container .chevron.left {
+  left: -7vw;
+}
+.image-overlay-container .chevron.right {
+  right: -7vw;
+}
+@media screen and (max-width: 600px) {
+  .image-overlay-container {
+    height: 60%;
+    margin: 20vh auto;
+  }
+  .image-overlay-container .chevron {
+    width: 10vw;
+    font-size: 1.5em;
+  }
+  .image-overlay-container .chevron.left {
+    left: -10vw;
+  }
+  .image-overlay-container .chevron.right {
+    right: -10vw;
   }
 }
