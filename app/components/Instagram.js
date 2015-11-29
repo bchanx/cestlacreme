@@ -35,7 +35,6 @@ var Instagram = React.createClass({
   },
 
   openOverlay: function(index) {
-    console.log("-->> index:", index);
     this.setState({
       imageOverlayShow: true,
       imageOverlayStartIndex: index
@@ -49,31 +48,29 @@ var Instagram = React.createClass({
   },
 
   render: function() {
-    let images = [];
-    let thumbnails = this.state.recent.map((r, index) => {
-      images.push(r.image.url);
+    let instagramImages = this.state.recent.map((r, index) => {
       let onClickHandler = this.openOverlay.bind(this, index);
       return (
-//        <a className="instagram-link" href={r.link} target="_blank" key={r.link}>
-        <div className="instagram-link" key={r.link} onClick={onClickHandler}>
+        <div className="instagram-image" key={r.source} onClick={onClickHandler}>
           <div className="instagram-thumbnail">
-            <img src={r.image.url}/>
+            <img src={r.url}/>
           </div>
         </div>
-//        </a>
       );
     });
+    let defaultImageURL = '/images/default-brulee-low.png';
     let defaultImage = (
-      <img className="default-thumbnail" src="/images/default-brulee-low.png"/>
+      <img className="default-image" src={defaultImageURL} onClick={this.openOverlay.bind(this, 0)}/>
     );
     return (
       <div className="instagram">
-        {this.state.loading ? <Loading size="large"/> : this.state.showDefault ? defaultImage : thumbnails}
-        <div className="instagram-carousel">
-          <Carousel images={images}/>
-        </div>
+        {this.state.loading ? <Loading size="large"/> : this.state.showDefault ? defaultImage : instagramImages}
+        {this.state.recent.length ?
+          <div className="instagram-carousel">
+            <Carousel images={this.state.recent} onCarouselClick={this.openOverlay}/>
+          </div> : null}
         <ImageOverlay
-          images={images}
+          images={this.state.recent.length ? this.state.recent : [defaultImageURL]}
           show={this.state.imageOverlayShow}
           startIndex={this.state.imageOverlayStartIndex}
           onClose={this.onOverlayClose}/>

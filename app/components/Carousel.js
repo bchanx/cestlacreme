@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ReactTimerMixin from 'react-timer-mixin';
 import classNames from 'classnames';
 
@@ -12,7 +13,10 @@ var Carousel = React.createClass({
   nextImageTimeout: function() {
     this.setTimeout(() => {
       if (!this.state.imageHovered) {
-        this.nextImage();
+        let isVisible = ReactDOM.findDOMNode(this).offsetHeight;
+        if (isVisible) {
+          this.nextImage();
+        }
         this.nextImageTimeout();
       }
       else {
@@ -38,7 +42,8 @@ var Carousel = React.createClass({
     return {
       images: [],
       timeout: 5000,
-      startIndex: 0
+      startIndex: 0,
+      onCarouselClick: null
     };
   },
 
@@ -66,15 +71,23 @@ var Carousel = React.createClass({
     }
   },
 
+  onCarouselClick: function(index) {
+    if (this.props.onCarouselClick) {
+      this.props.onCarouselClick(index);
+    }
+  },
+
   render: function() {
-    let images = this.props.images.map((imgURL, idx) => {
+    let images = this.props.images.map((img, idx) => {
+      let imgURL = img.url || img;
       let backgroundImage = {
         backgroundImage: 'url(' + imgURL + ')'
       };
+      let onClickHandler = this.onCarouselClick.bind(this, idx);
       return (
         <div key={imgURL} className={classNames("carousel-image", {
           active: idx === this.state.currentIndex
-        })} style={backgroundImage}></div>
+        })} style={backgroundImage} onClick={onClickHandler}></div>
       );
     });
     return (

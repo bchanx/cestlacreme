@@ -1,5 +1,7 @@
 import React from 'react';
+import moment from 'moment';
 import classNames from 'classnames';
+import { Bold } from './Common';
 
 var ImageOverlay = React.createClass({
   getDefaultProps: function() {
@@ -85,9 +87,23 @@ var ImageOverlay = React.createClass({
   },
 
   render: function() {
-    let backgroundImage = this.props.images.length > this.state.currentIndex ? {
-      backgroundImage: 'url(' + this.props.images[this.state.currentIndex] + ')'
-    } : null;
+    let backgroundImage = null;
+    let timestamp = null;
+    let description = null;
+    let source = null;
+    if (this.props.images.length > this.state.currentIndex) {
+      let image = this.props.images[this.state.currentIndex];
+      let imageURL = image.url || image;
+      if (imageURL) {
+        backgroundImage = {
+          backgroundImage: 'url(' + imageURL + ')'
+        };
+      }
+      timestamp = image.timestamp;
+      description = image.description;
+      source = image.source;
+    }
+    let hasMeta = timestamp || description || source;
     return (
       <div className={classNames("image-overlay", {
         active: this.props.show
@@ -96,9 +112,20 @@ var ImageOverlay = React.createClass({
           <span className="ion-close"></span>
         </div>
         <div className="image-overlay-container">
-          <div className="chevron left" onClick={this.gotoPrev}><span className="ion-chevron-left"></span></div>
-          <div className="image" style={backgroundImage}></div>
-          <div className="chevron right" onClick={this.gotoNext}><span className="ion-chevron-right"></span></div>
+          {this.props.images.length > 1 ? <div className="chevron left" onClick={this.gotoPrev}><span className="ion-chevron-left"></span></div> : null}
+          {backgroundImage ?
+            <div className="image-background" style={backgroundImage}>
+              {hasMeta ? 
+                <div className="image-meta">
+                  {timestamp || source ?
+                    <div className="image-header">
+                      {timestamp ? <div className="image-timestamp"><Bold>{moment.unix(timestamp).fromNow()}</Bold></div> : null}
+                      {source ? <div className="image-source"><a href={source} target="_blank">Source</a></div> : null}
+                    </div> : null}
+                  {description ? <div className="image-description">{description}</div> : null}
+                </div> : null}
+            </div> : null}
+          {this.props.images.length > 1 ? <div className="chevron right" onClick={this.gotoNext}><span className="ion-chevron-right"></span></div> : null}
         </div>
       </div>
     );

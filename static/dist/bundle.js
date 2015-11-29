@@ -179,6 +179,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
 var _reactTimerMixin = require('react-timer-mixin');
 
 var _reactTimerMixin2 = _interopRequireDefault(_reactTimerMixin);
@@ -203,7 +207,10 @@ var Carousel = _react2.default.createClass({
 
     this.setTimeout(function () {
       if (!_this.state.imageHovered) {
-        _this.nextImage();
+        var isVisible = _reactDom2.default.findDOMNode(_this).offsetHeight;
+        if (isVisible) {
+          _this.nextImage();
+        }
         _this.nextImageTimeout();
       } else {
         _this.setState({
@@ -228,7 +235,8 @@ var Carousel = _react2.default.createClass({
     return {
       images: [],
       timeout: 5000,
-      startIndex: 0
+      startIndex: 0,
+      onCarouselClick: null
     };
   },
 
@@ -256,16 +264,24 @@ var Carousel = _react2.default.createClass({
     }
   },
 
+  onCarouselClick: function onCarouselClick(index) {
+    if (this.props.onCarouselClick) {
+      this.props.onCarouselClick(index);
+    }
+  },
+
   render: function render() {
     var _this2 = this;
 
-    var images = this.props.images.map(function (imgURL, idx) {
+    var images = this.props.images.map(function (img, idx) {
+      var imgURL = img.url || img;
       var backgroundImage = {
         backgroundImage: 'url(' + imgURL + ')'
       };
+      var onClickHandler = _this2.onCarouselClick.bind(_this2, idx);
       return _react2.default.createElement('div', { key: imgURL, className: (0, _classnames2.default)("carousel-image", {
           active: idx === _this2.state.currentIndex
-        }), style: backgroundImage });
+        }), style: backgroundImage, onClick: onClickHandler });
     });
     return _react2.default.createElement(
       'div',
@@ -277,7 +293,7 @@ var Carousel = _react2.default.createClass({
 
 exports.default = Carousel;
 
-},{"classnames":"classnames","react":"react","react-timer-mixin":"react-timer-mixin"}],4:[function(require,module,exports){
+},{"classnames":"classnames","react":"react","react-dom":"react-dom","react-timer-mixin":"react-timer-mixin"}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -620,9 +636,15 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _moment = require('moment');
+
+var _moment2 = _interopRequireDefault(_moment);
+
 var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Common = require('./Common');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -709,9 +731,23 @@ var ImageOverlay = _react2.default.createClass({
   },
 
   render: function render() {
-    var backgroundImage = this.props.images.length > this.state.currentIndex ? {
-      backgroundImage: 'url(' + this.props.images[this.state.currentIndex] + ')'
-    } : null;
+    var backgroundImage = null;
+    var timestamp = null;
+    var description = null;
+    var source = null;
+    if (this.props.images.length > this.state.currentIndex) {
+      var image = this.props.images[this.state.currentIndex];
+      var imageURL = image.url || image;
+      if (imageURL) {
+        backgroundImage = {
+          backgroundImage: 'url(' + imageURL + ')'
+        };
+      }
+      timestamp = image.timestamp;
+      description = image.description;
+      source = image.source;
+    }
+    var hasMeta = timestamp || description || source;
     return _react2.default.createElement(
       'div',
       { className: (0, _classnames2.default)("image-overlay", {
@@ -725,17 +761,51 @@ var ImageOverlay = _react2.default.createClass({
       _react2.default.createElement(
         'div',
         { className: 'image-overlay-container' },
-        _react2.default.createElement(
+        this.props.images.length > 1 ? _react2.default.createElement(
           'div',
           { className: 'chevron left', onClick: this.gotoPrev },
           _react2.default.createElement('span', { className: 'ion-chevron-left' })
-        ),
-        _react2.default.createElement('div', { className: 'image', style: backgroundImage }),
-        _react2.default.createElement(
+        ) : null,
+        backgroundImage ? _react2.default.createElement(
+          'div',
+          { className: 'image-background', style: backgroundImage },
+          hasMeta ? _react2.default.createElement(
+            'div',
+            { className: 'image-meta' },
+            timestamp || source ? _react2.default.createElement(
+              'div',
+              { className: 'image-header' },
+              timestamp ? _react2.default.createElement(
+                'div',
+                { className: 'image-timestamp' },
+                _react2.default.createElement(
+                  _Common.Bold,
+                  null,
+                  _moment2.default.unix(timestamp).fromNow()
+                )
+              ) : null,
+              source ? _react2.default.createElement(
+                'div',
+                { className: 'image-source' },
+                _react2.default.createElement(
+                  'a',
+                  { href: source, target: '_blank' },
+                  'Source'
+                )
+              ) : null
+            ) : null,
+            description ? _react2.default.createElement(
+              'div',
+              { className: 'image-description' },
+              description
+            ) : null
+          ) : null
+        ) : null,
+        this.props.images.length > 1 ? _react2.default.createElement(
           'div',
           { className: 'chevron right', onClick: this.gotoNext },
           _react2.default.createElement('span', { className: 'ion-chevron-right' })
-        )
+        ) : null
       )
     );
   }
@@ -743,7 +813,7 @@ var ImageOverlay = _react2.default.createClass({
 
 exports.default = ImageOverlay;
 
-},{"classnames":"classnames","react":"react"}],10:[function(require,module,exports){
+},{"./Common":4,"classnames":"classnames","moment":"moment","react":"react"}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -803,7 +873,6 @@ var Instagram = _react2.default.createClass({
   },
 
   openOverlay: function openOverlay(index) {
-    console.log("-->> index:", index);
     this.setState({
       imageOverlayShow: true,
       imageOverlayStartIndex: index
@@ -819,37 +888,31 @@ var Instagram = _react2.default.createClass({
   render: function render() {
     var _this2 = this;
 
-    var images = [];
-    var thumbnails = this.state.recent.map(function (r, index) {
-      images.push(r.image.url);
+    var instagramImages = this.state.recent.map(function (r, index) {
       var onClickHandler = _this2.openOverlay.bind(_this2, index);
-      return(
-        //        <a className="instagram-link" href={r.link} target="_blank" key={r.link}>
+      return _react2.default.createElement(
+        'div',
+        { className: 'instagram-image', key: r.source, onClick: onClickHandler },
         _react2.default.createElement(
           'div',
-          { className: 'instagram-link', key: r.link, onClick: onClickHandler },
-          _react2.default.createElement(
-            'div',
-            { className: 'instagram-thumbnail' },
-            _react2.default.createElement('img', { src: r.image.url })
-          )
+          { className: 'instagram-thumbnail' },
+          _react2.default.createElement('img', { src: r.url })
         )
-        //        </a>
-
       );
     });
-    var defaultImage = _react2.default.createElement('img', { className: 'default-thumbnail', src: '/images/default-brulee-low.png' });
+    var defaultImageURL = '/images/default-brulee-low.png';
+    var defaultImage = _react2.default.createElement('img', { className: 'default-image', src: defaultImageURL, onClick: this.openOverlay.bind(this, 0) });
     return _react2.default.createElement(
       'div',
       { className: 'instagram' },
-      this.state.loading ? _react2.default.createElement(_Common.Loading, { size: 'large' }) : this.state.showDefault ? defaultImage : thumbnails,
-      _react2.default.createElement(
+      this.state.loading ? _react2.default.createElement(_Common.Loading, { size: 'large' }) : this.state.showDefault ? defaultImage : instagramImages,
+      this.state.recent.length ? _react2.default.createElement(
         'div',
         { className: 'instagram-carousel' },
-        _react2.default.createElement(_Carousel2.default, { images: images })
-      ),
+        _react2.default.createElement(_Carousel2.default, { images: this.state.recent, onCarouselClick: this.openOverlay })
+      ) : null,
       _react2.default.createElement(_ImageOverlay2.default, {
-        images: images,
+        images: this.state.recent.length ? this.state.recent : [defaultImageURL],
         show: this.state.imageOverlayShow,
         startIndex: this.state.imageOverlayStartIndex,
         onClose: this.onOverlayClose })

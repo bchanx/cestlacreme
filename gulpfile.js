@@ -31,6 +31,7 @@ const VENDOR_DEPS = [
   'react-timer-mixin',
   'react-script-loader',
   'classnames',
+  'moment',
   'superagent'
 ];
 

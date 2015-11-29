@@ -2,6 +2,11 @@ var router = require('express').Router();
 var config = require('../config');
 var request = require('request');
 
+var TYPES = {
+  IMAGE: 'image',
+  VIDEO: 'video'
+};
+
 var instagram = function(route) {
   return 'https://api.instagram.com' + route;
 };
@@ -34,10 +39,14 @@ router.get('/recent', function(req, res) {
     }, function(error, response, body) {
       if (body && body.data) {
         body.data.forEach(function(d) {
-          RECENT.push({
-            link: d.link,
-            image: d.images.standard_resolution
-          });
+          if (d.type === TYPES.IMAGE) {
+            RECENT.push({
+              timestamp: d.created_time,
+              description: d.caption ? d.caption.text : null,
+              source: d.link,
+              url: d.images.standard_resolution.url
+            });
+          }
         });
       }
       res.send(RECENT);

@@ -1,5 +1,6 @@
-$app-medium = 1000px
-$app-small = 600px
+$app-full = 1000px
+$app-medium = 600px
+$app-small = 440px
 
 html
   background-color: $gray1
@@ -32,7 +33,7 @@ a:hover
 .content
   position: relative
   padding: 60px 40px
-  padding-right: "calc((100vw - %s)/2 + 40px)" % $app-medium;
+  padding-right: "calc((100vw - %s)/2 + 40px)" % $app-full;
   flex-grow: 1
   text-align: center
   overflow-y: scroll
@@ -47,7 +48,7 @@ a:hover
   .site
     margin-left: 15px
 
-@media screen and (max-width: $app-medium)
+@media screen and (max-width: $app-full)
   .container
     flex-direction: column
   .content
@@ -55,7 +56,7 @@ a:hover
   .footer
     line-height: normal
 
-@media screen and (max-width: $app-small)
+@media screen and (max-width: $app-medium)
   html
     font-size: 16px
   .content
