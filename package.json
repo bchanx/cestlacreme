@@ -18,6 +18,7 @@
     "compression": "^1.6.0",
     "cookie-parser": "^1.4.0",
     "express": "^4.13.3",
+    "express-sslify": "^1.0.1",
     "jade": "^1.11.0",
     "moment": "^2.10.6",
     "react": "^0.14.1",

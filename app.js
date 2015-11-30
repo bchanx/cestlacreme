@@ -15,6 +15,12 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+if (process.env.NODE_ENV === 'production') {
+  // Force SSL as default in Heroku
+  var enforce = require('express-sslify');
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
+
 var ENV = process.env.NODE_ENV || 'development';
 var PORT = process.env.PORT || 3000;
 app.set('env', ENV);
