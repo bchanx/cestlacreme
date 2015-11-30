@@ -41,3 +41,13 @@ export var Loading = React.createClass({
     );
   }
 });
+
+export var Button = React.createClass({
+  render: function() {
+    return (
+      <button {...this.props} className={classNames("btn", this.props.className)} defaultPrevented={true}>
+        {this.props.children}
+      </button>
+    );
+  }
+});

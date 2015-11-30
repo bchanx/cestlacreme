@@ -2,8 +2,9 @@ import React from 'react';
 import { Break, Bold } from './Common';
 import Stripe from './Stripe';
 import MenuItems from './MenuItems';
+import OrderSummary from './OrderSummary';
 
-var CONSTRAINTS = {
+var PRICING = {
   price: 5.00,
   minimum: 4,
   maximum: 12
@@ -13,16 +14,25 @@ var Menu = React.createClass({
   getInitialState: function() {
     return {
       selected: {
-        vanilla: 0,
-        matcha: 0,
-        earlgrey: 0
+        vanilla: {
+          name: 'Vanilla',
+          value: 0
+        },
+        matcha: {
+          name: 'Matcha',
+          value: 0
+        },
+        earlgrey: {
+          name: 'Earl Grey',
+          value: 0
+        }
       }
     };
   },
 
   onSelectionChange: function(name, val) {
     let selected = this.state.selected;
-    selected[name] = val.value;
+    selected[name].value = val.value;
     this.setState(selected);
   },
 
@@ -30,7 +40,7 @@ var Menu = React.createClass({
     return (
       <div className="menu">
         <div>
-          Our creme brulee's are sold at a flat rate of ${CONSTRAINTS.price} each. However due to the nature of our business, we require at least {CONSTRAINTS.minimum} brulee's per order, meaning a <Bold>minimum ${CONSTRAINTS.price * CONSTRAINTS.minimum} purchase</Bold>.
+          Our creme brulee's are sold at a flat rate of ${PRICING.price} each. However due to the nature of our business, we require at least {PRICING.minimum} brulee's per order, meaning a <Bold>minimum ${PRICING.price * PRICING.minimum} purchase</Bold>.
           <br/>
           <br/>
           Flavors can be mixed and matched to your preference.
@@ -39,13 +49,10 @@ var Menu = React.createClass({
           (For orders of more than a dozen, please <a href="mailto:cestlacreme@gmail.com">email us</a> to set up a specialty order.)
         </div>
         <Break/>
-        <MenuItems constraints={CONSTRAINTS} selected={this.state.selected} onSelectionChange={this.onSelectionChange}/>
+        <MenuItems pricing={PRICING} selected={this.state.selected} onSelectionChange={this.onSelectionChange}/>
+        <OrderSummary pricing={PRICING} selected={this.state.selected}/>
         <Break/>
-        <div>
-          You have currently selected: {this.state.selected.vanilla} Vanilla, {this.state.selected.matcha} Matcha, and {this.state.selected.earlgrey} Earl Grey.
-        </div>
-        <Break/>
-        <Stripe/>
+        <Stripe pricing={PRICING} selected={this.state.selected}/>
       </div>
     );
   }

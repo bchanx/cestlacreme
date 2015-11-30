@@ -1,13 +1,29 @@
 @import 'colors'
 
 .stripe
-  outline: 1px red solid
+  opacity: 1
+
+.stripe-payment
+  opacity: 0
+  max-height: 0
+  overflow: hidden
+  visibility: hidden
+  transition: opacity 0.5s linear
+  &.active
+    opacity: 1
+    visibility: visible
+    max-height: 1000px
 
 .stripe-card
   text-align: left
 
 .stripe-form
   margin-top: 20px
+
+.stripe-input
+  &.error
+    border: 1px $red solid
+    padding: 2px
 
 .react-credit-card
   min-width: 280px

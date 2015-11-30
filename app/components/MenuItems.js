@@ -7,7 +7,7 @@ var MenuItems = React.createClass({
 
   getDefaultProps: function() {
     return {
-      contraints: null,
+      pricing: null,
       selected: null,
       onSelectionChange: null
     };
@@ -19,47 +19,31 @@ var MenuItems = React.createClass({
     }.bind(this);
   },
 
+  getImages: function(type) {
+    return ['ingredients', 'torched', 'spoon'].map(suffix => {
+      return '/images/' + type + '/' + type + '-' + suffix + '-low.jpg';
+    });
+  },
+
   render: function() {
     return (
       <div className="selection">
-        <Selection
-          type="vanilla"
-          name="Vanilla"
-          constraints={this.props.constraints}
-          selected={this.props.selected}
-          onChange={this.handleSelectChange('vanilla')}
-          images={[
-            '/images/vanilla/vanilla-ingredients-low.jpg',
-            '/images/vanilla/vanilla-torched-low.jpg',
-            '/images/vanilla/vanilla-spoon-low.jpg'
-          ]}
-        />
-        <Break/>
-        <Selection
-          type="matcha"
-          name="Matcha"
-          constraints={this.props.constraints}
-          selected={this.props.selected}
-          onChange={this.handleSelectChange('matcha')}
-          images={[
-            '/images/matcha/matcha-ingredients-low.jpg',
-            '/images/matcha/matcha-torched-low.jpg',
-            '/images/matcha/matcha-spoon-low.jpg'
-          ]}
-        />
-        <Break/>
-        <Selection
-          type="earlgrey"
-          name="Earl Grey"
-          constraints={this.props.constraints}
-          selected={this.props.selected}
-          onChange={this.handleSelectChange('earlgrey')}
-          images={[
-            '/images/earlgrey/earlgrey-ingredients-low.jpg',
-            '/images/earlgrey/earlgrey-torched-low.jpg',
-            '/images/earlgrey/earlgrey-spoon-low.jpg'
-          ]}
-        />
+        {(() => {
+          return Object.keys(this.props.selected).map(type => {
+            return (
+              <div key={type}>
+                <Selection
+                  type={type}
+                  pricing={this.props.pricing}
+                  selected={this.props.selected}
+                  onChange={this.handleSelectChange(type)}
+                  images={this.getImages(type)}
+                />
+                <Break/>
+              </div>
+            );
+          });
+        })()}
       </div>
     );
   }

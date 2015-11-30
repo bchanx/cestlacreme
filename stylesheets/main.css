@@ -2,6 +2,7 @@
   -webkit-margin-before: 0em;
   -webkit-margin-after: 0em;
   box-sizing: border-box;
+  outline-color: #f7e1a9;
 }
 html {
   font-size: 16px;
@@ -34,6 +35,9 @@ a:hover {
 ::selection {
   background: #faedcb;
   text-shadow: none;
+}
+button[disabled] {
+  opacity: 0.5;
 }
 .bold {
   font-weight: 400;
@@ -145,7 +149,7 @@ a:focus {
   text-decoration: none;
 }
 a:hover {
-  color: #be8e12;
+  color: #ba8b12;
 }
 #app {
   height: 100%;
@@ -195,7 +199,7 @@ a:hover {
   }
   .content {
     padding: 20px;
-    padding-bottom: 40px;
+    padding-bottom: 60px;
   }
 }
 .nav {
@@ -376,13 +380,29 @@ a:hover {
   }
 }
 .stripe {
-  outline: 1px #f00 solid;
+  opacity: 1;
+}
+.stripe-payment {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  transition: opacity 0.5s linear;
+}
+.stripe-payment.active {
+  opacity: 1;
+  visibility: visible;
+  max-height: 1000px;
 }
 .stripe-card {
   text-align: left;
 }
 .stripe-form {
   margin-top: 20px;
+}
+.stripe-input.error {
+  border: 1px #ff4136 solid;
+  padding: 2px;
 }
 .react-credit-card {
   min-width: 280px;
@@ -941,4 +961,84 @@ a:hover {
     height: 50%;
     margin: 30vh auto;
   }
+}
+.order-summary {
+  padding: 20px;
+  border: 2px #f7e1a9 solid;
+  border-radius: 3px;
+  text-align: right;
+  position: relative;
+}
+.order-icon {
+  position: absolute;
+  font-size: 2em;
+  left: 20px;
+  top: 10px;
+}
+.order-title .warning {
+  color: #ff4136;
+}
+.order-item {
+  margin-top: 5px;
+}
+.order-price {
+  margin-left: 20px;
+}
+.order-total {
+  color: #ecb937;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px #e8e8e8 solid;
+  font-size: 1.4em;
+  position: relative;
+}
+.order-warning {
+  position: absolute;
+  left: 0;
+  bottom: 3px;
+  font-size: 16px;
+}
+.order-warning .note {
+  color: #ff4136;
+}
+.btn {
+  padding: 8px 15px;
+  display: inline-block;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 3px;
+  font-weight: 400;
+  background-color: #e8e8e8;
+  border-color: #c5c5c5;
+}
+.btn:hover:enabled {
+  background-color: #c5c5c5;
+  border-color: #a7a7a7;
+}
+.btn-default {
+  color: #fff;
+  background-color: #9d9d9d;
+  border-color: #858585;
+}
+.btn-default:hover:enabled {
+  background-color: #858585;
+  border-color: #717171;
+}
+.btn-success {
+  color: #fff;
+  background-color: #2ecc40;
+  border-color: #27ad36;
+}
+.btn-success:hover:enabled {
+  background-color: #27ad36;
+  border-color: #21932e;
+}
+.btn-danger {
+  color: #fff;
+  background-color: #ff4136;
+  border-color: #ff1508;
+}
+.btn-danger:hover:enabled {
+  background-color: #ff1508;
+  border-color: #e00c00;
 }

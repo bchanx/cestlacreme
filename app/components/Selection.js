@@ -8,20 +8,19 @@ var Selection = React.createClass({
   getDefaultProps: function() {
     return {
       type: null, // earlgrey
-      name: null, // Earl Grey,
       images: null,
       selected: null,
-      constraints: null,
+      pricing: null,
       onChange: null
     };
   },
 
   getOptions: function() {
-    let othersSelected = Object.keys(this.props.selected).   filter(s => s !== this.props.type)
-      .map(s => this.props.selected[s])
+    let othersSelected = Object.keys(this.props.selected).filter(s => s !== this.props.type)
+      .map(s => this.props.selected[s].value)
       .reduce((a, b) => a + b);
     let options = [];
-    for (let i = 0; i <= this.props.constraints.maximum - othersSelected; i++) {
+    for (let i = 0; i <= this.props.pricing.maximum - othersSelected; i++) {
       options.push({
         value: i,
         label: String(i)
@@ -37,12 +36,12 @@ var Selection = React.createClass({
           <Carousel images={this.props.images}/>
         </div>
         <div className="menu-options">
-          <div className="menu-caption">{this.props.name}</div>
+          <div className="menu-caption">{this.props.selected[this.props.type].name}</div>
           <Select
-            name="vanilla-select"
+            name={this.props.type + '-select'}
             searchable={false}
             clearable={false}
-            value={this.props.selected[this.props.type]}
+            value={this.props.selected[this.props.type].value}
             options={this.getOptions()}
             onChange={this.props.onChange}
           />
