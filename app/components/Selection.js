@@ -9,18 +9,19 @@ var Selection = React.createClass({
     return {
       type: null, // earlgrey
       images: null,
-      selected: null,
-      pricing: null,
-      onChange: null
+      selection: null,
+      product: null,
+      onChange: null,
+      disabled: false
     };
   },
 
   getOptions: function() {
-    let othersSelected = Object.keys(this.props.selected).filter(s => s !== this.props.type)
-      .map(s => this.props.selected[s].value)
+    let othersSelected = Object.keys(this.props.selection).filter(s => s !== this.props.type)
+      .map(s => this.props.selection[s].value)
       .reduce((a, b) => a + b);
     let options = [];
-    for (let i = 0; i <= this.props.pricing.maximum - othersSelected; i++) {
+    for (let i = 0; i <= this.props.product.maximum - othersSelected; i++) {
       options.push({
         value: i,
         label: String(i)
@@ -36,14 +37,15 @@ var Selection = React.createClass({
           <Carousel images={this.props.images}/>
         </div>
         <div className="menu-options">
-          <div className="menu-caption">{this.props.selected[this.props.type].name}</div>
+          <div className="menu-caption">{this.props.selection[this.props.type].name}</div>
           <Select
             name={this.props.type + '-select'}
             searchable={false}
             clearable={false}
-            value={this.props.selected[this.props.type].value}
+            value={this.props.selection[this.props.type].value}
             options={this.getOptions()}
             onChange={this.props.onChange}
+            disabled={this.props.disabled}
           />
         </div>
       </div>

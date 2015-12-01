@@ -4,12 +4,18 @@
   border-radius: 3px
   text-align: right
   position: relative
+  &.success
+    border-color: $green
+    .order-total
+      color: $green
 
 .order-icon
   position: absolute
   font-size: 2em
   left: 20px
   top: 10px
+  .ion-spoon
+    padding-left: 1px
 
 .order-title
   .warning
@@ -33,7 +39,7 @@
   position: absolute
   left: 0
   bottom: 3px
-  font-size: 16px
+  font-size: (1 / 1.4)em
   .note
     color: $red
 

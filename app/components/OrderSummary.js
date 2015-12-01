@@ -1,17 +1,19 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Bold, Note } from './Common';
 
 var OrderSummary = React.createClass({
   getDefaultProps: function() {
     return {
-      selected: null,
-      pricing: null
+      product: null,
+      selection: null,
+      orderSuccessful: false
     };
   },
 
   componentWillReceiveProps: function(nextProps) {
-    let totalSelected = Object.keys(nextProps.selected)
-      .map(type => nextProps.selected[type].value)
+    let totalSelected = Object.keys(nextProps.selection)
+      .map(type => nextProps.selection[type].value)
       .reduce((a, b) => a + b);
     this.setState({
       totalSelected: totalSelected
@@ -25,33 +27,35 @@ var OrderSummary = React.createClass({
   },
 
   render: function() {
-    let items = Object.keys(this.props.selected);
+    let items = Object.keys(this.props.selection);
     return (
-      <div className="order-summary">
+      <div className={classNames("order-summary", {
+        success: this.props.orderSuccessful
+      })}>
         <div className="order-icon">
           <span className="ion-spoon"></span>
         </div>
         <div className="order-title">
-          <Bold>{!this.state.totalSelected ? <span className="warning">You currently have no items selected.</span> : 'You have currently selected:'}</Bold>
+          <Bold>{!this.state.totalSelected ? <span className="warning">You currently have no items selection.</span> : this.props.orderSuccessful ? 'You have successfully ordered:' : 'You have currently selection:'}</Bold>
         </div>
         {this.state.totalSelected ?
           <div>
             {(() => {
               return items.filter(itm => {
-                return this.props.selected[itm].value;
+                return this.props.selection[itm].value;
               }).map(itm => {
                 return (
                   <div key={itm} className="order-item">
-                    {this.props.selected[itm].name} x {this.props.selected[itm].value}
-                    <span className="order-price">${(this.props.selected[itm].value * this.props.pricing.price).toFixed(2)}</span>
+                    {this.props.selection[itm].name} x {this.props.selection[itm].value}
+                    <span className="order-price">${(this.props.selection[itm].value * this.props.product.price).toFixed(2)}</span>
                   </div>
                 );
               });
             })()}
             <div className="order-total">
-              {this.state.totalSelected < this.props.pricing.minimum ? <div className="order-warning"><Note><Bold>*Minimum $20.00 required*</Bold></Note></div> : null}
+              {this.state.totalSelected < this.props.product.minimum ? <div className="order-warning"><Note><Bold>*Minimum $20.00 required*</Bold></Note></div> : null}
               <Bold>
-                Total: ${(this.state.totalSelected * this.props.pricing.price).toFixed(2)}
+                Total: ${(this.state.totalSelected * this.props.product.price).toFixed(2)}
               </Bold>
             </div>
           </div> : null}

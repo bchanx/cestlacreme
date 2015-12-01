@@ -13,7 +13,9 @@ export var Break = React.createClass({
 export var Bold = React.createClass({
   render: function() {
     return (
-      <span className="bold">{this.props.children}</span>
+      <span {...this.props} className={classNames("bold", this.props.className)}>
+        {this.props.children}
+      </span>
     );
   }
 });
@@ -45,7 +47,7 @@ export var Loading = React.createClass({
 export var Button = React.createClass({
   render: function() {
     return (
-      <button {...this.props} className={classNames("btn", this.props.className)} defaultPrevented={true}>
+      <button {...this.props} className={classNames("btn", this.props.className)}>
         {this.props.children}
       </button>
     );

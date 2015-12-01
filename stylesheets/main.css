@@ -36,8 +36,9 @@ a:hover {
   background: #faedcb;
   text-shadow: none;
 }
-button[disabled] {
-  opacity: 0.5;
+button[disabled],
+input[disabled] {
+  opacity: 0.65;
 }
 .bold {
   font-weight: 400;
@@ -72,7 +73,7 @@ button[disabled] {
 }
 .loading {
   display: inline-block;
-  color: #f7e1a9;
+  color: #ecb937;
   font-size: 2em;
 }
 .loading span {
@@ -398,11 +399,54 @@ a:hover {
   text-align: left;
 }
 .stripe-form {
+  margin: 10px auto 0;
+  max-width: 350px;
+}
+.stripe-form .stripe-input {
+  outline: none;
+  padding: 5px 10px;
+  width: calc(100% - 4px);
+  margin: 2px 2px 0;
+  border-radius: 3px;
+  border: 1px #e8e8e8 solid;
+}
+.stripe-form .stripe-input[name="cvc"],
+.stripe-form .stripe-input[name="expiry"] {
+  width: calc(50% - 4px);
+}
+.stripe-form .stripe-input.error {
+  border-color: #ff4136 !important;
+}
+.stripe-form .stripe-input:focus {
+  border-color: #ecb937;
+}
+.stripe-form button {
   margin-top: 20px;
 }
-.stripe-input.error {
-  border: 1px #ff4136 solid;
-  padding: 2px;
+.stripe-form .loading {
+  display: block;
+  margin-top: 9px;
+  margin-bottom: -11px;
+}
+.stripe-form-error {
+  margin-top: 20px;
+}
+.stripe-form-error .note {
+  color: #ff4136;
+}
+.stripe-success .ion-checkmark {
+  color: #2ecc40;
+  margin-left: 5px;
+}
+.stripe-success .btn {
+  margin: 20px auto 0;
+}
+.stripe-success-text {
+  line-height: 2em;
+  margin-top: -5px;
+}
+.stripe-order-number {
+  font-size: 1.4em;
 }
 .react-credit-card {
   min-width: 280px;
@@ -460,6 +504,9 @@ a:hover {
   width: 65px;
   text-align: left;
 }
+.selection .Select.is-disabled {
+  opacity: 0.65;
+}
 .selection .Select-value,
 .selection .Select-option {
   padding-left: 20px !important;
@@ -510,11 +557,15 @@ a:hover {
 .qa.expanded .question {
   background-color: #f0f0f0;
   padding: 2px 0;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
   animation: question-expanded 0.3s;
 }
 .qa.expanded .answer {
   padding: 10px 20px;
   border: 2px #f0f0f0 solid;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
   border-top: none;
   max-height: 1000px;
   opacity: 1;
@@ -848,11 +899,13 @@ a:hover {
   color: #fff;
   visibility: hidden;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.2s linear;
 }
 .image-overlay.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 .image-overlay-close {
   position: fixed;
@@ -903,7 +956,7 @@ a:hover {
   background-position-x: 50%;
   background-position-y: 50%;
   max-width: 80vh;
-  min-width: 320px;
+  min-width: 300px;
   position: relative;
 }
 .image-background:hover .image-meta {
@@ -959,7 +1012,7 @@ a:hover {
 @media screen and (max-width: 440px) {
   .image-overlay-container {
     height: 50%;
-    margin: 30vh auto;
+    margin: 25vh auto;
   }
 }
 .order-summary {
@@ -969,11 +1022,20 @@ a:hover {
   text-align: right;
   position: relative;
 }
+.order-summary.success {
+  border-color: #2ecc40;
+}
+.order-summary.success .order-total {
+  color: #2ecc40;
+}
 .order-icon {
   position: absolute;
   font-size: 2em;
   left: 20px;
   top: 10px;
+}
+.order-icon .ion-spoon {
+  padding-left: 1px;
 }
 .order-title .warning {
   color: #ff4136;
@@ -996,13 +1058,13 @@ a:hover {
   position: absolute;
   left: 0;
   bottom: 3px;
-  font-size: 16px;
+  font-size: 0.714285714285714em;
 }
 .order-warning .note {
   color: #ff4136;
 }
 .btn {
-  padding: 8px 15px;
+  padding: 6.5px 15px;
   display: inline-block;
   border-width: 1px;
   border-style: solid;
@@ -1014,6 +1076,9 @@ a:hover {
 .btn:hover:enabled {
   background-color: #c5c5c5;
   border-color: #a7a7a7;
+}
+.btn:not(:first-of-type) {
+  margin-left: 10px;
 }
 .btn-default {
   color: #fff;

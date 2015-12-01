@@ -18,12 +18,47 @@
   text-align: left
 
 .stripe-form
-  margin-top: 20px
+  margin: 10px auto 0
+  max-width: 350px
+  .stripe-input
+    outline: none
+    padding: 5px 10px
+    width: calc(100% - 4px)
+    margin: 2px 2px 0
+    border-radius: 3px
+    border: 1px $gray3 solid
+    &[name="cvc"],
+    &[name="expiry"]
+      width: calc(50% - 4px)
+    &.error
+      border-color: $red !important
+    &:focus
+      border-color: $orange
+  button
+    margin-top: 20px
+  .loading
+    display: block
+    margin-top: 9px
+    margin-bottom: -11px
 
-.stripe-input
-  &.error
-    border: 1px $red solid
-    padding: 2px
+.stripe-form-error
+  margin-top: 20px
+  .note
+    color: $red
+
+.stripe-success
+  .ion-checkmark
+    color: $green
+    margin-left: 5px
+  .btn
+    margin: 20px auto 0
+
+.stripe-success-text
+  line-height: 2em
+  margin-top: -5px
+
+.stripe-order-number
+  font-size: 1.4em
 
 .react-credit-card
   min-width: 280px

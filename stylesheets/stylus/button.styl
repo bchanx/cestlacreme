@@ -8,13 +8,16 @@ btn-style(color)
     border-color: darken(@background-color, $darken)
 
 .btn
-  padding: 8px 15px
+  padding: 6.5px 15px
   display: inline-block
   border-width: 1px
   border-style: solid
   border-radius: 3px
   font-weight: 400
   btn-style($gray3)
+
+.btn:not(:first-of-type)
+  margin-left: 10px
 
 .btn-default
   color: white

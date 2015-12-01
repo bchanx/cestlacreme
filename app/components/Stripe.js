@@ -4,15 +4,20 @@ import { ReactScriptLoaderMixin } from 'react-script-loader';
 import ReactCreditCard from 'react-credit-card';
 import request from 'superagent';
 import classNames from 'classnames';
-import { Break, Button } from './Common';
+import email from 'email-validator';
+import { Loading, Break, Button, Note, Bold } from './Common';
 
 var StripeReact = React.createClass({
   mixins: [ReactScriptLoaderMixin],
 
   getDefaultProps: function() {
     return {
-      pricing: null,
-      selected: null,
+      product: null,
+      selection: null,
+      disabled: false,
+      orderSuccessful: false,
+      updateState: null,
+      resetState: null,
       formParams: [{
         type: 'number',
         placeholder: 'Card number'
@@ -25,36 +30,59 @@ var StripeReact = React.createClass({
       }, {
         type: 'cvc',
         placeholder: 'CVC'
+      }, {
+        type: 'email',
+        placeholder: 'Email'
       }],
       cardDisclosure: 'We do not store any credit card information on our servers. All payments are securely handled with Stripe. Learn more at stripe.com/about.'
     };
   },
 
-  componentWillReceiveProps: function(nextProps) {
-    let totalSelected = Object.keys(nextProps.selected).map(type => nextProps.selected[type].value)
-      .reduce((a, b) => a + b);
-    this.setState({
-      totalSelected: totalSelected
-    });
+  // Internal state
+  _: {},
+  getInternalState: function() {
+    this._ = {
+      mounted: false,
+      paymentsToggleClicked: false,
+      input: {
+        number: null,
+        name: null,
+        expiry: null,
+        cvc: null
+      }
+    };
   },
 
-  getInitialState: function() {
+  getInitialState: function(opt_force) {
+    // Get internal state
+    this.getInternalState();
     return {
-      loading: true,
+      loading: !!opt_force ? false : true,
       loadingError: false,
       totalSelected: 0,
       showPayments: false,
-      showSuccess: false,
-      submitInProgress: false,
       form: {
         number: '',
         name: '',
         expiry: '',
-        cvc: ''
+        cvc: '',
+        email: ''
       },
       focused: 'number',
-      error: null
+      error: null,
+      orderNumber: null
     };
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    let totalSelected = Object.keys(nextProps.selection).map(type => nextProps.selection[type].value)
+      .reduce((a, b) => a + b);
+    let isValidOrder = totalSelected >= this.props.product.minimum && totalSelected <= this.props.product.maximum;
+    this.setState({
+      totalSelected: totalSelected,
+      isValidOrder: isValidOrder,
+      showPayments: this.state.showPayments && isValidOrder
+    });
   },
 
   getScriptURL: function() {
@@ -63,7 +91,7 @@ var StripeReact = React.createClass({
 
   onScriptLoaded: function() {
     // TODO: prod/test key
-    if (!this._.unmounted) {
+    if (this._.mounted) {
       var ready = Stripe && process.env.STRIPE_TEST_PUBLISHABLE_KEY;
       this.setState({
         loading: false,
@@ -76,8 +104,7 @@ var StripeReact = React.createClass({
   },
 
   onScriptError: function() {
-    console.log("-->> ERROR!");
-    if (!this._.unmounted) {
+    if (this._.mounted) {
       this.setState({
         loading: false,
         loadingError: true
@@ -85,20 +112,12 @@ var StripeReact = React.createClass({
     }
   },
 
-  // Internal state
-  _: {
-    unmounted: false,
-    paymentsToggleClicked: false,
-    input: {
-      number: null,
-      name: null,
-      expiry: null,
-      cvc: null
-    }
+  componentWillUnmount: function() {
+    this._.mounted = false;
   },
 
-  componentWillUnmount: function() {
-    this._.unmounted = true;
+  componentWillMount: function() {
+    this._.mounted = true;
   },
 
   componentDidUpdate: function() {
@@ -107,7 +126,6 @@ var StripeReact = React.createClass({
         let node = ReactDOM.findDOMNode(this).parentNode.parentNode;
         node.scrollTop = node.scrollHeight;
         let focus = this.state.error && this.state.error.type || 'number';
-        console.log('-->> FOCUS:', focus, this.state.error);
         if (this._.input[focus]) {
           this._.input[focus].focus();
         }
@@ -116,26 +134,31 @@ var StripeReact = React.createClass({
     }
   },
 
-  isValidOrder: function() {
-    return this.state.totalSelected >= this.props.pricing.minimum && this.state.totalSelected <= this.props.pricing.maximum;
-  },
-
   togglePayments: function(event) {
     event && event.preventDefault();
-    if (this.isValidOrder()) {
+    if (this.state.isValidOrder) {
       this._.paymentsToggleClicked = true;
       this.setState({
         showPayments: !this.state.showPayments
       });
     }
-    else {
-      // TODO show button error
-      console.error("-->> total not correct", this.state.totalSelected);
+  },
+
+  resetOrder: function(event) {
+    event && event.preventDefault();
+    this.props.resetState();
+    this.setState(this.getInitialState(true));
+  },
+
+  focusError: function(error) {
+    error = error || this.state.error;
+    if (this._.input[error.type]) {
+      this._.input[error.type].focus();
     }
   },
 
   onFormChange: function(type, event) {
-    if (!this.state.submitInProgress) {
+    if (!this.props.disabled) {
       let form = this.state.form;
       form[type] = event.target.value;
       this.setState(form);
@@ -143,7 +166,7 @@ var StripeReact = React.createClass({
   },
 
   onFocusChange: function(type) {
-    if (!this.state.submitInProgress) {
+    if (!this.props.disabled) {
       this.setState({
         focused: type
       });
@@ -176,57 +199,46 @@ var StripeReact = React.createClass({
         message: 'CVC is invalid.'
       };
     }
+    else if (!email.validate(this.state.form.email)) {
+      error = {
+        type: 'email',
+        message: 'Email is invalid.'
+      };
+    }
     // Returns error if any, otherwise null
     return error;
   },
 
-  onCreateResponse: function(status, response) {
-    if (response.error) {
-      // Stripe error
-      this.setState({
-        submitInProgress: false
-      });
-      console.log("-->> SOMETHING WENT WRONG ...");
-    }
-    else {
-      // Send form data to server for charge
-      request.post(window.location.origin + '/stripe/order')
-        .send({
-          stripeToken: response.id,
-          created: response.created,
-          livemode: response.livemode
-        })
-        .accept('json')
-        .end((error, response) => {
-          this.setState({
-            submitInProgress: false,
-            showSuccess: true,
-            showPayments: false
-          });
-        });
-    }
-  },
-
   submitOrder: function(event) {
     event && event.preventDefault();
-    console.log("-->> submit order!", this.state.form);
+    if (!this.state.isValidOrder) {
+      this.setState({
+        error: {
+          message: 'Order selection is invalid.'
+        }
+      });
+      return;
+    }
+
+    // Reset errors
+    this.setState({
+      error: null,
+      orderNumber: null
+    });
     let error = this.validateForm();
     if (error) {
-      console.log("-->> things are invalid...", error);
+      // Show error
       this.setState({
         error: error
       });
-      if (this._.input[error.type]) {
-        this._.input[error.type].focus();
-      }
+      this.focusError(error);
     }
     else {
       // Things look good, submit!
-      console.log("-->> CREATE TOKEN!!");
-      this.setState({
-        submitInProgress: true
+      this.props.updateState({
+        disabled: true
       });
-      // TODO turn this on for prod
+      // TODO: turn this on for prod
       if (process.env.NODE_ENV === 'development') {
         Stripe.card.createToken({
           number: this.state.form.number,
@@ -235,11 +247,72 @@ var StripeReact = React.createClass({
           cvc: this.state.form.cvc
         }, this.onCreateResponse);
       }
+      else {
+        this.props.updateState({
+          disabled: false
+        });
+      }
     }
   },
 
+  onCreateResponse: function(status, response) {
+    if (response.error) {
+      // Stripe error
+      this.props.updateState({
+        disabled: false
+      });
+      this.setState({
+        error: response.error
+      });
+    }
+    else {
+      // Send form data to server for charge
+      request.post(window.location.origin + '/stripe/order')
+        .send({
+          stripeToken: response.id,
+          created: response.created,
+          livemode: response.livemode,
+          email: this.state.form.email,
+          selection: this.props.selection
+        })
+        .accept('json')
+        .end((error, response) => {
+          if (response && response.body && response.body.error) {
+            // Charge failed.
+            error = response.body.error;
+          }
+          else if (!(response && response.body && response.body.success)) {
+            // No valid response body...
+            error = {
+              message: 'The charge could not be made.'
+            };
+          }
+          if (error) {
+            // Could also be network error. Make sure error message is present.
+            error.message = error.message || 'Something went wrong.';
+            this.focusError(error);
+          }
+          else {
+            // Save current order number
+            this.setState({
+              orderNumber: response && response.body && response.body.order
+            });
+          }
+          this.setState({
+            error: error,
+            showPayments: !!error
+          });
+          this.props.updateState({
+            disabled: !error,
+            orderSuccessful: !error
+          });
+        });
+    }
+  },
+
+
   onBlurChange: function(type) {
-    if (!this.state.submitInProgress && type === 'cvc') {
+    if (!this.props.disabled && type === 'cvc') {
       this.setState({
         focused: 'number'
       });
@@ -252,18 +325,32 @@ var StripeReact = React.createClass({
     }
   },
 
-  render: function() {
-    let formParams = this.props.formParams.map(p => {
+  getFormParams: function() {
+    return this.props.formParams.map(p => {
       let type = p.type;
       let placeholder = p.placeholder;
       let onChangeHandler = this.onFormChange.bind(this, type);
       let onFocusHandler = this.onFocusChange.bind(this, type);
       let onBlurHandler = this.onBlurChange.bind(this, type);
       let formMountHandler = this.onFormMount.bind(this, type);
-      return <input key={type} className={classNames("stripe-input", {
-        error: this.state.error && this.state.error.type === type
-      })} text="text" placeholder={placeholder} name={type} value={this.state.form[type]} onChange={onChangeHandler} onFocus={onFocusHandler} onBlur={onBlurHandler} ref={formMountHandler}/>;
+      return <input
+        key={type}
+        type="text"
+        className={classNames("stripe-input", {
+          error: this.state.error && this.state.error.type === type
+        })}
+        placeholder={placeholder}
+        disabled={this.props.disabled}
+        name={type}
+        value={this.state.form[type]}
+        onChange={onChangeHandler}
+        onFocus={onFocusHandler}
+        onBlur={onBlurHandler}
+        ref={formMountHandler}/>;
     });
+  },
+
+  render: function() {
     let payment = (
       <div>
         <div className={classNames("stripe-payment", {
@@ -279,25 +366,39 @@ var StripeReact = React.createClass({
               shinyAfterBack={this.props.cardDisclosure}/>
           </div>
           <form className="stripe-form">
-            {formParams}
-            <Button className="btn-success" onClick={this.submitOrder}>Place Order</Button>
-            <Button className="btn-default" onClick={this.togglePayments}>Cancel</Button>
+            {this.getFormParams()}
+            {this.state.error ?
+              <div className="stripe-form-error">
+                <Note><Bold>{this.state.error.message}</Bold></Note>
+              </div> : null}
+            {this.props.disabled ? <Loading/> : null}
+            <Button className="btn-success" onClick={this.submitOrder} disabled={this.props.disabled}>{this.props.disabled ? 'Preparing Eggs...' : 'Place Order'}</Button>
+            <Button className="btn-default" onClick={this.togglePayments} disabled={this.props.disabled}>Cancel</Button>
           </form>
         </div>
-        { this.state.showSuccess ?
-          <div>
-            Success!
-            <div onClick={this.togglePayments}>Make another order?</div>
+        { this.props.orderSuccessful ?
+          <div className="stripe-success">
+            <div className="stripe-success-text">
+              Hurray! Your order was successfully created! <span className="ion-checkmark"></span>
+              <br/> 
+              Your order number is <Bold className="stripe-order-number">{this.state.orderNumber}</Bold>.
+              <br/>
+              A receipt has been sent to <Bold>{this.state.form.email}</Bold>.
+            </div>
+            <Button className="btn-success" onClick={this.resetOrder}>Make another order?</Button>
           </div> :
           !this.state.showPayments ?
           <div className="stripe-ready">
-            <Button className="btn-default" onClick={this.togglePayments} disabled={!this.isValidOrder()}>Ready to order?</Button>
+            <Button className={classNames({
+              "btn-default": !this.state.isValidOrder,
+              "btn-success": this.state.isValidOrder
+            })} onClick={this.togglePayments} disabled={!this.state.isValidOrder}>Ready to order?</Button>
           </div> : null }
       </div>
     );
     return (
       <div className="stripe">
-        { this.state.loading ? 'Loading...' : this.state.loadingError ? 'An Error Occured...' : payment }
+        { this.state.loading ? <Button disabled="true">Payments Loading...</Button> : this.state.loadingError ? <Button className="btn-danger">Payments Error</Button> : payment }
       </div>
     );
   }

@@ -4,7 +4,7 @@ import Stripe from './Stripe';
 import MenuItems from './MenuItems';
 import OrderSummary from './OrderSummary';
 
-var PRICING = {
+var PRODUCT = {
   price: 5.00,
   minimum: 4,
   maximum: 12
@@ -13,7 +13,7 @@ var PRICING = {
 var Menu = React.createClass({
   getInitialState: function() {
     return {
-      selected: {
+      selection: {
         vanilla: {
           name: 'Vanilla',
           value: 0
@@ -26,21 +26,31 @@ var Menu = React.createClass({
           name: 'Earl Grey',
           value: 0
         }
-      }
+      },
+      disabled: false,
+      orderSuccessful: false
     };
   },
 
+  updateState: function(state) {
+    this.setState(state);
+  },
+
+  resetState: function() {
+    this.setState(this.getInitialState());
+  },
+
   onSelectionChange: function(name, val) {
-    let selected = this.state.selected;
-    selected[name].value = val.value;
-    this.setState(selected);
+    let selection = this.state.selection;
+    selection[name].value = val.value;
+    this.setState(selection);
   },
 
   render: function() {
     return (
       <div className="menu">
         <div>
-          Our creme brulee's are sold at a flat rate of ${PRICING.price} each. However due to the nature of our business, we require at least {PRICING.minimum} brulee's per order, meaning a <Bold>minimum ${PRICING.price * PRICING.minimum} purchase</Bold>.
+          Our creme brulee's are sold at a flat rate of ${PRODUCT.price} each. However due to the nature of our business, we require at least {PRODUCT.minimum} brulee's per order, meaning a <Bold>minimum ${PRODUCT.price * PRODUCT.minimum} purchase</Bold>.
           <br/>
           <br/>
           Flavors can be mixed and matched to your preference.
@@ -49,10 +59,23 @@ var Menu = React.createClass({
           (For orders of more than a dozen, please <a href="mailto:cestlacreme@gmail.com">email us</a> to set up a specialty order.)
         </div>
         <Break/>
-        <MenuItems pricing={PRICING} selected={this.state.selected} onSelectionChange={this.onSelectionChange}/>
-        <OrderSummary pricing={PRICING} selected={this.state.selected}/>
+        <MenuItems
+          product={PRODUCT}
+          selection={this.state.selection}
+          onSelectionChange={this.onSelectionChange}
+          disabled={this.state.disabled}/>
+        <OrderSummary
+          product={PRODUCT}
+          selection={this.state.selection}
+          orderSuccessful={this.state.orderSuccessful}/>
         <Break/>
-        <Stripe pricing={PRICING} selected={this.state.selected}/>
+        <Stripe
+          product={PRODUCT}
+          selection={this.state.selection}
+          disabled={this.state.disabled}
+          orderSuccessful={this.state.orderSuccessful}
+          updateState={this.updateState}
+          resetState={this.resetState}/>
       </div>
     );
   }

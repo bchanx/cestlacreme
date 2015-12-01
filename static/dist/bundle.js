@@ -331,7 +331,7 @@ var Bold = exports.Bold = _react2.default.createClass({
   render: function render() {
     return _react2.default.createElement(
       'span',
-      { className: 'bold' },
+      _extends({}, this.props, { className: (0, _classnames2.default)("bold", this.props.className) }),
       this.props.children
     );
   }
@@ -373,7 +373,7 @@ var Button = exports.Button = _react2.default.createClass({
   render: function render() {
     return _react2.default.createElement(
       'button',
-      _extends({}, this.props, { className: (0, _classnames2.default)("btn", this.props.className), defaultPrevented: true }),
+      _extends({}, this.props, { className: (0, _classnames2.default)("btn", this.props.className) }),
       this.props.children
     );
   }
@@ -963,7 +963,7 @@ var _OrderSummary2 = _interopRequireDefault(_OrderSummary);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var PRICING = {
+var PRODUCT = {
   price: 5.00,
   minimum: 4,
   maximum: 12
@@ -974,7 +974,7 @@ var Menu = _react2.default.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      selected: {
+      selection: {
         vanilla: {
           name: 'Vanilla',
           value: 0
@@ -987,14 +987,24 @@ var Menu = _react2.default.createClass({
           name: 'Earl Grey',
           value: 0
         }
-      }
+      },
+      disabled: false,
+      orderSuccessful: false
     };
   },
 
+  updateState: function updateState(state) {
+    this.setState(state);
+  },
+
+  resetState: function resetState() {
+    this.setState(this.getInitialState());
+  },
+
   onSelectionChange: function onSelectionChange(name, val) {
-    var selected = this.state.selected;
-    selected[name].value = val.value;
-    this.setState(selected);
+    var selection = this.state.selection;
+    selection[name].value = val.value;
+    this.setState(selection);
   },
 
   render: function render() {
@@ -1005,15 +1015,15 @@ var Menu = _react2.default.createClass({
         'div',
         null,
         'Our creme brulee\'s are sold at a flat rate of $',
-        PRICING.price,
+        PRODUCT.price,
         ' each. However due to the nature of our business, we require at least ',
-        PRICING.minimum,
+        PRODUCT.minimum,
         ' brulee\'s per order, meaning a ',
         _react2.default.createElement(
           _Common.Bold,
           null,
           'minimum $',
-          PRICING.price * PRICING.minimum,
+          PRODUCT.price * PRODUCT.minimum,
           ' purchase'
         ),
         '.',
@@ -1031,10 +1041,23 @@ var Menu = _react2.default.createClass({
         ' to set up a specialty order.)'
       ),
       _react2.default.createElement(_Common.Break, null),
-      _react2.default.createElement(_MenuItems2.default, { pricing: PRICING, selected: this.state.selected, onSelectionChange: this.onSelectionChange }),
-      _react2.default.createElement(_OrderSummary2.default, { pricing: PRICING, selected: this.state.selected }),
+      _react2.default.createElement(_MenuItems2.default, {
+        product: PRODUCT,
+        selection: this.state.selection,
+        onSelectionChange: this.onSelectionChange,
+        disabled: this.state.disabled }),
+      _react2.default.createElement(_OrderSummary2.default, {
+        product: PRODUCT,
+        selection: this.state.selection,
+        orderSuccessful: this.state.orderSuccessful }),
       _react2.default.createElement(_Common.Break, null),
-      _react2.default.createElement(_Stripe2.default, { pricing: PRICING, selected: this.state.selected })
+      _react2.default.createElement(_Stripe2.default, {
+        product: PRODUCT,
+        selection: this.state.selection,
+        disabled: this.state.disabled,
+        orderSuccessful: this.state.orderSuccessful,
+        updateState: this.updateState,
+        resetState: this.resetState })
     );
   }
 });
@@ -1069,9 +1092,10 @@ var MenuItems = _react2.default.createClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      pricing: null,
-      selected: null,
-      onSelectionChange: null
+      product: null,
+      selection: null,
+      onSelectionChange: null,
+      disabled: false
     };
   },
 
@@ -1094,14 +1118,15 @@ var MenuItems = _react2.default.createClass({
       'div',
       { className: 'selection' },
       (function () {
-        return Object.keys(_this.props.selected).map(function (type) {
+        return Object.keys(_this.props.selection).map(function (type) {
           return _react2.default.createElement(
             'div',
             { key: type },
             _react2.default.createElement(_Selection2.default, {
               type: type,
-              pricing: _this.props.pricing,
-              selected: _this.props.selected,
+              product: _this.props.product,
+              selection: _this.props.selection,
+              disabled: _this.props.disabled,
               onChange: _this.handleSelectChange(type),
               images: _this.getImages(type)
             }),
@@ -1190,6 +1215,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
 var _Common = require('./Common');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -1199,14 +1228,15 @@ var OrderSummary = _react2.default.createClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      selected: null,
-      pricing: null
+      product: null,
+      selection: null,
+      orderSuccessful: false
     };
   },
 
   componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-    var totalSelected = Object.keys(nextProps.selected).map(function (type) {
-      return nextProps.selected[type].value;
+    var totalSelected = Object.keys(nextProps.selection).map(function (type) {
+      return nextProps.selection[type].value;
     }).reduce(function (a, b) {
       return a + b;
     });
@@ -1224,10 +1254,12 @@ var OrderSummary = _react2.default.createClass({
   render: function render() {
     var _this = this;
 
-    var items = Object.keys(this.props.selected);
+    var items = Object.keys(this.props.selection);
     return _react2.default.createElement(
       'div',
-      { className: 'order-summary' },
+      { className: (0, _classnames2.default)("order-summary", {
+          success: this.props.orderSuccessful
+        }) },
       _react2.default.createElement(
         'div',
         { className: 'order-icon' },
@@ -1242,8 +1274,8 @@ var OrderSummary = _react2.default.createClass({
           !this.state.totalSelected ? _react2.default.createElement(
             'span',
             { className: 'warning' },
-            'You currently have no items selected.'
-          ) : 'You have currently selected:'
+            'You currently have no items selection.'
+          ) : this.props.orderSuccessful ? 'You have successfully ordered:' : 'You have currently selection:'
         )
       ),
       this.state.totalSelected ? _react2.default.createElement(
@@ -1251,19 +1283,19 @@ var OrderSummary = _react2.default.createClass({
         null,
         (function () {
           return items.filter(function (itm) {
-            return _this.props.selected[itm].value;
+            return _this.props.selection[itm].value;
           }).map(function (itm) {
             return _react2.default.createElement(
               'div',
               { key: itm, className: 'order-item' },
-              _this.props.selected[itm].name,
+              _this.props.selection[itm].name,
               ' x ',
-              _this.props.selected[itm].value,
+              _this.props.selection[itm].value,
               _react2.default.createElement(
                 'span',
                 { className: 'order-price' },
                 '$',
-                (_this.props.selected[itm].value * _this.props.pricing.price).toFixed(2)
+                (_this.props.selection[itm].value * _this.props.product.price).toFixed(2)
               )
             );
           });
@@ -1271,7 +1303,7 @@ var OrderSummary = _react2.default.createClass({
         _react2.default.createElement(
           'div',
           { className: 'order-total' },
-          this.state.totalSelected < this.props.pricing.minimum ? _react2.default.createElement(
+          this.state.totalSelected < this.props.product.minimum ? _react2.default.createElement(
             'div',
             { className: 'order-warning' },
             _react2.default.createElement(
@@ -1288,7 +1320,7 @@ var OrderSummary = _react2.default.createClass({
             _Common.Bold,
             null,
             'Total: $',
-            (this.state.totalSelected * this.props.pricing.price).toFixed(2)
+            (this.state.totalSelected * this.props.product.price).toFixed(2)
           )
         )
       ) : null
@@ -1298,7 +1330,7 @@ var OrderSummary = _react2.default.createClass({
 
 exports.default = OrderSummary;
 
-},{"./Common":4,"react":"react"}],15:[function(require,module,exports){
+},{"./Common":4,"classnames":"classnames","react":"react"}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1330,24 +1362,25 @@ var Selection = _react2.default.createClass({
     return {
       type: null, // earlgrey
       images: null,
-      selected: null,
-      pricing: null,
-      onChange: null
+      selection: null,
+      product: null,
+      onChange: null,
+      disabled: false
     };
   },
 
   getOptions: function getOptions() {
     var _this = this;
 
-    var othersSelected = Object.keys(this.props.selected).filter(function (s) {
+    var othersSelected = Object.keys(this.props.selection).filter(function (s) {
       return s !== _this.props.type;
     }).map(function (s) {
-      return _this.props.selected[s].value;
+      return _this.props.selection[s].value;
     }).reduce(function (a, b) {
       return a + b;
     });
     var options = [];
-    for (var i = 0; i <= this.props.pricing.maximum - othersSelected; i++) {
+    for (var i = 0; i <= this.props.product.maximum - othersSelected; i++) {
       options.push({
         value: i,
         label: String(i)
@@ -1371,15 +1404,16 @@ var Selection = _react2.default.createClass({
         _react2.default.createElement(
           'div',
           { className: 'menu-caption' },
-          this.props.selected[this.props.type].name
+          this.props.selection[this.props.type].name
         ),
         _react2.default.createElement(_reactSelect2.default, {
           name: this.props.type + '-select',
           searchable: false,
           clearable: false,
-          value: this.props.selected[this.props.type].value,
+          value: this.props.selection[this.props.type].value,
           options: this.getOptions(),
-          onChange: this.props.onChange
+          onChange: this.props.onChange,
+          disabled: this.props.disabled
         })
       )
     );
@@ -1418,7 +1452,6 @@ var Social = _react2.default.createClass({
 exports.default = Social;
 
 },{"react":"react"}],17:[function(require,module,exports){
-(function (process){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1447,6 +1480,10 @@ var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
+var _emailValidator = require('email-validator');
+
+var _emailValidator2 = _interopRequireDefault(_emailValidator);
+
 var _Common = require('./Common');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -1458,8 +1495,12 @@ var StripeReact = _react2.default.createClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      pricing: null,
-      selected: null,
+      product: null,
+      selection: null,
+      disabled: false,
+      orderSuccessful: false,
+      updateState: null,
+      resetState: null,
       formParams: [{
         type: 'number',
         placeholder: 'Card number'
@@ -1472,39 +1513,62 @@ var StripeReact = _react2.default.createClass({
       }, {
         type: 'cvc',
         placeholder: 'CVC'
+      }, {
+        type: 'email',
+        placeholder: 'Email'
       }],
       cardDisclosure: 'We do not store any credit card information on our servers. All payments are securely handled with Stripe. Learn more at stripe.com/about.'
     };
   },
 
-  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-    var totalSelected = Object.keys(nextProps.selected).map(function (type) {
-      return nextProps.selected[type].value;
-    }).reduce(function (a, b) {
-      return a + b;
-    });
-    this.setState({
-      totalSelected: totalSelected
-    });
+  // Internal state
+  _: {},
+  getInternalState: function getInternalState() {
+    this._ = {
+      mounted: false,
+      paymentsToggleClicked: false,
+      input: {
+        number: null,
+        name: null,
+        expiry: null,
+        cvc: null
+      }
+    };
   },
 
-  getInitialState: function getInitialState() {
+  getInitialState: function getInitialState(opt_force) {
+    // Get internal state
+    this.getInternalState();
     return {
-      loading: true,
+      loading: !!opt_force ? false : true,
       loadingError: false,
       totalSelected: 0,
       showPayments: false,
-      showSuccess: false,
-      submitInProgress: false,
       form: {
         number: '',
         name: '',
         expiry: '',
-        cvc: ''
+        cvc: '',
+        email: ''
       },
       focused: 'number',
-      error: null
+      error: null,
+      orderNumber: null
     };
+  },
+
+  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+    var totalSelected = Object.keys(nextProps.selection).map(function (type) {
+      return nextProps.selection[type].value;
+    }).reduce(function (a, b) {
+      return a + b;
+    });
+    var isValidOrder = totalSelected >= this.props.product.minimum && totalSelected <= this.props.product.maximum;
+    this.setState({
+      totalSelected: totalSelected,
+      isValidOrder: isValidOrder,
+      showPayments: this.state.showPayments && isValidOrder
+    });
   },
 
   getScriptURL: function getScriptURL() {
@@ -1513,7 +1577,7 @@ var StripeReact = _react2.default.createClass({
 
   onScriptLoaded: function onScriptLoaded() {
     // TODO: prod/test key
-    if (!this._.unmounted) {
+    if (this._.mounted) {
       var ready = Stripe && "pk_test_IaT5HSSG1P7dpsq44cKF4Ypr";
       this.setState({
         loading: false,
@@ -1526,8 +1590,7 @@ var StripeReact = _react2.default.createClass({
   },
 
   onScriptError: function onScriptError() {
-    console.log("-->> ERROR!");
-    if (!this._.unmounted) {
+    if (this._.mounted) {
       this.setState({
         loading: false,
         loadingError: true
@@ -1535,20 +1598,12 @@ var StripeReact = _react2.default.createClass({
     }
   },
 
-  // Internal state
-  _: {
-    unmounted: false,
-    paymentsToggleClicked: false,
-    input: {
-      number: null,
-      name: null,
-      expiry: null,
-      cvc: null
-    }
+  componentWillUnmount: function componentWillUnmount() {
+    this._.mounted = false;
   },
 
-  componentWillUnmount: function componentWillUnmount() {
-    this._.unmounted = true;
+  componentWillMount: function componentWillMount() {
+    this._.mounted = true;
   },
 
   componentDidUpdate: function componentDidUpdate() {
@@ -1557,7 +1612,6 @@ var StripeReact = _react2.default.createClass({
         var node = _reactDom2.default.findDOMNode(this).parentNode.parentNode;
         node.scrollTop = node.scrollHeight;
         var focus = this.state.error && this.state.error.type || 'number';
-        console.log('-->> FOCUS:', focus, this.state.error);
         if (this._.input[focus]) {
           this._.input[focus].focus();
         }
@@ -1566,25 +1620,31 @@ var StripeReact = _react2.default.createClass({
     }
   },
 
-  isValidOrder: function isValidOrder() {
-    return this.state.totalSelected >= this.props.pricing.minimum && this.state.totalSelected <= this.props.pricing.maximum;
-  },
-
   togglePayments: function togglePayments(event) {
     event && event.preventDefault();
-    if (this.isValidOrder()) {
+    if (this.state.isValidOrder) {
       this._.paymentsToggleClicked = true;
       this.setState({
         showPayments: !this.state.showPayments
       });
-    } else {
-      // TODO show button error
-      console.error("-->> total not correct", this.state.totalSelected);
+    }
+  },
+
+  resetOrder: function resetOrder(event) {
+    event && event.preventDefault();
+    this.props.resetState();
+    this.setState(this.getInitialState(true));
+  },
+
+  focusError: function focusError(error) {
+    error = error || this.state.error;
+    if (this._.input[error.type]) {
+      this._.input[error.type].focus();
     }
   },
 
   onFormChange: function onFormChange(type, event) {
-    if (!this.state.submitInProgress) {
+    if (!this.props.disabled) {
       var form = this.state.form;
       form[type] = event.target.value;
       this.setState(form);
@@ -1592,7 +1652,7 @@ var StripeReact = _react2.default.createClass({
   },
 
   onFocusChange: function onFocusChange(type) {
-    if (!this.state.submitInProgress) {
+    if (!this.props.disabled) {
       this.setState({
         focused: type
       });
@@ -1621,9 +1681,58 @@ var StripeReact = _react2.default.createClass({
         type: 'cvc',
         message: 'CVC is invalid.'
       };
+    } else if (!_emailValidator2.default.validate(this.state.form.email)) {
+      error = {
+        type: 'email',
+        message: 'Email is invalid.'
+      };
     }
     // Returns error if any, otherwise null
     return error;
+  },
+
+  submitOrder: function submitOrder(event) {
+    event && event.preventDefault();
+    if (!this.state.isValidOrder) {
+      this.setState({
+        error: {
+          message: 'Order selection is invalid.'
+        }
+      });
+      return;
+    }
+
+    // Reset errors
+    this.setState({
+      error: null,
+      orderNumber: null
+    });
+    var error = this.validateForm();
+    if (error) {
+      // Show error
+      this.setState({
+        error: error
+      });
+      this.focusError(error);
+    } else {
+      // Things look good, submit!
+      this.props.updateState({
+        disabled: true
+      });
+      // TODO: turn this on for prod
+      if ("development" === 'development') {
+        Stripe.card.createToken({
+          number: this.state.form.number,
+          name: this.state.form.name,
+          exp: this.state.form.expiry,
+          cvc: this.state.form.cvc
+        }, this.onCreateResponse);
+      } else {
+        this.props.updateState({
+          disabled: false
+        });
+      }
+    }
   },
 
   onCreateResponse: function onCreateResponse(status, response) {
@@ -1631,58 +1740,54 @@ var StripeReact = _react2.default.createClass({
 
     if (response.error) {
       // Stripe error
-      this.setState({
-        submitInProgress: false
+      this.props.updateState({
+        disabled: false
       });
-      console.log("-->> SOMETHING WENT WRONG ...");
+      this.setState({
+        error: response.error
+      });
     } else {
       // Send form data to server for charge
       _superagent2.default.post(window.location.origin + '/stripe/order').send({
         stripeToken: response.id,
         created: response.created,
-        livemode: response.livemode
+        livemode: response.livemode,
+        email: this.state.form.email,
+        selection: this.props.selection
       }).accept('json').end(function (error, response) {
+        if (response && response.body && response.body.error) {
+          // Charge failed.
+          error = response.body.error;
+        } else if (!(response && response.body && response.body.success)) {
+          // No valid response body...
+          error = {
+            message: 'The charge could not be made.'
+          };
+        }
+        if (error) {
+          // Could also be network error. Make sure error message is present.
+          error.message = error.message || 'Something went wrong.';
+          _this.focusError(error);
+        } else {
+          // Save current order number
+          _this.setState({
+            orderNumber: response && response.body && response.body.order
+          });
+        }
         _this.setState({
-          submitInProgress: false,
-          showSuccess: true,
-          showPayments: false
+          error: error,
+          showPayments: !!error
+        });
+        _this.props.updateState({
+          disabled: !error,
+          orderSuccessful: !error
         });
       });
     }
   },
 
-  submitOrder: function submitOrder(event) {
-    event && event.preventDefault();
-    console.log("-->> submit order!", this.state.form);
-    var error = this.validateForm();
-    if (error) {
-      console.log("-->> things are invalid...", error);
-      this.setState({
-        error: error
-      });
-      if (this._.input[error.type]) {
-        this._.input[error.type].focus();
-      }
-    } else {
-      // Things look good, submit!
-      console.log("-->> CREATE TOKEN!!");
-      this.setState({
-        submitInProgress: true
-      });
-      // TODO turn this on for prod
-      if (process.env.NODE_ENV === 'development') {
-        Stripe.card.createToken({
-          number: this.state.form.number,
-          name: this.state.form.name,
-          exp: this.state.form.expiry,
-          cvc: this.state.form.cvc
-        }, this.onCreateResponse);
-      }
-    }
-  },
-
   onBlurChange: function onBlurChange(type) {
-    if (!this.state.submitInProgress && type === 'cvc') {
+    if (!this.props.disabled && type === 'cvc') {
       this.setState({
         focused: 'number'
       });
@@ -1695,20 +1800,34 @@ var StripeReact = _react2.default.createClass({
     }
   },
 
-  render: function render() {
+  getFormParams: function getFormParams() {
     var _this2 = this;
 
-    var formParams = this.props.formParams.map(function (p) {
+    return this.props.formParams.map(function (p) {
       var type = p.type;
       var placeholder = p.placeholder;
       var onChangeHandler = _this2.onFormChange.bind(_this2, type);
       var onFocusHandler = _this2.onFocusChange.bind(_this2, type);
       var onBlurHandler = _this2.onBlurChange.bind(_this2, type);
       var formMountHandler = _this2.onFormMount.bind(_this2, type);
-      return _react2.default.createElement('input', { key: type, className: (0, _classnames2.default)("stripe-input", {
+      return _react2.default.createElement('input', {
+        key: type,
+        type: 'text',
+        className: (0, _classnames2.default)("stripe-input", {
           error: _this2.state.error && _this2.state.error.type === type
-        }), text: 'text', placeholder: placeholder, name: type, value: _this2.state.form[type], onChange: onChangeHandler, onFocus: onFocusHandler, onBlur: onBlurHandler, ref: formMountHandler });
+        }),
+        placeholder: placeholder,
+        disabled: _this2.props.disabled,
+        name: type,
+        value: _this2.state.form[type],
+        onChange: onChangeHandler,
+        onFocus: onFocusHandler,
+        onBlur: onBlurHandler,
+        ref: formMountHandler });
     });
+  },
+
+  render: function render() {
     var payment = _react2.default.createElement(
       'div',
       null,
@@ -1731,26 +1850,61 @@ var StripeReact = _react2.default.createClass({
         _react2.default.createElement(
           'form',
           { className: 'stripe-form' },
-          formParams,
+          this.getFormParams(),
+          this.state.error ? _react2.default.createElement(
+            'div',
+            { className: 'stripe-form-error' },
+            _react2.default.createElement(
+              _Common.Note,
+              null,
+              _react2.default.createElement(
+                _Common.Bold,
+                null,
+                this.state.error.message
+              )
+            )
+          ) : null,
+          this.props.disabled ? _react2.default.createElement(_Common.Loading, null) : null,
           _react2.default.createElement(
             _Common.Button,
-            { className: 'btn-success', onClick: this.submitOrder },
-            'Place Order'
+            { className: 'btn-success', onClick: this.submitOrder, disabled: this.props.disabled },
+            this.props.disabled ? 'Preparing Eggs...' : 'Place Order'
           ),
           _react2.default.createElement(
             _Common.Button,
-            { className: 'btn-default', onClick: this.togglePayments },
+            { className: 'btn-default', onClick: this.togglePayments, disabled: this.props.disabled },
             'Cancel'
           )
         )
       ),
-      this.state.showSuccess ? _react2.default.createElement(
+      this.props.orderSuccessful ? _react2.default.createElement(
         'div',
-        null,
-        'Success!',
+        { className: 'stripe-success' },
         _react2.default.createElement(
           'div',
-          { onClick: this.togglePayments },
+          { className: 'stripe-success-text' },
+          'Hurray! Your order was successfully created! ',
+          _react2.default.createElement('span', { className: 'ion-checkmark' }),
+          _react2.default.createElement('br', null),
+          'Your order number is ',
+          _react2.default.createElement(
+            _Common.Bold,
+            { className: 'stripe-order-number' },
+            this.state.orderNumber
+          ),
+          '.',
+          _react2.default.createElement('br', null),
+          'A receipt has been sent to ',
+          _react2.default.createElement(
+            _Common.Bold,
+            null,
+            this.state.form.email
+          ),
+          '.'
+        ),
+        _react2.default.createElement(
+          _Common.Button,
+          { className: 'btn-success', onClick: this.resetOrder },
           'Make another order?'
         )
       ) : !this.state.showPayments ? _react2.default.createElement(
@@ -1758,7 +1912,10 @@ var StripeReact = _react2.default.createClass({
         { className: 'stripe-ready' },
         _react2.default.createElement(
           _Common.Button,
-          { className: 'btn-default', onClick: this.togglePayments, disabled: !this.isValidOrder() },
+          { className: (0, _classnames2.default)({
+              "btn-default": !this.state.isValidOrder,
+              "btn-success": this.state.isValidOrder
+            }), onClick: this.togglePayments, disabled: !this.state.isValidOrder },
           'Ready to order?'
         )
       ) : null
@@ -1766,15 +1923,22 @@ var StripeReact = _react2.default.createClass({
     return _react2.default.createElement(
       'div',
       { className: 'stripe' },
-      this.state.loading ? 'Loading...' : this.state.loadingError ? 'An Error Occured...' : payment
+      this.state.loading ? _react2.default.createElement(
+        _Common.Button,
+        { disabled: 'true' },
+        'Payments Loading...'
+      ) : this.state.loadingError ? _react2.default.createElement(
+        _Common.Button,
+        { className: 'btn-danger' },
+        'Payments Error'
+      ) : payment
     );
   }
 });
 
 exports.default = StripeReact;
 
-}).call(this,require('_process'))
-},{"./Common":4,"_process":20,"classnames":"classnames","react":"react","react-credit-card":"react-credit-card","react-dom":"react-dom","react-script-loader":"react-script-loader","superagent":"superagent"}],18:[function(require,module,exports){
+},{"./Common":4,"classnames":"classnames","email-validator":"email-validator","react":"react","react-credit-card":"react-credit-card","react-dom":"react-dom","react-script-loader":"react-script-loader","superagent":"superagent"}],18:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');

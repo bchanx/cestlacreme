@@ -20,7 +20,7 @@ var babel = require('gulp-babel');
 var spawn = require('child_process').spawn;
 var config = require('./config');
 
-const PRODUCTION = 0;
+const ENV = 'development';
 const STATIC = 'static/dist';
 const VENDOR_DEPS = [
   'react',
@@ -32,6 +32,7 @@ const VENDOR_DEPS = [
   'react-script-loader',
   'classnames',
   'moment',
+  'email-validator',
   'superagent'
 ];
 
@@ -135,12 +136,14 @@ gulp.task('vendor', function() {
 });
 
 gulp.task('browserify', function() {
+  var env = config.all();
+  env.NODE_ENV = ENV;
   var bundler = watchify(browserify('app/main.js', { debug: false }))
     .external(VENDOR_DEPS)
     .transform(babelify, {
       presets: ['es2015', 'react']
     })
-    .transform(envify, config.all())
+    .transform(envify, env)
     .on('update', rebundle);
   return rebundle();
 
@@ -188,7 +191,7 @@ gulp.task('start', ['stylesheets', 'scripts', 'watch'], function() {
     script: 'server.js',
     ext: 'js html css',
     env: {
-      NODE_ENV: !PRODUCTION ? 'development' : 'production'
+      NODE_ENV: ENV
     },
     ignore: ['stylesheets/', 'scripts/', 'app/', 'static/dist/*.min.*', 'app.js']
   });

@@ -5291,7 +5291,7 @@ function updateCache(cache, input, data) {
 
 function getFromCache(cache, input) {
 	if (!cache) return;
-	for (var i = 0; i <= input.length; i++) {
+	for (var i = input.length; i >= 0; --i) {
 		var cacheKey = input.slice(0, i);
 		if (cache[cacheKey] && (input === cacheKey || cache[cacheKey].complete)) {
 			return cache[cacheKey];
@@ -5301,7 +5301,7 @@ function getFromCache(cache, input) {
 
 function thenPromise(promise, callback) {
 	if (!promise || typeof promise.then !== 'function') return;
-	promise.then(function (data) {
+	return promise.then(function (data) {
 		callback(null, data);
 	}, function (err) {
 		callback(err);
@@ -5394,7 +5394,7 @@ var Async = _react2['default'].createClass({
 			isLoading: true
 		});
 		var responseHandler = this.getResponseHandler(input);
-		thenPromise(this.props.loadOptions(input, responseHandler), responseHandler);
+		return thenPromise(this.props.loadOptions(input, responseHandler), responseHandler);
 	},
 	render: function render() {
 		var noResultsText = this.props.noResultsText;
@@ -5553,7 +5553,7 @@ var Value = _react2['default'].createClass({
 		var className = 'Select-value-label';
 		return this.props.onClick || this.props.value.href ? _react2['default'].createElement(
 			'a',
-			{ className: className, href: this.props.value.href, target: this.props.value.target, onMouseDown: this.handleMouseDown, onTouchEnd: this.props.handleMouseDown },
+			{ className: className, href: this.props.value.href, target: this.props.value.target, onMouseDown: this.handleMouseDown, onTouchEnd: this.handleMouseDown },
 			this.props.children
 		) : _react2['default'].createElement(
 			'span',
@@ -24864,6 +24864,40 @@ module.exports = function(arr, fn, initial){
 	}
 }());
 
+},{}],"email-validator":[function(require,module,exports){
+"use strict";
+
+var tester = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?[a-zA-Z0-9])*(\.[a-zA-Z](-?[a-zA-Z0-9])*)+$/;
+// Thanks to:
+// http://fightingforalostcause.net/misc/2006/compare-email-regex.php
+// http://thedailywtf.com/Articles/Validating_Email_Addresses.aspx
+// http://stackoverflow.com/questions/201323/what-is-the-best-regular-expression-for-validating-email-addresses/201378#201378
+function validate(email)
+{
+	if (!email)
+		return false;
+		
+	if(email.length>254)
+		return false;
+
+	var valid = tester.test(email);
+	if(!valid)
+		return false;
+
+	// Further checking of some things regex can't handle
+	var parts = email.split("@");
+	if(parts[0].length>64)
+		return false;
+
+	var domainParts = parts[1].split(".");
+	if(domainParts.some(function(part) { return part.length>63; }))
+		return false;
+
+	return true;
+}
+
+exports.validate = validate;
+
 },{}],"moment":[function(require,module,exports){
 //! moment.js
 //! version : 2.10.6
@@ -28568,6 +28602,7 @@ var Select = _react2['default'].createClass({
 		searchable: _react2['default'].PropTypes.bool, // whether to enable searching feature or not
 		simpleValue: _react2['default'].PropTypes.bool, // pass the value to onChange as a simple value (legacy pre 1.0 mode), defaults to false
 		style: _react2['default'].PropTypes.object, // optional style to apply to the control
+		tabIndex: _react2['default'].PropTypes.string, // optional tab index of the control
 		value: _react2['default'].PropTypes.any, // initial field value
 		valueComponent: _react2['default'].PropTypes.func, // value component to render
 		valueKey: _react2['default'].PropTypes.string, // path of the label value in option objects
@@ -28655,6 +28690,7 @@ var Select = _react2['default'].createClass({
 
 		// for the non-searchable select, toggle the menu
 		if (!this.props.searchable) {
+			this.focus();
 			return this.setState({
 				isOpen: !this.state.isOpen
 			});
@@ -28693,7 +28729,8 @@ var Select = _react2['default'].createClass({
 	closeMenu: function closeMenu() {
 		this.setState({
 			isOpen: false,
-			isPseudoFocused: this.state.isFocused && !this.props.multi
+			isPseudoFocused: this.state.isFocused && !this.props.multi,
+			inputValue: ''
 		});
 	},
 
@@ -28808,7 +28845,7 @@ var Select = _react2['default'].createClass({
 		if (this.props.multi) {
 			if (typeof value === 'string') value = value.split(this.props.delimiter);
 			if (!Array.isArray(value)) {
-				if (!value) return [];
+				if (value === null || value === undefined) return [];
 				value = [value];
 			}
 			return value.map(this.expandValue).filter(function (i) {
@@ -29005,12 +29042,13 @@ var Select = _react2['default'].createClass({
 	renderInput: function renderInput(valueArray) {
 		var className = (0, _classnames2['default'])('Select-input', this.props.inputProps.className);
 		if (this.props.disabled || !this.props.searchable) {
-			if (this.props.multi && valueArray.length) return;
-			return _react2['default'].createElement(
-				'div',
-				{ className: className },
-				' '
-			);
+			return _react2['default'].createElement('div', _extends({}, this.props.inputProps, {
+				className: className,
+				tabIndex: this.props.tabIndex || 0,
+				onBlur: this.handleInputBlur,
+				onFocus: this.handleInputFocus,
+				ref: 'input',
+				style: { border: 0, width: 1, display: 'inline-block' } }));
 		}
 		return _react2['default'].createElement(_reactInputAutosize2['default'], _extends({}, this.props.inputProps, {
 			className: className,

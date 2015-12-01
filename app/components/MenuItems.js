@@ -7,9 +7,10 @@ var MenuItems = React.createClass({
 
   getDefaultProps: function() {
     return {
-      pricing: null,
-      selected: null,
-      onSelectionChange: null
+      product: null,
+      selection: null,
+      onSelectionChange: null,
+      disabled: false
     };
   },
 
@@ -29,13 +30,14 @@ var MenuItems = React.createClass({
     return (
       <div className="selection">
         {(() => {
-          return Object.keys(this.props.selected).map(type => {
+          return Object.keys(this.props.selection).map(type => {
             return (
               <div key={type}>
                 <Selection
                   type={type}
-                  pricing={this.props.pricing}
-                  selected={this.props.selected}
+                  product={this.props.product}
+                  selection={this.props.selection}
+                  disabled={this.props.disabled}
                   onChange={this.handleSelectChange(type)}
                   images={this.getImages(type)}
                 />

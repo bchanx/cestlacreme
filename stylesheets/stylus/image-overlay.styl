@@ -12,10 +12,12 @@
   color: $white
   visibility: hidden
   opacity: 0
+  pointer-events: none
   transition: opacity 0.2s linear
   &.active
     opacity: 1
     visibility: visible
+    pointer-events: auto
 
 .image-overlay-close
   position: fixed
@@ -61,7 +63,7 @@
   background-position-x: 50%
   background-position-y: 50%
   max-width: 80vh
-  min-width: 320px
+  min-width: 300px
   position: relative
   &:hover
     .image-meta
@@ -113,4 +115,4 @@
 @media screen and (max-width: $app-small)
   .image-overlay-container
     height: 50%
-    margin: 30vh auto
+    margin: 25vh auto
