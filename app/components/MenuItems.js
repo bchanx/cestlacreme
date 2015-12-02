@@ -2,6 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import { Break } from './Common';
 import Selection from './Selection';
+import ImageOverlay from './ImageOverlay';
 
 var MenuItems = React.createClass({
 
@@ -11,6 +12,14 @@ var MenuItems = React.createClass({
       selection: null,
       onSelectionChange: null,
       disabled: false
+    };
+  },
+
+  getInitialState: function() {
+    return {
+      overlayImages: [],
+      imageOverlayShow: false,
+      imageOverlayStartIndex: 0
     };
   },
 
@@ -26,11 +35,27 @@ var MenuItems = React.createClass({
     });
   },
 
+  openOverlay: function(images, index) {
+    this.setState({
+      overlayImages: images,
+      imageOverlayShow: true,
+      imageOverlayStartIndex: index
+    });
+  },
+
+  onOverlayClose: function() {
+    this.setState({
+      imageOverlayShow: false
+    });
+  },
+
   render: function() {
     return (
       <div className="selection">
         {(() => {
           return Object.keys(this.props.selection).map(type => {
+            let images = this.getImages(type);
+            let onClickHandler = this.openOverlay.bind(this, images);
             return (
               <div key={type}>
                 <Selection
@@ -39,13 +64,19 @@ var MenuItems = React.createClass({
                   selection={this.props.selection}
                   disabled={this.props.disabled}
                   onChange={this.handleSelectChange(type)}
-                  images={this.getImages(type)}
+                  images={images}
+                  onClick={onClickHandler}
                 />
                 <Break/>
               </div>
             );
           });
         })()}
+        <ImageOverlay
+          images={this.state.overlayImages}
+          show={this.state.imageOverlayShow}
+          startIndex={this.state.imageOverlayStartIndex}
+          onClose={this.onOverlayClose}/>
       </div>
     );
   }

@@ -1096,6 +1096,10 @@ var _Selection = require('./Selection');
 
 var _Selection2 = _interopRequireDefault(_Selection);
 
+var _ImageOverlay = require('./ImageOverlay');
+
+var _ImageOverlay2 = _interopRequireDefault(_ImageOverlay);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var MenuItems = _react2.default.createClass({
@@ -1107,6 +1111,14 @@ var MenuItems = _react2.default.createClass({
       selection: null,
       onSelectionChange: null,
       disabled: false
+    };
+  },
+
+  getInitialState: function getInitialState() {
+    return {
+      overlayImages: [],
+      imageOverlayShow: false,
+      imageOverlayStartIndex: 0
     };
   },
 
@@ -1122,6 +1134,20 @@ var MenuItems = _react2.default.createClass({
     });
   },
 
+  openOverlay: function openOverlay(images, index) {
+    this.setState({
+      overlayImages: images,
+      imageOverlayShow: true,
+      imageOverlayStartIndex: index
+    });
+  },
+
+  onOverlayClose: function onOverlayClose() {
+    this.setState({
+      imageOverlayShow: false
+    });
+  },
+
   render: function render() {
     var _this = this;
 
@@ -1130,6 +1156,8 @@ var MenuItems = _react2.default.createClass({
       { className: 'selection' },
       (function () {
         return Object.keys(_this.props.selection).map(function (type) {
+          var images = _this.getImages(type);
+          var onClickHandler = _this.openOverlay.bind(_this, images);
           return _react2.default.createElement(
             'div',
             { key: type },
@@ -1139,19 +1167,25 @@ var MenuItems = _react2.default.createClass({
               selection: _this.props.selection,
               disabled: _this.props.disabled,
               onChange: _this.handleSelectChange(type),
-              images: _this.getImages(type)
+              images: images,
+              onClick: onClickHandler
             }),
             _react2.default.createElement(_Common.Break, null)
           );
         });
-      })()
+      })(),
+      _react2.default.createElement(_ImageOverlay2.default, {
+        images: this.state.overlayImages,
+        show: this.state.imageOverlayShow,
+        startIndex: this.state.imageOverlayStartIndex,
+        onClose: this.onOverlayClose })
     );
   }
 });
 
 exports.default = MenuItems;
 
-},{"./Common":4,"./Selection":15,"react":"react","react-select":"react-select"}],13:[function(require,module,exports){
+},{"./Common":4,"./ImageOverlay":9,"./Selection":15,"react":"react","react-select":"react-select"}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1376,7 +1410,8 @@ var Selection = _react2.default.createClass({
       selection: null,
       product: null,
       onChange: null,
-      disabled: false
+      disabled: false,
+      onClick: null
     };
   },
 
@@ -1407,7 +1442,9 @@ var Selection = _react2.default.createClass({
       _react2.default.createElement(
         'div',
         { className: 'menu-images' },
-        _react2.default.createElement(_Carousel2.default, { images: this.props.images })
+        _react2.default.createElement(_Carousel2.default, {
+          images: this.props.images,
+          onCarouselClick: this.props.onClick })
       ),
       _react2.default.createElement(
         'div',

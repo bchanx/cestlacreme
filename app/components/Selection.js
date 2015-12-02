@@ -12,7 +12,8 @@ var Selection = React.createClass({
       selection: null,
       product: null,
       onChange: null,
-      disabled: false
+      disabled: false,
+      onClick: null
     };
   },
 
@@ -34,7 +35,9 @@ var Selection = React.createClass({
     return (
       <div>
         <div className="menu-images">
-          <Carousel images={this.props.images}/>
+          <Carousel
+            images={this.props.images}
+            onCarouselClick={this.props.onClick}/>
         </div>
         <div className="menu-options">
           <div className="menu-caption">{this.props.selection[this.props.type].name}</div>
