@@ -70,7 +70,7 @@ var About = _react2.default.createClass({
           _react2.default.createElement(
             _Common.Note,
             null,
-            '*Please be safe!!! If you are torching and have an open flame, please do so at your own risk and have be fire safe ready.*'
+            '*Please be safe!!! If you are torching and have an open flame, please do so at your own risk and be fire safe ready.*'
           )
         ),
         _react2.default.createElement(
@@ -1274,8 +1274,8 @@ var OrderSummary = _react2.default.createClass({
           !this.state.totalSelected ? _react2.default.createElement(
             'span',
             { className: 'warning' },
-            'You currently have no items selection.'
-          ) : this.props.orderSuccessful ? 'You have successfully ordered:' : 'You have currently selection:'
+            'You currently have no items selected.'
+          ) : this.props.orderSuccessful ? 'You have successfully ordered:' : 'You have currently selected:'
         )
       ),
       this.state.totalSelected ? _react2.default.createElement(

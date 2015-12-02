@@ -34,7 +34,7 @@ var About = React.createClass({
             <br/>
             <br/>
             <Note>
-              *Please be safe!!! If you are torching and have an open flame, please do so at your own risk and have be fire safe ready.*
+              *Please be safe!!! If you are torching and have an open flame, please do so at your own risk and be fire safe ready.*
             </Note>
           </FAQ>
           <FAQ question={"Can you make me a custom flavor?"}>

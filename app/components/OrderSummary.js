@@ -36,7 +36,7 @@ var OrderSummary = React.createClass({
           <span className="ion-spoon"></span>
         </div>
         <div className="order-title">
-          <Bold>{!this.state.totalSelected ? <span className="warning">You currently have no items selection.</span> : this.props.orderSuccessful ? 'You have successfully ordered:' : 'You have currently selection:'}</Bold>
+          <Bold>{!this.state.totalSelected ? <span className="warning">You currently have no items selected.</span> : this.props.orderSuccessful ? 'You have successfully ordered:' : 'You have currently selected:'}</Bold>
         </div>
         {this.state.totalSelected ?
           <div>
