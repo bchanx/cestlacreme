@@ -32,9 +32,18 @@ var About = _react2.default.createClass({
           null,
           'Hi! I\'m Samson, creator of C\'est la Creme!'
         ),
-        _react2.default.createElement('br', null),
-        _react2.default.createElement('br', null),
-        'I love food. For as long as I can remember I\'ve been eating my way through all different ethnic cuisines! I started cooking for myself ever since I was little and have always been cooking as a hobby. One day I decided to make my mom\'s favorite dessert - the Creme Brulee.',
+        _react2.default.createElement(
+          'div',
+          { className: 'about-me-picture' },
+          ' '
+        ),
+        'I love food. For as long as I can remember I\'ve been eating my way through all different ethnic cuisines! I started cooking for myself ever since I was little and have always been cooking as a hobby. One day I decided to make my mom\'s favorite dessert - the ',
+        _react2.default.createElement(
+          _Common.Bold,
+          null,
+          'Creme Brulee'
+        ),
+        '.',
         _react2.default.createElement('br', null),
         _react2.default.createElement('br', null),
         'As an engineer by day, and an amateur foodie at night, I\'ve often dreamt about making something special and sharing it with everyone.',
@@ -701,6 +710,7 @@ var ImageOverlay = _react2.default.createClass({
   },
 
   handleClick: function handleClick(event) {
+    event && event.stopPropagation();
     if (event.target.classList.contains('image-overlay') || event.target.classList.contains('image-overlay-container')) {
       // Clicked on empty space, close overlay
       this.close();
@@ -782,7 +792,8 @@ var ImageOverlay = _react2.default.createClass({
         ) : null,
         backgroundImage ? _react2.default.createElement(
           'div',
-          { className: 'image-background', style: backgroundImage },
+          { className: 'image-background' },
+          _react2.default.createElement('div', { className: 'image-picture', style: backgroundImage }),
           hasMeta ? _react2.default.createElement(
             'div',
             { className: 'image-meta' },

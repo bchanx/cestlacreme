@@ -40,6 +40,7 @@ var ImageOverlay = React.createClass({
   },
 
   handleClick: function(event) {
+    event && event.stopPropagation();
     if (event.target.classList.contains('image-overlay') ||
         event.target.classList.contains('image-overlay-container')) {
       // Clicked on empty space, close overlay
@@ -114,7 +115,8 @@ var ImageOverlay = React.createClass({
         <div className="image-overlay-container">
           {this.props.images.length > 1 ? <div className="chevron left" onClick={this.gotoPrev}><span className="ion-chevron-left"></span></div> : null}
           {backgroundImage ?
-            <div className="image-background" style={backgroundImage}>
+            <div className="image-background">
+              <div className="image-picture" style={backgroundImage}></div>
               {hasMeta ? 
                 <div className="image-meta">
                   {timestamp || source ?

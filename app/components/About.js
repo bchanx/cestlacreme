@@ -8,9 +8,8 @@ var About = React.createClass({
       <div className="about">
         <div>
           <Bold>Hi! I'm Samson, creator of C'est la Creme!</Bold>
-          <br/>
-          <br/>
-          I love food. For as long as I can remember I've been eating my way through all different ethnic cuisines! I started cooking for myself ever since I was little and have always been cooking as a hobby. One day I decided to make my mom's favorite dessert - the Creme Brulee. 
+          <div className="about-me-picture"> </div>
+          I love food. For as long as I can remember I've been eating my way through all different ethnic cuisines! I started cooking for myself ever since I was little and have always been cooking as a hobby. One day I decided to make my mom's favorite dessert - the <Bold>Creme Brulee</Bold>.
           <br/>
           <br/>
           As an engineer by day, and an amateur foodie at night, I've often dreamt about making something special and sharing it with everyone. 

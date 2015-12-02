@@ -558,6 +558,21 @@ a:hover {
     padding-top: 65px;
   }
 }
+.about-me-picture {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin: 25px auto;
+  background-image: url("/images/about-me.jpg");
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  opacity: 0.95;
+  -webkit-filter: brightness(1.1) contrast(1.1) hue-rotate(-3deg);
+  filter: brightness(1.1) contrast(1.1) hue-rotate(-3deg);
+  -webkit-transform: rotate(-35deg);
+  transform: rotate(-35deg);
+}
 .faq-title {
   padding-bottom: 10px;
 }
@@ -781,7 +796,15 @@ a:hover {
   left: 0;
   width: 100vw;
   height: 100vh;
-  display: block;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   overflow: scroll;
   min-height: 400px;
   color: #fff;
@@ -810,9 +833,6 @@ a:hover {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 80%;
-  height: 80%;
-  margin: 10vh auto;
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
@@ -828,8 +848,7 @@ a:hover {
   user-select: none;
   position: absolute;
   color: #b0b0b0;
-  width: 5vw;
-  max-width: 50px;
+  width: 10%;
   height: 100%;
   cursor: pointer;
   display: -webkit-flex;
@@ -847,25 +866,35 @@ a:hover {
   color: #fff;
 }
 .image-overlay-container .chevron.left {
-  left: -7vw;
+  left: 0;
 }
 .image-overlay-container .chevron.right {
-  right: -7vw;
+  right: 0;
 }
 .image-background {
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
+  max-width: 80vh;
+  min-width: 300px;
+  width: 80%;
+  position: relative;
+}
+.image-background:after {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+.image-background:hover .image-meta {
+  opacity: 1;
+}
+.image-picture {
   background-size: 100%;
   background-repeat: no-repeat;
   background-position-x: 50%;
   background-position-y: 50%;
-  max-width: 80vh;
-  min-width: 300px;
-  position: relative;
-}
-.image-background:hover .image-meta {
-  opacity: 1;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 .image-meta {
   opacity: 0;
@@ -911,24 +940,6 @@ a:hover {
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
-}
-@media screen and (max-width: 600px) {
-  .image-overlay-container .chevron {
-    width: 10vw;
-    font-size: 1.5rem;
-  }
-  .image-overlay-container .chevron.left {
-    left: -10vw;
-  }
-  .image-overlay-container .chevron.right {
-    right: -10vw;
-  }
-}
-@media screen and (max-width: 440px) {
-  .image-overlay-container {
-    height: 50%;
-    margin: 25vh auto;
-  }
 }
 .order-summary {
   padding: 20px;
