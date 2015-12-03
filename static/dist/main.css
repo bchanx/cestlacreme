@@ -183,8 +183,8 @@ a:hover {
   body {
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
-    height: calc(100vh - 38px - 4vw - 2px);
-    margin-top: calc(38px + 4vw + 2px);
+    height: 100%;
+    padding-top: calc(38px + 4vw + 2px);
   }
   .container {
     -webkit-flex-direction: column;
@@ -207,8 +207,8 @@ a:hover {
     font-size: 16px;
   }
   body {
-    height: calc(100vh - 38px - 20px - 2px);
-    margin-top: calc(38px + 20px + 2px);
+    height: 100%;
+    padding-top: calc(38px + 20px + 2px);
   }
   .content {
     padding: 20px;

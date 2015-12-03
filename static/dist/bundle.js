@@ -479,6 +479,7 @@ var FAQ = _react2.default.createClass({
         var node = _reactDom2.default.findDOMNode(_this);
         var content = node.parentNode.parentNode.parentNode;
         content.scrollTop = node.offsetTop - 10;
+        document.body.scrollTop = node.offsetTop - 10;
       }
     }, 100);
   },
