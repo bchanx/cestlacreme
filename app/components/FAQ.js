@@ -27,6 +27,8 @@ var FAQ = React.createClass({
         let node = ReactDOM.findDOMNode(this);
         let content = node.parentNode.parentNode.parentNode;
         content.scrollTop = node.offsetTop - 10;
+        let app = content.parentNode.parentNode;
+        app.scrollTop = node.offsetTop - 10;
       }
     }, 100);
   },
