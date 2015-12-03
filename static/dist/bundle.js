@@ -479,7 +479,7 @@ var FAQ = _react2.default.createClass({
         var node = _reactDom2.default.findDOMNode(_this);
         var content = node.parentNode.parentNode.parentNode;
         content.scrollTop = node.offsetTop - 10;
-        document.body.scrollTop = node.offsetTop - 10;
+        document.body.scrollTop = node.offsetTop - 10 - 200;
       }
     }, 100);
   },
@@ -701,6 +701,7 @@ var ImageOverlay = _react2.default.createClass({
     if (document) {
       document.addEventListener('keydown', this.handleKeydown, false);
       document.addEventListener('click', this.handleClick, false);
+      document.addEventListener('touchstart', this.handleClick, false);
     }
   },
 
@@ -708,6 +709,7 @@ var ImageOverlay = _react2.default.createClass({
     if (document) {
       document.removeEventListener('keydown', this.handleKeydown, false);
       document.removeEventListener('click', this.handleClick, false);
+      document.removeEventListener('touchstart', this.handleClick, false);
     }
   },
 
