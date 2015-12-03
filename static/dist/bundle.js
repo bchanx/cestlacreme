@@ -330,7 +330,7 @@ var Break = exports.Break = _react2.default.createClass({
   displayName: 'Break',
 
   render: function render() {
-    return _react2.default.createElement('div', { className: 'break' });
+    return _react2.default.createElement('div', _extends({}, this.props, { className: (0, _classnames2.default)("break", this.props.className) }));
   }
 });
 
@@ -403,6 +403,8 @@ var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
+var _Common = require('./Common');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Content = _react2.default.createClass({
@@ -418,14 +420,15 @@ var Content = _react2.default.createClass({
     return _react2.default.createElement(
       'div',
       { className: 'content' },
-      this.props.children
+      this.props.children,
+      _react2.default.createElement(_Common.Break, { className: 'mobile' })
     );
   }
 });
 
 exports.default = Content;
 
-},{"react":"react","react-dom":"react-dom"}],6:[function(require,module,exports){
+},{"./Common":4,"react":"react","react-dom":"react-dom"}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -479,7 +482,6 @@ var FAQ = _react2.default.createClass({
         var node = _reactDom2.default.findDOMNode(_this);
         var content = node.parentNode.parentNode.parentNode;
         content.scrollTop = node.offsetTop - 10;
-        document.body.scrollTop = node.offsetTop - 10 - 200;
       }
     }, 100);
   },
@@ -701,7 +703,6 @@ var ImageOverlay = _react2.default.createClass({
     if (document) {
       document.addEventListener('keydown', this.handleKeydown, false);
       document.addEventListener('click', this.handleClick, false);
-      document.addEventListener('touchstart', this.handleClick, false);
     }
   },
 
@@ -709,7 +710,6 @@ var ImageOverlay = _react2.default.createClass({
     if (document) {
       document.removeEventListener('keydown', this.handleKeydown, false);
       document.removeEventListener('click', this.handleClick, false);
-      document.removeEventListener('touchstart', this.handleClick, false);
     }
   },
 

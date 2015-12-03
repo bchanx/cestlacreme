@@ -169,6 +169,9 @@ a:hover {
   -webkit-overflow-scrolling: touch;
   background-color: #f8f8f8;
 }
+.content .break.mobile {
+  display: none;
+}
 .footer {
   line-height: 38px;
   font-size: 0.8rem;
@@ -193,8 +196,8 @@ a:hover {
     overflow-y: initial;
     padding: 4vw;
   }
-  .content > div {
-    margin-bottom: 6vw;
+  .content .break.mobile {
+    display: block;
   }
   .footer {
     line-height: normal;
@@ -206,9 +209,6 @@ a:hover {
   }
   .content {
     padding: 20px;
-  }
-  .content > div {
-    margin-bottom: 60px;
   }
 }
 .nav {

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Break } from './Common';
 
 var Content = React.createClass({
   componentDidUpdate: function() {
@@ -12,6 +13,7 @@ var Content = React.createClass({
     return (
       <div className="content">
         {this.props.children}
+        <Break className="mobile"/>
       </div>
     );
   }

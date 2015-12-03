@@ -5,7 +5,7 @@ import classNames from 'classnames';
 export var Break = React.createClass({
   render: function() {
     return (
-      <div className="break"></div>
+      <div {...this.props} className={classNames("break", this.props.className)}></div>
     );
   }
 });
