@@ -411,6 +411,7 @@ var Content = _react2.default.createClass({
   componentDidUpdate: function componentDidUpdate() {
     var node = _reactDom2.default.findDOMNode(this);
     node.scrollTop = 0;
+    document.body.scrollTop = 0;
   },
 
   render: function render() {

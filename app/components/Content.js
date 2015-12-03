@@ -5,6 +5,7 @@ var Content = React.createClass({
   componentDidUpdate: function() {
     let node = ReactDOM.findDOMNode(this);
     node.scrollTop = 0;
+    document.body.scrollTop = 0;
   },
 
   render: function() {
