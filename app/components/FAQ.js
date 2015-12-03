@@ -30,7 +30,7 @@ var FAQ = React.createClass({
         let app = content.parentNode.parentNode;
         app.scrollTop = node.offsetTop - 10;
       }
-    }, 100);
+    }, 250);
   },
 
   toggleQuestion: function() {

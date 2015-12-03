@@ -485,7 +485,7 @@ var FAQ = _react2.default.createClass({
         var app = content.parentNode.parentNode;
         app.scrollTop = node.offsetTop - 10;
       }
-    }, 100);
+    }, 250);
   },
 
   toggleQuestion: function toggleQuestion() {
