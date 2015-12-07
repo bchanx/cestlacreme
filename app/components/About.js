@@ -50,6 +50,21 @@ var About = React.createClass({
             <br/>
             For larger quantities, please <a href="mailto:cestlacreme@gmail.com">email us</a> and request for a special order.
           </FAQ>
+          <FAQ question={"When and where is pickup?"}>
+            Orders before <Bold>8pm PST Tuesday</Bold> will be scheduled for pickup the same week Thursday. Orders after the deadline will be scheduled for pickup on the week after Thursday.
+            <br/>
+            <br/>
+            Pick up location is at the McDonalds parking lot, next to the Main Skytrain station. 1527 Main St, Vancouver, BC V6A 2W5.
+            <br/>
+            <br/>
+            If things are unclear, or you'd like to schedule an order for a later date, send us an <a href="mailto:cestlacreme@gmail.com">email</a>.
+          </FAQ>
+          <FAQ question={"What happens if I miss the weekly meetup for my order?"}>
+            Things happen, we understand.
+            <br/>
+            <br/>
+            <a href="mailto:cestlacreme@gmail.com">Email us</a> with your <Bold>order number</Bold> and we'll reschedule your pickup time.
+          </FAQ>
           <FAQ question={"Can we keep the jars?"}>
             Of course! However we gladly accept returns as we can clean and sustainably re-use the jars. Meet us at our drop off if you decide to do so!
           </FAQ>

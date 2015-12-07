@@ -127,6 +127,48 @@ var About = _react2.default.createClass({
         ),
         _react2.default.createElement(
           _FAQ2.default,
+          { question: "When and where is pickup?" },
+          'Orders before ',
+          _react2.default.createElement(
+            _Common.Bold,
+            null,
+            '8pm PST Tuesday'
+          ),
+          ' will be scheduled for pickup the same week Thursday. Orders after the deadline will be scheduled for pickup on the week after Thursday.',
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('br', null),
+          'Pick up location is at the McDonalds parking lot, next to the Main Skytrain station. 1527 Main St, Vancouver, BC V6A 2W5.',
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('br', null),
+          'If things are unclear, or you\'d like to schedule an order for a later date, send us an ',
+          _react2.default.createElement(
+            'a',
+            { href: 'mailto:cestlacreme@gmail.com' },
+            'email'
+          ),
+          '.'
+        ),
+        _react2.default.createElement(
+          _FAQ2.default,
+          { question: "What happens if I miss the weekly meetup for my order?" },
+          'Things happen, we understand.',
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement(
+            'a',
+            { href: 'mailto:cestlacreme@gmail.com' },
+            'Email us'
+          ),
+          ' with your ',
+          _react2.default.createElement(
+            _Common.Bold,
+            null,
+            'order number'
+          ),
+          ' and we\'ll reschedule your pickup time.'
+        ),
+        _react2.default.createElement(
+          _FAQ2.default,
           { question: "Can we keep the jars?" },
           'Of course! However we gladly accept returns as we can clean and sustainably re-use the jars. Meet us at our drop off if you decide to do so!'
         )

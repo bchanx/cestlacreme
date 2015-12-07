@@ -434,9 +434,9 @@ a:hover {
 }
 .stripe-form .stripe-textarea {
   resize: none;
-  max-height: 70px;
-  height: 70px;
-  min-height: 70px;
+  max-height: 55px;
+  height: 55px;
+  min-height: 55px;
   margin-bottom: -5px;
 }
 .stripe-form .stripe-input[name="cvc"],
