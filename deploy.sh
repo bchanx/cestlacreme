@@ -50,7 +50,7 @@ fi
 # Deploy to heroku
 #####
 printStatus "Deploying to Heroku"
-heroku config:push
+heroku config:push --overwrite
 git push heroku master
 
 #####
