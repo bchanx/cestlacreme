@@ -413,7 +413,8 @@ var Content = _react2.default.createClass({
   componentDidUpdate: function componentDidUpdate() {
     var node = _reactDom2.default.findDOMNode(this);
     node.scrollTop = 0;
-    document.body.scrollTop = 0;
+    var app = node.parentNode.parentNode;
+    app.scrollTop = 0;
   },
 
   render: function render() {
@@ -1538,6 +1539,10 @@ var _emailValidator = require('email-validator');
 
 var _emailValidator2 = _interopRequireDefault(_emailValidator);
 
+var _reactTimerMixin = require('react-timer-mixin');
+
+var _reactTimerMixin2 = _interopRequireDefault(_reactTimerMixin);
+
 var _Common = require('./Common');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -1545,7 +1550,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var StripeReact = _react2.default.createClass({
   displayName: 'StripeReact',
 
-  mixins: [_reactScriptLoader.ReactScriptLoaderMixin],
+  mixins: [_reactScriptLoader.ReactScriptLoaderMixin, _reactTimerMixin2.default],
 
   getDefaultProps: function getDefaultProps() {
     return {
@@ -1570,6 +1575,10 @@ var StripeReact = _react2.default.createClass({
       }, {
         type: 'email',
         placeholder: 'Email'
+      }, {
+        type: 'comments',
+        placeholder: 'Additional comments (optional)',
+        textarea: true
       }],
       cardDisclosure: 'We do not store any credit card information on our servers. All payments are securely handled with Stripe. Learn more at stripe.com/about.'
     };
@@ -1603,7 +1612,8 @@ var StripeReact = _react2.default.createClass({
         name: '',
         expiry: '',
         cvc: '',
-        email: ''
+        email: '',
+        comments: ''
       },
       focused: 'number',
       error: null,
@@ -1695,6 +1705,7 @@ var StripeReact = _react2.default.createClass({
     if (this._.input[error.type]) {
       this._.input[error.type].focus();
     }
+    this.scrollToBottom();
   },
 
   onFormChange: function onFormChange(type, event) {
@@ -1745,6 +1756,18 @@ var StripeReact = _react2.default.createClass({
     return error;
   },
 
+  scrollToBottom: function scrollToBottom() {
+    var _this = this;
+
+    this.setTimeout(function () {
+      var node = _reactDom2.default.findDOMNode(_this);
+      var content = node.parentNode.parentNode;
+      content.scrollTop = content.scrollHeight;
+      var app = content.parentNode.parentNode;
+      app.scrollTop = app.scrollHeight;
+    }, 50);
+  },
+
   submitOrder: function submitOrder(event) {
     event && event.preventDefault();
     if (!this.state.isValidOrder) {
@@ -1773,6 +1796,8 @@ var StripeReact = _react2.default.createClass({
       this.props.updateState({
         disabled: true
       });
+      this.scrollToBottom();
+
       // TODO: turn this on for prod
       if ("development" === 'development') {
         Stripe.card.createToken({
@@ -1790,7 +1815,7 @@ var StripeReact = _react2.default.createClass({
   },
 
   onCreateResponse: function onCreateResponse(status, response) {
-    var _this = this;
+    var _this2 = this;
 
     if (response.error) {
       // Stripe error
@@ -1800,6 +1825,7 @@ var StripeReact = _react2.default.createClass({
       this.setState({
         error: response.error
       });
+      this.scrollToBottom();
     } else {
       // Send form data to server for charge
       _superagent2.default.post(window.location.origin + '/stripe/order').send({
@@ -1807,6 +1833,7 @@ var StripeReact = _react2.default.createClass({
         created: response.created,
         livemode: response.livemode,
         email: this.state.form.email,
+        comments: this.state.form.comments,
         selection: this.props.selection
       }).accept('json').end(function (error, response) {
         if (response && response.body && response.body.error) {
@@ -1821,18 +1848,18 @@ var StripeReact = _react2.default.createClass({
         if (error) {
           // Could also be network error. Make sure error message is present.
           error.message = error.message || 'Something went wrong.';
-          _this.focusError(error);
+          _this2.focusError(error);
         } else {
           // Save current order number
-          _this.setState({
-            orderNumber: response && response.body && response.body.order
+          _this2.setState({
+            orderNumber: response && response.body && response.body.orderNumber
           });
         }
-        _this.setState({
+        _this2.setState({
           error: error,
           showPayments: !!error
         });
-        _this.props.updateState({
+        _this2.props.updateState({
           disabled: !error,
           orderSuccessful: !error
         });
@@ -1855,25 +1882,34 @@ var StripeReact = _react2.default.createClass({
   },
 
   getFormParams: function getFormParams() {
-    var _this2 = this;
+    var _this3 = this;
 
     return this.props.formParams.map(function (p) {
       var type = p.type;
       var placeholder = p.placeholder;
-      var onChangeHandler = _this2.onFormChange.bind(_this2, type);
-      var onFocusHandler = _this2.onFocusChange.bind(_this2, type);
-      var onBlurHandler = _this2.onBlurChange.bind(_this2, type);
-      var formMountHandler = _this2.onFormMount.bind(_this2, type);
-      return _react2.default.createElement('input', {
+      var onChangeHandler = _this3.onFormChange.bind(_this3, type);
+      var onFocusHandler = _this3.onFocusChange.bind(_this3, type);
+      var onBlurHandler = _this3.onBlurChange.bind(_this3, type);
+      var formMountHandler = _this3.onFormMount.bind(_this3, type);
+      return p.textarea ? _react2.default.createElement('textarea', {
+        key: type,
+        name: type,
+        className: 'stripe-textarea',
+        value: _this3.state.form[type],
+        placeholder: placeholder,
+        disabled: _this3.props.disabled,
+        onChange: onChangeHandler,
+        onFocus: onFocusHandler
+      }) : _react2.default.createElement('input', {
         key: type,
         type: 'text',
         className: (0, _classnames2.default)("stripe-input", {
-          error: _this2.state.error && _this2.state.error.type === type
+          error: _this3.state.error && _this3.state.error.type === type
         }),
         placeholder: placeholder,
-        disabled: _this2.props.disabled,
+        disabled: _this3.props.disabled,
         name: type,
-        value: _this2.state.form[type],
+        value: _this3.state.form[type],
         onChange: onChangeHandler,
         onFocus: onFocusHandler,
         onBlur: onBlurHandler,
@@ -1992,7 +2028,7 @@ var StripeReact = _react2.default.createClass({
 
 exports.default = StripeReact;
 
-},{"./Common":4,"classnames":"classnames","email-validator":"email-validator","react":"react","react-credit-card":"react-credit-card","react-dom":"react-dom","react-script-loader":"react-script-loader","superagent":"superagent"}],18:[function(require,module,exports){
+},{"./Common":4,"classnames":"classnames","email-validator":"email-validator","react":"react","react-credit-card":"react-credit-card","react-dom":"react-dom","react-script-loader":"react-script-loader","react-timer-mixin":"react-timer-mixin","superagent":"superagent"}],18:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');

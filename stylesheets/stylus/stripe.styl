@@ -21,13 +21,21 @@
 .stripe-form
   margin: 10px auto 0
   max-width: 350px
-  .stripe-input
+  .stripe-input,
+  .stripe-textarea
     outline: none
     padding: 5px 10px
     width: calc(100% - 4px)
     margin: 2px 2px 0
     border-radius: 3px
     border: 1px $gray3 solid
+  .stripe-textarea
+    resize: none
+    max-height: 70px
+    height: 70px
+    min-height: 70px
+    margin-bottom: -5px
+  .stripe-input
     &[name="cvc"],
     &[name="expiry"]
       width: calc(50% - 4px)

@@ -1,6 +1,8 @@
 var router = require('express').Router();
 var config = require('../config');
 var validate = require('email-validator');
+var orders = require('../models/orders');
+var attempts = require('../models/attempts');
 // TODO: prod/test key
 var stripe = require('stripe')(config.get('STRIPE_TEST_SECRET_KEY'));
 
@@ -16,12 +18,25 @@ var ORDER_NUMBER = {
   length: 6
 };
 
-var generateOrderNumber = function() {
-  var order = [];
+var generateOrderNumber = function(callback) {
+  var orderNumber = [];
   for (var i = 0; i < ORDER_NUMBER.length; i++) {
-    order.push(ORDER_NUMBER.keys[Math.floor(Math.random() * ORDER_NUMBER.keys.length)]);
+    orderNumber.push(ORDER_NUMBER.keys[Math.floor(Math.random() * ORDER_NUMBER.keys.length)]);
   }
-  return order.join('').toUpperCase();
+  orderNumber = orderNumber.join('').toUpperCase();
+  orders.query({
+    select: 'order_number',
+    where: {
+      order_number: orderNumber
+    }
+  }, function(results) {
+    if (results.length) {
+      generateOrderNumber(callback);
+    }
+    else {
+      callback(orderNumber);
+    }
+  });
 };
 
 var getQuantity = function(selection) {
@@ -35,14 +50,14 @@ var getQuantity = function(selection) {
   }));
 };
 
-var getDescription = function(order, selection) {
+var getDescription = function(orderNumber, selection) {
   var options = [];
   Object.keys(selection).forEach(function(type) {
     if (selection[type].value) {
       options.push(selection[type].name + ' x ' + selection[type].value);
     }
   });
-  return '[Order# ' + order + '] A tasty batch of Creme Brulee! (' + options.join(', ') + ')';
+  return '[Order# ' + orderNumber + '] A tasty batch of Creme Brulee! (' + options.join(', ') + ')';
 };
 
 var validateSelection = function(selection) {
@@ -75,17 +90,27 @@ var validateSelection = function(selection) {
   return null;
 };
 
+var handleError = function(res, email, metadata, error) {
+  // Log the error attempt
+  attempts.log({
+    email: email,
+    metadata: JSON.stringify(metadata),
+    error: JSON.stringify(error)
+  });
+  return res.send({
+    success: false,
+    error: error
+  });
+};
+
 // Stripe call to CHARGE
 router.post('/order', function(req, res) {
   var email = req.body.email;
   if (!validate.validate(email)) {
     // Email is invalid
-    return res.send({
-      success: false,
-      error: {
-        type: 'email',
-        message: 'Email is invalid.'
-      }
+    return handleError(res, email, {}, {
+      type: 'email',
+      message: 'Email is invalid.'
     });
   }
   else {
@@ -93,52 +118,55 @@ router.post('/order', function(req, res) {
     var error = validateSelection(selection);
     if (error) {
       // Selection is invalid
-      return res.send({
-        success: false,
-        error: error
-      });
+      return handleError(res, email, {
+        selection: selection
+      }, error);
     }
     else {
       // No more errors, let's make a charge!
-      var quantity = getQuantity(selection);
-      // TODO: make sure order number doesn't exist...
-      var order = generateOrderNumber();
-      var description = getDescription(order, selection);
-      var stripeToken = req.body.stripeToken;
-      var product = {};
-      Object.keys(selection).forEach(type => {
-        product[type] = selection[type].value;
-      });
-      var charge = stripe.charges.create({
-        amount: quantity * PRODUCT.price, // amount in cents
-        currency: 'cad',
-        source: stripeToken,
-        description: description,
-        receipt_email: email,
-        metadata: {
-          order: order,
+      generateOrderNumber(function(orderNumber) {
+        var quantity = getQuantity(selection);
+        var description = getDescription(orderNumber, selection);
+        var stripeToken = req.body.stripeToken;
+        var product = {};
+        Object.keys(selection).forEach(type => {
+          product[type] = selection[type].value;
+        });
+        // Create db object
+        var obj = {
+          order_number: orderNumber,
           email: email,
-          product: JSON.stringify(product)
-        }
-      }, function(err, charge) {
-        var livemode = req.body.livemode;
-        if (err) {
-          // Charge failed.
-          // TODO: Log the request.
-          return res.send({
-            success: false,
-            error: err
-          })
-        }
-        else {
-          // Charge succeeded!
-          // TODO: Log and save to DB (email, order#, time, order amount, product)...
-          return res.send({
-            success: true,
-            order: order,
-            charge: charge
-          })
-        }
+          amount: quantity * PRODUCT.price, // amount in cents
+          product: JSON.stringify(product),
+          comments: req.body.comments,
+          livemode: req.body.livemode
+        };
+        var charge = stripe.charges.create({
+          amount: obj.amount,
+          currency: 'cad',
+          source: stripeToken,
+          description: description,
+          receipt_email: obj.email,
+          metadata: {
+            order_number: obj.order_number,
+            email: obj.email,
+            product: obj.product
+          }
+        }, function(err, charge) {
+          if (err) {
+            // Charge failed.
+            return handleError(res, email, obj, err);
+          }
+          else {
+            // Charge succeeded!
+            orders.create(obj);
+            return res.send({
+              success: true,
+              orderNumber: orderNumber,
+              charge: charge
+            })
+          }
+        });
       });
     }
   }

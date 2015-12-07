@@ -42,6 +42,19 @@ app.locals = {
   min: ENV === 'production' ? '.min' : ''
 };
 
+// Initialize DB
+var MODEL_DIR = './models';
+var models = fs.readdirSync(MODEL_DIR);
+models.forEach(function (r) {
+  if (r.endsWith('.js')) {
+    var filepath = MODEL_DIR + '/' + r;
+    var model = require(filepath);
+    if (model.setup) {
+      model.setup();
+    }
+  }
+});
+
 // Setup custom routes
 var ROUTE_DIR = './routes';
 var customRoutes = fs.readdirSync(ROUTE_DIR);
