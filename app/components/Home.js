@@ -9,7 +9,7 @@ var Home = React.createClass({
     return (
       <div className="home">
         <div>
-          <Bold>C'est la Creme</Bold> is a online creme brulee shop, crafting quality desserts for lucky folks in the Vancouver area. Our goal is to source the freshest local ingredients and deliver an indulgence to your taste buds with every bite.
+          <Bold>C'est la Creme</Bold> is an online creme brulee shop, crafting quality desserts for lucky folks in the Vancouver area. Our goal is to source the freshest local ingredients and deliver an indulgence to your taste buds with every bite.
         </div>
         <Break/>
         <Instagram/>

@@ -650,7 +650,7 @@ var Home = _react2.default.createClass({
           null,
           'C\'est la Creme'
         ),
-        ' is a online creme brulee shop, crafting quality desserts for lucky folks in the Vancouver area. Our goal is to source the freshest local ingredients and deliver an indulgence to your taste buds with every bite.'
+        ' is an online creme brulee shop, crafting quality desserts for lucky folks in the Vancouver area. Our goal is to source the freshest local ingredients and deliver an indulgence to your taste buds with every bite.'
       ),
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(_Instagram2.default, null),
