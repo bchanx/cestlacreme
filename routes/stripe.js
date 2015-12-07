@@ -3,8 +3,7 @@ var config = require('../config');
 var validate = require('email-validator');
 var orders = require('../models/orders');
 var attempts = require('../models/attempts');
-// TODO: prod/test key
-var stripe = require('stripe')(config.get('STRIPE_TEST_SECRET_KEY'));
+var stripe = require('stripe')(config.get('STRIPE_SECRET_KEY'));
 
 var PRODUCT = {
   types: ['vanilla', 'matcha', 'earlgrey'],

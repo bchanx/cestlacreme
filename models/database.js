@@ -11,7 +11,7 @@ var db = knex({
 });
 
 var error = function(table, fn, error) {
-  console.error('[POSTGRES] Something went wrong for table (' + table + ') from function (' + fn + '):', error);
+  console.error('[ POSTGRES ] Something went wrong for table (' + table + ') from function (' + fn + '):', error);
 };
 
 var result = function(error, results, callback) {

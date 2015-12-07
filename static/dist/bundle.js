@@ -1640,7 +1640,6 @@ var StripeReact = _react2.default.createClass({
   },
 
   onScriptLoaded: function onScriptLoaded() {
-    // TODO: prod/test key
     if (this._.mounted) {
       var ready = Stripe && "pk_test_IaT5HSSG1P7dpsq44cKF4Ypr";
       this.setState({
@@ -1798,19 +1797,12 @@ var StripeReact = _react2.default.createClass({
       });
       this.scrollToBottom();
 
-      // TODO: turn this on for prod
-      if ("development" === 'development') {
-        Stripe.card.createToken({
-          number: this.state.form.number,
-          name: this.state.form.name,
-          exp: this.state.form.expiry,
-          cvc: this.state.form.cvc
-        }, this.onCreateResponse);
-      } else {
-        this.props.updateState({
-          disabled: false
-        });
-      }
+      Stripe.card.createToken({
+        number: this.state.form.number,
+        name: this.state.form.name,
+        exp: this.state.form.expiry,
+        cvc: this.state.form.cvc
+      }, this.onCreateResponse);
     }
   },
 

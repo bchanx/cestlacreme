@@ -136,33 +136,48 @@ gulp.task('vendor', function() {
 });
 
 gulp.task('browserify', function() {
-  var env = config.all();
-  env.NODE_ENV = ENV;
-  var bundler = watchify(browserify('app/main.js', { debug: false }))
-    .external(VENDOR_DEPS)
-    .transform(babelify, {
-      presets: ['es2015', 'react']
-    })
-    .transform(envify, env)
-    .on('update', rebundle);
+  var envs = {
+    'development': null,
+    'production': null
+  };
+  Object.keys(envs).forEach(function(env) {
+    var bundler = browserify('app/main.js', { debug: false });
+    if (env === 'development') {
+      bundler = watchify(bundler);
+    }
+    bundler = bundler.external(VENDOR_DEPS)
+      .transform(babelify, {
+        presets: ['es2015', 'react']
+      })
+      .transform(envify, config.all(env))
+    if (env === 'development') {
+      bundler = bundler.on('update', rebundle);
+    }
+    envs[env] = bundler;
+  });
   return rebundle();
 
   function rebundle() {
     var start = Date.now();
-    return bundler.bundle()
-      .on('error', function(err) {
-        gutil.log(gutil.colors.red(err.toString()));
-      })
-      .on('end', function() {
-        gutil.log(gutil.colors.green('Finished rebundling in', (Date.now() - start) + 'ms.'));
-      })
-      .pipe(source('bundle.js'))
-      .pipe(gulp.dest(STATIC))
-      .pipe(streamify(uglify({ mangle: true })))
-      .pipe(rename({
-        extname: '.min.js'
-      }))
-      .pipe(gulp.dest(STATIC));
+    Object.keys(envs).forEach(function(env) {
+      var vendor = envs[env]
+        .bundle()
+        .on('error', function(err) {
+          gutil.log(gutil.colors.red('[ ' + env + ' ] ' + err.toString()));
+        })
+        .on('end', function() {
+          gutil.log(gutil.colors.green('[ ' + env + ' ] Finished rebundling in', (Date.now() - start) + 'ms.'));
+        })
+        .pipe(source('bundle.js'));
+      if (env === 'production') {
+        vendor = vendor.pipe(streamify(uglify({ mangle: true })))
+        .pipe(rename({
+          extname: '.min.js'
+        }));
+      }
+      vendor = vendor.pipe(gulp.dest(STATIC));
+    });
+    return envs.development;
   }
 });
 

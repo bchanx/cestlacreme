@@ -96,15 +96,14 @@ var StripeReact = React.createClass({
   },
 
   onScriptLoaded: function() {
-    // TODO: prod/test key
     if (this._.mounted) {
-      var ready = Stripe && process.env.STRIPE_TEST_PUBLISHABLE_KEY;
+      var ready = Stripe && process.env.STRIPE_PUBLISHABLE_KEY;
       this.setState({
         loading: false,
         loadingError: !ready
       });
       if (ready) {
-        Stripe.setPublishableKey(process.env.STRIPE_TEST_PUBLISHABLE_KEY);
+        Stripe.setPublishableKey(process.env.STRIPE_PUBLISHABLE_KEY);
       }
     }
   },
@@ -257,20 +256,12 @@ var StripeReact = React.createClass({
       });
       this.scrollToBottom();
 
-      // TODO: turn this on for prod
-      if (process.env.NODE_ENV === 'development') {
-        Stripe.card.createToken({
-          number: this.state.form.number,
-          name: this.state.form.name,
-          exp: this.state.form.expiry,
-          cvc: this.state.form.cvc
-        }, this.onCreateResponse);
-      }
-      else {
-        this.props.updateState({
-          disabled: false
-        });
-      }
+      Stripe.card.createToken({
+        number: this.state.form.number,
+        name: this.state.form.name,
+        exp: this.state.form.expiry,
+        cvc: this.state.form.cvc
+      }, this.onCreateResponse);
     }
   },
 

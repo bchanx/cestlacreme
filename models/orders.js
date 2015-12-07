@@ -38,7 +38,7 @@ var migrations = function() {
         db.client.schema.hasColumn(ORDERS_TABLE, 'success')
           .then(function(exists) {
             if (!exists) {
-              console.log('[POSTGRES] Running "success" column migration.');
+              console.log('[ POSTGRES ] Running "success" column migration.');
               db.client.schema.table(ORDERS_TABLE, function(table) {
                 table.boolean('success').defaultTo(false);
                 seriesCallback();

@@ -1,5 +1,6 @@
 var fs = require('fs');
 
+var ENV = process.env.NODE_ENV || 'development';
 var ENV_FILE = './.env';
 var PROPERTIES = {};
 
@@ -19,11 +20,22 @@ catch (e) {
 }
 
 var get = function(key) {
+  if (key.indexOf('STRIPE') >= 0) {
+    // Special handling for Stripe env vars
+    key = key.replace('STRIPE_', 'STRIPE_' + (ENV === 'development' ? 'TEST_' : 'LIVE_'));
+  }
   return process.env[key] || PROPERTIES[key];
 };
 
-var all = function() {
-  return JSON.parse(JSON.stringify(PROPERTIES));
+var all = function(env) {
+  var config = JSON.parse(JSON.stringify(PROPERTIES));
+  config.NODE_ENV = env || 'development';
+  // Handle Stripe env vars separately
+  ['STRIPE_PUBLISHABLE_KEY', 'STRIPE_SECRET_KEY'].forEach(function(key) {
+    var selectedKey = key.replace('STRIPE_', 'STRIPE_' + (config.NODE_ENV === 'development' ? 'TEST_' : 'LIVE_'));
+    config[key] = config[selectedKey];
+  });
+  return config;
 };
 
 module.exports = {
