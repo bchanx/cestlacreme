@@ -55,6 +55,12 @@ models.forEach(function (r) {
   }
 });
 
+// Setup logging middleware
+app.use(function (req, res, next) {
+  console.log('[ ' + req.method + ' ]', req.url, req.query);
+  next();
+});
+
 // Setup custom routes
 var ROUTE_DIR = './routes';
 var customRoutes = fs.readdirSync(ROUTE_DIR);

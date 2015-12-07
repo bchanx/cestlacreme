@@ -21,37 +21,33 @@ router.get('/auth_cb', function(req, res) {
   res.sendStatus(200);
 });
 
-var RECENT = [];
 router.get('/recent', function(req, res) {
-  if (RECENT.length) {
-    res.send(RECENT);
-  }
-  else {
-    var options = {
-      access_token: config.get('INSTAGRAM_ACCESS_TOKEN'),
-      count: 6
-    };
-    request({
-      method: 'GET',
-      json: true,
-      url: instagram('/v1/users/self/media/recent/'),
-      qs: options
-    }, function(error, response, body) {
-      if (body && body.data) {
-        body.data.forEach(function(d) {
-          if (d.type === TYPES.IMAGE) {
-            RECENT.push({
-              timestamp: d.created_time,
-              description: d.caption ? d.caption.text : null,
-              source: d.link,
-              url: d.images.standard_resolution.url
-            });
-          }
-        });
-      }
-      res.send(RECENT);
-    });
-  }
+  var options = {
+    access_token: config.get('INSTAGRAM_ACCESS_TOKEN'),
+    count: 6
+  };
+  request({
+    method: 'GET',
+    json: true,
+    url: instagram('/v1/users/self/media/recent/'),
+    qs: options
+  }, function(error, response, body) {
+    var results = [];
+    if (body && body.data) {
+      body.data.forEach(function(d) {
+        // TODO: handle video and/or non-square size images?
+        if (d.type === TYPES.IMAGE) {
+          results.push({
+            timestamp: d.created_time,
+            description: d.caption ? d.caption.text : null,
+            source: d.link,
+            url: d.images.standard_resolution.url
+          });
+        }
+      });
+    }
+    res.send(results);
+  });
 });
 
 module.exports = {
