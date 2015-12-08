@@ -54,7 +54,9 @@ var About = React.createClass({
             Orders before <Bold>8pm PST Tuesday</Bold> will be scheduled for pickup the same week Thursday. Orders after the deadline will be scheduled for pickup on the week after Thursday.
             <br/>
             <br/>
-            Pick up location is at the McDonalds parking lot, next to the Main Skytrain station. 1527 Main St, Vancouver, BC V6A 2W5.
+            Pickup location is at the McDonalds parking lot, next to the Main Skytrain station. The exact address is <Bold>1527 Main St, Vancouver, BC V6A 2W5</Bold>.
+            <br/>
+            Pickup time is between <Bold>6pm - 7pm</Bold>.
             <br/>
             <br/>
             If things are unclear, or you'd like to schedule an order for a later date, send us an <a href="mailto:cestlacreme@gmail.com">email</a>.

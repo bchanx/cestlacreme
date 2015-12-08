@@ -19,7 +19,7 @@ var Home = React.createClass({
         </div>
         <br/>
         <div>
-          <Bold>How it works:</Bold> We take regular orders online throughout the week, with orders closing weekly at 8pm every Tuesday. Thursday is pickup day! Current pickup point is located at the McDonalds parking lot, next to the Main Skytrain station. 1527 Main St, Vancouver, BC V6A 2W5. 
+          <Bold>How it works:</Bold> We take regular orders online throughout the week, with orders closing weekly at 8pm every Tuesday. Thursday is pickup day! Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.
         </div>
         <br/>
         <Note>

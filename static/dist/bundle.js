@@ -137,7 +137,21 @@ var About = _react2.default.createClass({
           ' will be scheduled for pickup the same week Thursday. Orders after the deadline will be scheduled for pickup on the week after Thursday.',
           _react2.default.createElement('br', null),
           _react2.default.createElement('br', null),
-          'Pick up location is at the McDonalds parking lot, next to the Main Skytrain station. 1527 Main St, Vancouver, BC V6A 2W5.',
+          'Pickup location is at the McDonalds parking lot, next to the Main Skytrain station. The exact address is ',
+          _react2.default.createElement(
+            _Common.Bold,
+            null,
+            '1527 Main St, Vancouver, BC V6A 2W5'
+          ),
+          '.',
+          _react2.default.createElement('br', null),
+          'Pickup time is between ',
+          _react2.default.createElement(
+            _Common.Bold,
+            null,
+            '6pm - 7pm'
+          ),
+          '.',
           _react2.default.createElement('br', null),
           _react2.default.createElement('br', null),
           'If things are unclear, or you\'d like to schedule an order for a later date, send us an ',
@@ -669,7 +683,7 @@ var Home = _react2.default.createClass({
           null,
           'How it works:'
         ),
-        ' We take regular orders online throughout the week, with orders closing weekly at 8pm every Tuesday. Thursday is pickup day! Current pickup point is located at the McDonalds parking lot, next to the Main Skytrain station. 1527 Main St, Vancouver, BC V6A 2W5.'
+        ' We take regular orders online throughout the week, with orders closing weekly at 8pm every Tuesday. Thursday is pickup day! Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.'
       ),
       _react2.default.createElement('br', null),
       _react2.default.createElement(
