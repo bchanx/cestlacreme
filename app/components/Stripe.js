@@ -459,6 +459,17 @@ var StripeReact = React.createClass({
     });
   },
 
+  loadingMessages: [
+    'Preparing Eggs',
+    'Adding Vanilla',
+    'Blending Cream',
+    'Caramelizing Sugar'
+  ],
+
+  getLoadingMessage: function() {
+    return this.loadingMessages[Math.floor(Math.random() * this.loadingMessages.length)] + '...';
+  },
+
   render: function() {
     let payment = (
       <div>
@@ -481,7 +492,7 @@ var StripeReact = React.createClass({
                 <Note><Bold>{this.state.error.message}</Bold></Note>
               </div> : null}
             {this.props.disabled ? <Loading/> : null}
-            <Button className="btn-success" onClick={this.submitOrder} disabled={this.props.disabled}>{this.props.disabled ? 'Preparing Eggs...' : 'Place Order'}</Button>
+            <Button className="btn-success" onClick={this.submitOrder} disabled={this.props.disabled}>{this.props.disabled ? this.getLoadingMessage() : 'Place Order'}</Button>
             <Button className="btn-default" onClick={this.togglePayments} disabled={this.props.disabled}>Cancel</Button>
           </form>
         </div>

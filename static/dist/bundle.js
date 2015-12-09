@@ -2063,6 +2063,12 @@ var StripeReact = _react2.default.createClass({
     });
   },
 
+  loadingMessages: ['Preparing Eggs', 'Adding Vanilla', 'Blending Cream', 'Caramelizing Sugar'],
+
+  getLoadingMessage: function getLoadingMessage() {
+    return this.loadingMessages[Math.floor(Math.random() * this.loadingMessages.length)] + '...';
+  },
+
   render: function render() {
     var payment = _react2.default.createElement(
       'div',
@@ -2104,7 +2110,7 @@ var StripeReact = _react2.default.createClass({
           _react2.default.createElement(
             _Common.Button,
             { className: 'btn-success', onClick: this.submitOrder, disabled: this.props.disabled },
-            this.props.disabled ? 'Preparing Eggs...' : 'Place Order'
+            this.props.disabled ? this.getLoadingMessage() : 'Place Order'
           ),
           _react2.default.createElement(
             _Common.Button,

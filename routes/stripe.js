@@ -149,7 +149,8 @@ router.post('/order', function(req, res) {
           metadata: {
             order_number: obj.order_number,
             email: obj.email,
-            product: obj.product
+            product: obj.product,
+            comments: obj.comments
           }
         }, function(err, charge) {
           if (err) {
