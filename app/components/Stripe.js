@@ -54,6 +54,10 @@ var StripeReact = React.createClass({
         name: null,
         expiry: null,
         cvc: null
+      },
+      backslash: {
+        add: false,
+        remove: false
       }
     };
   },
@@ -167,6 +171,18 @@ var StripeReact = React.createClass({
     if (!this.props.disabled) {
       let form = this.state.form;
       form[type] = event.target.value;
+      if (type === 'expiry') {
+        if (this._.backslash.add) {
+          event.target.value += '/';
+          form[type] = event.target.value;
+          this._.backslash.add = false;
+        }
+        else if (this._.backslash.remove) {
+          event.target.value = event.target.value.slice(0, event.target.value.length - 1);
+          form[type] = event.target.value;
+          this._.backslash.remove = false;
+        }
+      }
       this.setState(form);
     }
   },
@@ -337,6 +353,76 @@ var StripeReact = React.createClass({
     }
   },
 
+  _validKeys: [
+    8, // backspace
+    9, // tab
+    13, // enter
+    37, 38, 39, 40, // arrows
+  ],
+
+  _validNumbers: [
+    48, 49, 50, 51, 52, 53, 54, 55, 56, 57 // 0-9
+  ],
+
+  _validActions: [
+    65, // a
+    67, // c
+    86, // v
+    88, // x
+    90 // z
+  ],
+
+  onKeyDown: function(type, event) {
+    if (type === 'number' || type === 'expiry' || type === 'cvc') {
+      // Restrict number input keys
+      let keyCode = event.keyCode;
+      let isValidKey = this._validKeys.indexOf(keyCode) >= 0;
+      let isValidNumber = this._validNumbers.indexOf(keyCode) >= 0;
+      if (!isValidKey && !isValidNumber) {
+        // Not a valid key
+        let isValidAction = this._validActions.indexOf(keyCode) >= 0;
+        if (!((event.ctrlKey || event.metaKey) && isValidAction)) {
+          // Not a valid action either
+          event.preventDefault();
+        }
+      }
+      else if ((event.shiftKey || event.altKey) && isValidNumber) {
+        // No shift numbers
+        event.preventDefault();
+      }
+      else if (isValidNumber) {
+        // We're adding a number!
+        let length = event.target.value.length;
+        if (type === 'number' && length >= 16) {
+          // Restrict maximum card # to 16 digits
+          event.preventDefault();
+        }
+        else if (type === 'expiry') {
+          if (length >= 7) {
+            // Max expiry is 7 "MM/YYYY"
+            event.preventDefault();
+          }
+          else if (length === 1) {
+            // Insert backslash after change
+            this._.backslash.add = true;
+          }
+        }
+        else if (type === 'cvc') {
+          if (length >= 4) {
+            // Max CVC is 4
+            event.preventDefault();
+          }
+        }
+      }
+      else if (keyCode === 8 && type === 'expiry') {
+        if (event.target.value.length === 3 && event.target.value[2] === '/') {
+          // Special handling to remove backslash after change
+          this._.backslash.remove = true;
+        }
+      }
+    }
+  },
+
   getFormParams: function() {
     return this.props.formParams.map(p => {
       let type = p.type;
@@ -345,6 +431,7 @@ var StripeReact = React.createClass({
       let onFocusHandler = this.onFocusChange.bind(this, type);
       let onBlurHandler = this.onBlurChange.bind(this, type);
       let formMountHandler = this.onFormMount.bind(this, type);
+      let onKeyDownHandler = this.onKeyDown.bind(this, type);
       return p.textarea ? <textarea
         key={type}
         name={type}
@@ -367,6 +454,7 @@ var StripeReact = React.createClass({
         onChange={onChangeHandler}
         onFocus={onFocusHandler}
         onBlur={onBlurHandler}
+        onKeyDown={onKeyDownHandler}
         ref={formMountHandler}/>;
     });
   },

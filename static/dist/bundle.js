@@ -694,6 +694,26 @@ var Home = _react2.default.createClass({
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
         'div',
+        { className: 'pickup' },
+        _react2.default.createElement(
+          _Common.Bold,
+          null,
+          'Next scheduled pickup date:'
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'div',
+          { className: 'pickup-date' },
+          _react2.default.createElement(
+            _Common.Bold,
+            null,
+            'Thursday December 17th, 6pm - 7pm'
+          )
+        )
+      ),
+      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement(
+        'div',
         null,
         'Interested? Check out our ',
         _react2.default.createElement(
@@ -1651,6 +1671,10 @@ var StripeReact = _react2.default.createClass({
         name: null,
         expiry: null,
         cvc: null
+      },
+      backslash: {
+        add: false,
+        remove: false
       }
     };
   },
@@ -1767,6 +1791,17 @@ var StripeReact = _react2.default.createClass({
     if (!this.props.disabled) {
       var form = this.state.form;
       form[type] = event.target.value;
+      if (type === 'expiry') {
+        if (this._.backslash.add) {
+          event.target.value += '/';
+          form[type] = event.target.value;
+          this._.backslash.add = false;
+        } else if (this._.backslash.remove) {
+          event.target.value = event.target.value.slice(0, event.target.value.length - 1);
+          form[type] = event.target.value;
+          this._.backslash.remove = false;
+        }
+      }
       this.setState(form);
     }
   },
@@ -1929,6 +1964,67 @@ var StripeReact = _react2.default.createClass({
     }
   },
 
+  _validKeys: [8, // backspace
+  9, // tab
+  13, // enter
+  37, 38, 39, 40],
+
+  // arrows
+  _validNumbers: [48, 49, 50, 51, 52, 53, 54, 55, 56, 57 // 0-9
+  ],
+
+  _validActions: [65, // a
+  67, // c
+  86, // v
+  88, // x
+  90 // z
+  ],
+
+  onKeyDown: function onKeyDown(type, event) {
+    if (type === 'number' || type === 'expiry' || type === 'cvc') {
+      // Restrict number input keys
+      var keyCode = event.keyCode;
+      var isValidKey = this._validKeys.indexOf(keyCode) >= 0;
+      var isValidNumber = this._validNumbers.indexOf(keyCode) >= 0;
+      if (!isValidKey && !isValidNumber) {
+        // Not a valid key
+        var isValidAction = this._validActions.indexOf(keyCode) >= 0;
+        if (!((event.ctrlKey || event.metaKey) && isValidAction)) {
+          // Not a valid action either
+          event.preventDefault();
+        }
+      } else if ((event.shiftKey || event.altKey) && isValidNumber) {
+        // No shift numbers
+        event.preventDefault();
+      } else if (isValidNumber) {
+        // We're adding a number!
+        var length = event.target.value.length;
+        if (type === 'number' && length >= 16) {
+          // Restrict maximum card # to 16 digits
+          event.preventDefault();
+        } else if (type === 'expiry') {
+          if (length >= 7) {
+            // Max expiry is 7 "MM/YYYY"
+            event.preventDefault();
+          } else if (length === 1) {
+            // Insert backslash after change
+            this._.backslash.add = true;
+          }
+        } else if (type === 'cvc') {
+          if (length >= 4) {
+            // Max CVC is 4
+            event.preventDefault();
+          }
+        }
+      } else if (keyCode === 8 && type === 'expiry') {
+        if (event.target.value.length === 3 && event.target.value[2] === '/') {
+          // Special handling to remove backslash after change
+          this._.backslash.remove = true;
+        }
+      }
+    }
+  },
+
   getFormParams: function getFormParams() {
     var _this3 = this;
 
@@ -1939,6 +2035,7 @@ var StripeReact = _react2.default.createClass({
       var onFocusHandler = _this3.onFocusChange.bind(_this3, type);
       var onBlurHandler = _this3.onBlurChange.bind(_this3, type);
       var formMountHandler = _this3.onFormMount.bind(_this3, type);
+      var onKeyDownHandler = _this3.onKeyDown.bind(_this3, type);
       return p.textarea ? _react2.default.createElement('textarea', {
         key: type,
         name: type,
@@ -1961,6 +2058,7 @@ var StripeReact = _react2.default.createClass({
         onChange: onChangeHandler,
         onFocus: onFocusHandler,
         onBlur: onBlurHandler,
+        onKeyDown: onKeyDownHandler,
         ref: formMountHandler });
     });
   },

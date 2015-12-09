@@ -26,6 +26,14 @@ var Home = React.createClass({
           *Please bear with us as we are limited by the current size of our operations and may sell out!*
         </Note>
         <Break/>
+        <div className="pickup">
+          <Bold>Next scheduled pickup date:</Bold>
+          <br/>
+          <div className="pickup-date">
+            <Bold>Thursday December 17th, 6pm - 7pm</Bold>
+          </div>
+        </div>
+        <Break/>
         <div>
           Interested? Check out our&nbsp;
           <Link to="/menu">menu</Link>
