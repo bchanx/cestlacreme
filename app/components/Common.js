@@ -31,13 +31,16 @@ export var Note = React.createClass({
 export var Loading = React.createClass({
   getDefaultProps: function() {
     return {
-      size: 'small'
+      size: 'small',
+      inline: false
     };
   },
 
   render: function() {
     return (
-      <div className={classNames("loading", this.props.size)}>
+      <div className={classNames("loading", this.props.size, {
+        inline: this.props.inline 
+      })}>
         <span className="ion-load-c"></span>
       </div>
     );

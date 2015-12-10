@@ -11,6 +11,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _Common = require('./Common');
 
+var _GoogleMaps = require('./GoogleMaps');
+
 var _FAQ = require('./FAQ');
 
 var _FAQ2 = _interopRequireDefault(_FAQ);
@@ -152,8 +154,7 @@ var About = _react2.default.createClass({
             '6pm - 7pm'
           ),
           '.',
-          _react2.default.createElement('br', null),
-          _react2.default.createElement('br', null),
+          _react2.default.createElement(_GoogleMaps.GoogleMapsEmbed, { placeId: 'ChIJARg-smZxhlQRfhMPDMXsgL4' }),
           'If things are unclear, or you\'d like to schedule an order for a later date, send us an ',
           _react2.default.createElement(
             'a',
@@ -193,7 +194,7 @@ var About = _react2.default.createClass({
 
 exports.default = About;
 
-},{"./Common":4,"./FAQ":6,"react":"react"}],2:[function(require,module,exports){
+},{"./Common":4,"./FAQ":6,"./GoogleMaps":8,"react":"react"}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -233,7 +234,7 @@ var App = _react2.default.createClass({
 
 exports.default = App;
 
-},{"./Content":5,"./Navigation":13,"react":"react"}],3:[function(require,module,exports){
+},{"./Content":5,"./Navigation":14,"react":"react"}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -419,14 +420,17 @@ var Loading = exports.Loading = _react2.default.createClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      size: 'small'
+      size: 'small',
+      inline: false
     };
   },
 
   render: function render() {
     return _react2.default.createElement(
       'div',
-      { className: (0, _classnames2.default)("loading", this.props.size) },
+      { className: (0, _classnames2.default)("loading", this.props.size, {
+          inline: this.props.inline
+        }) },
       _react2.default.createElement('span', { className: 'ion-load-c' })
     );
   }
@@ -630,6 +634,48 @@ exports.default = Footer;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.GoogleMapsEmbed = undefined;
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var GoogleMapsEmbed = exports.GoogleMapsEmbed = _react2.default.createClass({
+  displayName: 'GoogleMapsEmbed',
+
+  getDefaultProps: function getDefaultProps() {
+    return {
+      placeId: null
+    };
+  },
+
+  render: function render() {
+    return this.props.placeId ? _react2.default.createElement(
+      'div',
+      { className: (0, _classnames2.default)("google-maps", this.props.className) },
+      _react2.default.createElement('iframe', {
+        width: '100%',
+        height: '100%',
+        frameBorder: '0',
+        style: { border: '0' },
+        allowFullScreen: true,
+        src: "https://www.google.com/maps/embed/v1/place?q=place_id:" + this.props.placeId + "&key=" + "AIzaSyCM62dBOAAkuQ1ZJdI67uqXLwWey8SH89g" })
+    ) : null;
+  }
+});
+
+},{"classnames":"classnames","react":"react"}],9:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _react = require('react');
 
@@ -646,6 +692,8 @@ var _Common = require('./Common');
 var _Footer = require('./Footer');
 
 var _Footer2 = _interopRequireDefault(_Footer);
+
+var _GoogleMaps = require('./GoogleMaps');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -676,6 +724,12 @@ var Home = _react2.default.createClass({
       ),
       _react2.default.createElement('br', null),
       _react2.default.createElement(
+        _Common.Note,
+        null,
+        '*Please bear with us as we are limited by the current size of our operations and may sell out!*'
+      ),
+      _react2.default.createElement(_Common.Break, null),
+      _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(
@@ -685,12 +739,7 @@ var Home = _react2.default.createClass({
         ),
         ' We take regular orders online throughout the week, with orders closing weekly at 8pm every Tuesday. Thursday is pickup day! Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.'
       ),
-      _react2.default.createElement('br', null),
-      _react2.default.createElement(
-        _Common.Note,
-        null,
-        '*Please bear with us as we are limited by the current size of our operations and may sell out!*'
-      ),
+      _react2.default.createElement(_GoogleMaps.GoogleMapsEmbed, { placeId: 'ChIJARg-smZxhlQRfhMPDMXsgL4' }),
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
         'div',
@@ -731,7 +780,7 @@ var Home = _react2.default.createClass({
 
 exports.default = Home;
 
-},{"./Common":4,"./Footer":7,"./Instagram":10,"react":"react","react-router":"react-router"}],9:[function(require,module,exports){
+},{"./Common":4,"./Footer":7,"./GoogleMaps":8,"./Instagram":11,"react":"react","react-router":"react-router"}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -921,7 +970,7 @@ var ImageOverlay = _react2.default.createClass({
 
 exports.default = ImageOverlay;
 
-},{"./Common":4,"classnames":"classnames","moment":"moment","react":"react"}],10:[function(require,module,exports){
+},{"./Common":4,"classnames":"classnames","moment":"moment","react":"react"}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1008,7 +1057,7 @@ var Instagram = _react2.default.createClass({
         )
       );
     });
-    var defaultImageURL = '/images/default-brulee-low.png';
+    var defaultImageURL = '/images/default-brulee-low-min.jpg';
     var defaultImage = _react2.default.createElement('img', { className: 'default-image', src: defaultImageURL, onClick: this.openOverlay.bind(this, 0) });
     return _react2.default.createElement(
       'div',
@@ -1030,7 +1079,7 @@ var Instagram = _react2.default.createClass({
 
 exports.default = Instagram;
 
-},{"./Carousel":3,"./Common":4,"./ImageOverlay":9,"react":"react","superagent":"superagent"}],11:[function(require,module,exports){
+},{"./Carousel":3,"./Common":4,"./ImageOverlay":10,"react":"react","superagent":"superagent"}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1158,7 +1207,7 @@ var Menu = _react2.default.createClass({
 
 exports.default = Menu;
 
-},{"./Common":4,"./MenuItems":12,"./OrderSummary":14,"./Stripe":17,"react":"react"}],12:[function(require,module,exports){
+},{"./Common":4,"./MenuItems":13,"./OrderSummary":15,"./Stripe":18,"react":"react"}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1213,7 +1262,7 @@ var MenuItems = _react2.default.createClass({
 
   getImages: function getImages(type) {
     return ['ingredients', 'torched', 'spoon'].map(function (suffix) {
-      return '/images/' + type + '/' + type + '-' + suffix + '-low.jpg';
+      return '/images/' + type + '/' + type + '-' + suffix + '-low-min.jpg';
     });
   },
 
@@ -1268,7 +1317,7 @@ var MenuItems = _react2.default.createClass({
 
 exports.default = MenuItems;
 
-},{"./Common":4,"./ImageOverlay":9,"./Selection":15,"react":"react","react-select":"react-select"}],13:[function(require,module,exports){
+},{"./Common":4,"./ImageOverlay":10,"./Selection":16,"react":"react","react-select":"react-select"}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1332,7 +1381,7 @@ var Navigation = _react2.default.createClass({
 
 exports.default = Navigation;
 
-},{"./Social":16,"react":"react","react-router":"react-router"}],14:[function(require,module,exports){
+},{"./Social":17,"react":"react","react-router":"react-router"}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1458,7 +1507,7 @@ var OrderSummary = _react2.default.createClass({
 
 exports.default = OrderSummary;
 
-},{"./Common":4,"classnames":"classnames","react":"react"}],15:[function(require,module,exports){
+},{"./Common":4,"classnames":"classnames","react":"react"}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1553,7 +1602,7 @@ var Selection = _react2.default.createClass({
 
 exports.default = Selection;
 
-},{"./Carousel":3,"classnames":"classnames","react":"react","react-select":"react-select"}],16:[function(require,module,exports){
+},{"./Carousel":3,"classnames":"classnames","react":"react","react-select":"react-select"}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1582,7 +1631,7 @@ var Social = _react2.default.createClass({
 
 exports.default = Social;
 
-},{"react":"react"}],17:[function(require,module,exports){
+},{"react":"react"}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2106,11 +2155,11 @@ var StripeReact = _react2.default.createClass({
               )
             )
           ) : null,
-          this.props.disabled ? _react2.default.createElement(_Common.Loading, null) : null,
           _react2.default.createElement(
             _Common.Button,
             { className: 'btn-success', onClick: this.submitOrder, disabled: this.props.disabled },
-            this.props.disabled ? this.getLoadingMessage() : 'Place Order'
+            this.props.disabled ? this.getLoadingMessage() : 'Place Order',
+            this.props.disabled ? _react2.default.createElement(_Common.Loading, { inline: true }) : null
           ),
           _react2.default.createElement(
             _Common.Button,
@@ -2180,7 +2229,7 @@ var StripeReact = _react2.default.createClass({
 
 exports.default = StripeReact;
 
-},{"./Common":4,"classnames":"classnames","email-validator":"email-validator","react":"react","react-credit-card":"react-credit-card","react-dom":"react-dom","react-script-loader":"react-script-loader","react-timer-mixin":"react-timer-mixin","superagent":"superagent"}],18:[function(require,module,exports){
+},{"./Common":4,"classnames":"classnames","email-validator":"email-validator","react":"react","react-credit-card":"react-credit-card","react-dom":"react-dom","react-script-loader":"react-script-loader","react-timer-mixin":"react-timer-mixin","superagent":"superagent"}],19:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -2213,7 +2262,7 @@ _reactDom2.default.render(_react2.default.createElement(
   (0, _routes2.default)()
 ), document.getElementById('app'));
 
-},{"./routes":19,"history/lib/createBrowserHistory":26,"react":"react","react-dom":"react-dom","react-router":"react-router"}],19:[function(require,module,exports){
+},{"./routes":20,"history/lib/createBrowserHistory":27,"react":"react","react-dom":"react-dom","react-router":"react-router"}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2254,7 +2303,7 @@ var _Menu2 = _interopRequireDefault(_Menu);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./components/About":1,"./components/App":2,"./components/Home":8,"./components/Menu":11,"react":"react","react-router":"react-router"}],20:[function(require,module,exports){
+},{"./components/About":1,"./components/App":2,"./components/Home":9,"./components/Menu":12,"react":"react","react-router":"react-router"}],21:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2347,7 +2396,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /**
  * Indicates that navigation was caused by a call to history.push.
  */
@@ -2379,7 +2428,7 @@ exports['default'] = {
   REPLACE: REPLACE,
   POP: POP
 };
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -2406,7 +2455,7 @@ function loopAsync(turns, work, callback) {
 
   next();
 }
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 (function (process){
 /*eslint-disable no-empty */
 'use strict';
@@ -2477,7 +2526,7 @@ function readState(key) {
   return null;
 }
 }).call(this,require('_process'))
-},{"_process":20,"warning":38}],24:[function(require,module,exports){
+},{"_process":21,"warning":39}],25:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2553,13 +2602,13 @@ function supportsGoWithoutReloadUsingHash() {
   var ua = navigator.userAgent;
   return ua.indexOf('Firefox') === -1;
 }
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
 var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 exports.canUseDOM = canUseDOM;
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2734,7 +2783,7 @@ function createBrowserHistory() {
 exports['default'] = createBrowserHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./Actions":21,"./DOMStateStorage":23,"./DOMUtils":24,"./ExecutionEnvironment":25,"./createDOMHistory":27,"_process":20,"invariant":37}],27:[function(require,module,exports){
+},{"./Actions":22,"./DOMStateStorage":24,"./DOMUtils":25,"./ExecutionEnvironment":26,"./createDOMHistory":28,"_process":21,"invariant":38}],28:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2777,7 +2826,7 @@ function createDOMHistory(options) {
 exports['default'] = createDOMHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./DOMUtils":24,"./ExecutionEnvironment":25,"./createHistory":28,"_process":20,"invariant":37}],28:[function(require,module,exports){
+},{"./DOMUtils":25,"./ExecutionEnvironment":26,"./createHistory":29,"_process":21,"invariant":38}],29:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -3048,7 +3097,7 @@ function createHistory() {
 
 exports['default'] = createHistory;
 module.exports = exports['default'];
-},{"./Actions":21,"./AsyncUtils":22,"./createLocation":29,"./deprecate":30,"./runTransitionHook":33,"deep-equal":34}],29:[function(require,module,exports){
+},{"./Actions":22,"./AsyncUtils":23,"./createLocation":30,"./deprecate":31,"./runTransitionHook":34,"deep-equal":35}],30:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -3085,7 +3134,7 @@ function createLocation() {
 
 exports['default'] = createLocation;
 module.exports = exports['default'];
-},{"./Actions":21,"./parsePath":32}],30:[function(require,module,exports){
+},{"./Actions":22,"./parsePath":33}],31:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -3107,7 +3156,7 @@ function deprecate(fn, message) {
 exports['default'] = deprecate;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"_process":20,"warning":38}],31:[function(require,module,exports){
+},{"_process":21,"warning":39}],32:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -3121,7 +3170,7 @@ function extractPath(string) {
 
 exports["default"] = extractPath;
 module.exports = exports["default"];
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -3168,7 +3217,7 @@ function parsePath(path) {
 exports['default'] = parsePath;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./extractPath":31,"_process":20,"warning":38}],33:[function(require,module,exports){
+},{"./extractPath":32,"_process":21,"warning":39}],34:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -3195,7 +3244,7 @@ function runTransitionHook(hook, location, callback) {
 exports['default'] = runTransitionHook;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"_process":20,"warning":38}],34:[function(require,module,exports){
+},{"_process":21,"warning":39}],35:[function(require,module,exports){
 var pSlice = Array.prototype.slice;
 var objectKeys = require('./lib/keys.js');
 var isArguments = require('./lib/is_arguments.js');
@@ -3291,7 +3340,7 @@ function objEquiv(a, b, opts) {
   return typeof a === typeof b;
 }
 
-},{"./lib/is_arguments.js":35,"./lib/keys.js":36}],35:[function(require,module,exports){
+},{"./lib/is_arguments.js":36,"./lib/keys.js":37}],36:[function(require,module,exports){
 var supportsArgumentsClass = (function(){
   return Object.prototype.toString.call(arguments)
 })() == '[object Arguments]';
@@ -3313,7 +3362,7 @@ function unsupported(object){
     false;
 };
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 exports = module.exports = typeof Object.keys === 'function'
   ? Object.keys : shim;
 
@@ -3324,7 +3373,7 @@ function shim (obj) {
   return keys;
 }
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -3379,7 +3428,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":20}],38:[function(require,module,exports){
+},{"_process":21}],39:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -3443,4 +3492,4 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":20}]},{},[18]);
+},{"_process":21}]},{},[19]);

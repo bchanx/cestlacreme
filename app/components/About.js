@@ -1,5 +1,6 @@
 import React from 'react';
 import { Break, Bold, Note } from './Common';
+import { GoogleMapsEmbed } from './GoogleMaps';
 import FAQ from './FAQ';
 
 var About = React.createClass({
@@ -57,8 +58,7 @@ var About = React.createClass({
             Pickup location is at the McDonalds parking lot, next to the Main Skytrain station. The exact address is <Bold>1527 Main St, Vancouver, BC V6A 2W5</Bold>.
             <br/>
             Pickup time is between <Bold>6pm - 7pm</Bold>.
-            <br/>
-            <br/>
+            <GoogleMapsEmbed placeId="ChIJARg-smZxhlQRfhMPDMXsgL4"/>
             If things are unclear, or you'd like to schedule an order for a later date, send us an <a href="mailto:cestlacreme@gmail.com">email</a>.
           </FAQ>
           <FAQ question={"What happens if I miss the weekly meetup for my order?"}>

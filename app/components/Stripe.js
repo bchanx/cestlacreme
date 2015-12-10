@@ -491,8 +491,10 @@ var StripeReact = React.createClass({
               <div className="stripe-form-error">
                 <Note><Bold>{this.state.error.message}</Bold></Note>
               </div> : null}
-            {this.props.disabled ? <Loading/> : null}
-            <Button className="btn-success" onClick={this.submitOrder} disabled={this.props.disabled}>{this.props.disabled ? this.getLoadingMessage() : 'Place Order'}</Button>
+            <Button className="btn-success" onClick={this.submitOrder} disabled={this.props.disabled}>
+              {this.props.disabled ? this.getLoadingMessage() : 'Place Order'}
+              {this.props.disabled ? <Loading inline={true}/> : null}
+            </Button>
             <Button className="btn-default" onClick={this.togglePayments} disabled={this.props.disabled}>Cancel</Button>
           </form>
         </div>

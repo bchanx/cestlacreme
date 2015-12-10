@@ -31,7 +31,7 @@ var MenuItems = React.createClass({
 
   getImages: function(type) {
     return ['ingredients', 'torched', 'spoon'].map(suffix => {
-      return '/images/' + type + '/' + type + '-' + suffix + '-low.jpg';
+      return '/images/' + type + '/' + type + '-' + suffix + '-low-min.jpg';
     });
   },
 

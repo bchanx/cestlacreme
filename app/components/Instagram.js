@@ -58,7 +58,7 @@ var Instagram = React.createClass({
         </div>
       );
     });
-    let defaultImageURL = '/images/default-brulee-low.png';
+    let defaultImageURL = '/images/default-brulee-low-min.jpg';
     let defaultImage = (
       <img className="default-image" src={defaultImageURL} onClick={this.openOverlay.bind(this, 0)}/>
     );

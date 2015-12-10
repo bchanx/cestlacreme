@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import Instagram from './Instagram';
 import { Break, Bold, Note } from './Common';
 import Footer from './Footer';
+import { GoogleMapsEmbed } from './GoogleMaps';
 
 var Home = React.createClass({
   render: function() {
@@ -18,13 +19,14 @@ var Home = React.createClass({
           We operate solely through online purchases, market pop-ups, and catering for events and weddings.
         </div>
         <br/>
-        <div>
-          <Bold>How it works:</Bold> We take regular orders online throughout the week, with orders closing weekly at 8pm every Tuesday. Thursday is pickup day! Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.
-        </div>
-        <br/>
         <Note>
           *Please bear with us as we are limited by the current size of our operations and may sell out!*
         </Note>
+        <Break/>
+        <div>
+          <Bold>How it works:</Bold> We take regular orders online throughout the week, with orders closing weekly at 8pm every Tuesday. Thursday is pickup day! Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.
+        </div>
+        <GoogleMapsEmbed placeId="ChIJARg-smZxhlQRfhMPDMXsgL4"/>
         <Break/>
         <div className="pickup">
           <Bold>Next scheduled pickup date:</Bold>

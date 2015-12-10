@@ -80,6 +80,11 @@ input[disabled] {
 .loading span {
   animation: loading 1s linear infinite;
 }
+.loading.inline {
+  font-size: 1em;
+  color: inherit;
+  margin-left: 10px;
+}
 .loading.large {
   line-height: 100px;
   font-size: 2.5rem;
@@ -455,11 +460,6 @@ a:hover {
 .stripe-form button {
   margin-top: 20px;
 }
-.stripe-form .loading {
-  display: block;
-  margin-top: 9px;
-  margin-bottom: -11px;
-}
 .stripe-form-error {
   margin-top: 20px;
 }
@@ -588,7 +588,7 @@ a:hover {
   height: 200px;
   border-radius: 50%;
   margin: 25px auto;
-  background-image: url("/images/about-me.jpg");
+  background-image: url("/images/about-me-min.jpg");
   background-size: 100%;
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -1149,4 +1149,31 @@ a:hover {
 .btn-danger:hover:enabled {
   background-color: #ff1508;
   border-color: #e00c00;
+}
+.google-maps {
+  width: 70%;
+  max-width: 450px;
+  min-width: 240px;
+  margin: 25px auto;
+  position: relative;
+}
+.google-maps iframe {
+  border: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.google-maps:after {
+  content: "";
+  display: block;
+  padding-top: 80%;
+}
+@media screen and (max-width: 440px) {
+  .google-maps {
+    width: 60vw;
+    margin: 20px auto;
+  }
+  .google-maps:after {
+    padding-top: 100%;
+  }
 }
