@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTimerMixin from 'react-timer-mixin';
+import { ScrollToMixin } from './Mixins';
 import { Bold } from './Common';
 import classNames from 'classnames';
 
 var FAQ = React.createClass({
-  mixins: [ReactTimerMixin],
+  mixins: [ReactTimerMixin, ScrollToMixin],
 
   getDefaultProps: function() {
     return {
@@ -22,15 +23,14 @@ var FAQ = React.createClass({
   questionExpanded: false,
 
   componentDidUpdate: function() {
-    this.setTimeout(() => {
-      if (this.questionExpanded) {
-        let node = ReactDOM.findDOMNode(this);
-        let content = node.parentNode.parentNode.parentNode;
-        content.scrollTop = node.offsetTop - 10;
-        let app = content.parentNode.parentNode;
-        app.scrollTop = node.offsetTop - 10;
-      }
-    }, 250);
+    if (this.questionExpanded) {
+      let node = ReactDOM.findDOMNode(this);
+      let content = node.parentNode.parentNode.parentNode;
+      this.scrollTo(content, node.offsetTop - 10, 300);
+    }
+    else {
+      this._scroll.cancel = true;
+    }
   },
 
   toggleQuestion: function() {
