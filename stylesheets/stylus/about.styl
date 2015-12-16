@@ -22,7 +22,7 @@ $qa-timing = 0.3s
     padding-bottom: 10px
     .question
       background-color: $gray2
-      padding: 2px 0
+      padding: 11px 10px
       border-top-left-radius: 3px
       border-top-right-radius: 3px
       animation: question-expanded $qa-timing
@@ -59,35 +59,34 @@ $qa-timing = 0.3s
 
 .question
   color: $orange
-  line-height: 38px
+  padding: 9px 10px
   cursor: pointer
   background-color: initial
-  padding: 0
   &:hover
     text-decoration: underline
 
 @keyframes question-expanded {
   0% {
     background-color: initial
-    padding: 2px 0
+    padding: 11px 10px
   }
   100% {
     background-color: $gray2
-    padding: 2px 0
+    padding: 11px 10px
   }
 }
 
 @keyframes question-collapsed {
   0% {
     background-color: $gray2
-    padding: 2px 0
+    padding: 11px 10px
   }
   99% {
-    padding: 2px 0
+    padding: 11px 10px
   }
   100% {
     background-color: initial
-    padding: 0
+    padding: 9px 10px
   }
 }
 

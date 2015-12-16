@@ -619,7 +619,7 @@ a:hover {
 }
 .qa.expanded .question {
   background-color: #f0f0f0;
-  padding: 2px 0;
+  padding: 11px 10px;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   -webkit-animation: question-expanded 0.3s;
@@ -650,10 +650,9 @@ a:hover {
 }
 .question {
   color: #ecb937;
-  line-height: 38px;
+  padding: 9px 10px;
   cursor: pointer;
   background-color: initial;
-  padding: 0;
 }
 .question:hover {
   text-decoration: underline;
@@ -698,47 +697,47 @@ a:hover {
 @-webkit-keyframes question-expanded {
   0% {
     background-color: initial;
-    padding: 2px 0;
+    padding: 11px 10px;
   }
   100% {
     background-color: #f0f0f0;
-    padding: 2px 0;
+    padding: 11px 10px;
   }
 }
 @keyframes question-expanded {
   0% {
     background-color: initial;
-    padding: 2px 0;
+    padding: 11px 10px;
   }
   100% {
     background-color: #f0f0f0;
-    padding: 2px 0;
+    padding: 11px 10px;
   }
 }
 @-webkit-keyframes question-collapsed {
   0% {
     background-color: #f0f0f0;
-    padding: 2px 0;
+    padding: 11px 10px;
   }
   99% {
-    padding: 2px 0;
+    padding: 11px 10px;
   }
   100% {
     background-color: initial;
-    padding: 0;
+    padding: 9px 10px;
   }
 }
 @keyframes question-collapsed {
   0% {
     background-color: #f0f0f0;
-    padding: 2px 0;
+    padding: 11px 10px;
   }
   99% {
-    padding: 2px 0;
+    padding: 11px 10px;
   }
   100% {
     background-color: initial;
-    padding: 0;
+    padding: 9px 10px;
   }
 }
 @-webkit-keyframes answer-expanded {
