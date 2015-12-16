@@ -541,9 +541,12 @@ var FAQ = _react2.default.createClass({
     if (this.questionExpanded) {
       var node = _reactDom2.default.findDOMNode(this);
       var content = node.parentNode.parentNode.parentNode;
-      this.scrollTo(content, node.offsetTop - 10, 300);
+      var app = content.parentNode.parentNode;
+      this.scrollTo('content', content, node.offsetTop - 10, 300);
+      this.scrollTo('app', app, node.offsetTop - 10, 300);
     } else {
-      this._scroll.cancel = true;
+      this.scrollCancel('content');
+      this.scrollCancel('app');
     }
   },
 
@@ -1323,7 +1326,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var ScrollToMixin = exports.ScrollToMixin = {
   componentDidMount: function componentDidMount() {
-    this._scroll.requestAnimationFrame = (function () {
+    this._fn.requestAnimationFrame = (function () {
       return window.requestAnimationFrame || window.webkitRequestAnimationFrame || function (callback, element, delay) {
         this.setTimeout(callback, delay || 1000 / 60, new Date().getTime());
       };
@@ -1334,22 +1337,14 @@ var ScrollToMixin = exports.ScrollToMixin = {
     return x < 0.5 ? Math.pow(x * 2, 2) / 2 : 1 - Math.pow((1 - x) * 2, 2) / 2;
   },
 
-  _scroll: {
-    start: null,
-    cancel: false,
-    element: null,
-    delta: 0,
-    progress: 0,
-    percent: 0,
-    startY: 0,
-    currentY: 0,
-    targetY: 0,
-    duration: 1000,
+  _fn: {
     requestAnimationFrame: null
   },
 
-  _animateScroll: function _animateScroll(timestamp) {
-    var s = this._scroll;
+  _scroll: {},
+
+  _animateScroll: function _animateScroll(id, timestamp) {
+    var s = this._scroll[id];
     if (s.cancel) {
       return;
     }
@@ -1362,22 +1357,33 @@ var ScrollToMixin = exports.ScrollToMixin = {
     s.element.scrollTop = s.currentY;
 
     if (s.percent < 1) {
-      this._scroll.requestAnimationFrame.call(window, this._animateScroll);
+      this._fn.requestAnimationFrame.call(window, this._animateScroll.bind(this, id));
     }
   },
 
-  scrollTo: function scrollTo(element, y, duration) {
-    var s = this._scroll;
-    s.start = null;
-    s.cancel = false;
-    s.element = element;
-    s.startY = element.scrollTop;
-    s.targetY = y;
-    s.delta = Math.round(s.targetY - s.startY);
-    s.duration = duration;
-    s.progress = 0;
-    if (this._scroll.requestAnimationFrame) {
-      this._scroll.requestAnimationFrame.call(window, this._animateScroll);
+  scrollTo: function scrollTo(id, element, y, duration) {
+    if (id) {
+      if (!this._scroll[id]) {
+        this._scroll[id] = {};
+      }
+      var s = this._scroll[id];
+      s.start = null;
+      s.cancel = false;
+      s.element = element;
+      s.startY = element.scrollTop;
+      s.targetY = y;
+      s.delta = Math.round(s.targetY - s.startY);
+      s.duration = duration;
+      s.progress = 0;
+      if (this._fn.requestAnimationFrame) {
+        this._fn.requestAnimationFrame.call(window, this._animateScroll.bind(this, id));
+      }
+    }
+  },
+
+  scrollCancel: function scrollCancel(id) {
+    if (id && this._scroll[id]) {
+      this._scroll[id].cancel = true;
     }
   }
 };

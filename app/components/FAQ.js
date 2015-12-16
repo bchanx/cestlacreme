@@ -26,10 +26,13 @@ var FAQ = React.createClass({
     if (this.questionExpanded) {
       let node = ReactDOM.findDOMNode(this);
       let content = node.parentNode.parentNode.parentNode;
-      this.scrollTo(content, node.offsetTop - 10, 300);
+      let app = content.parentNode.parentNode;
+      this.scrollTo('content', content, node.offsetTop - 10, 300);
+      this.scrollTo('app', app, node.offsetTop - 10, 300);
     }
     else {
-      this._scroll.cancel = true;
+      this.scrollCancel('content');
+      this.scrollCancel('app');
     }
   },
 
