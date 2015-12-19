@@ -748,7 +748,7 @@ var Home = _react2.default.createClass({
         _react2.default.createElement(
           _Common.Bold,
           null,
-          'Next scheduled pickup date:'
+          'Special holiday pickup date:'
         ),
         _react2.default.createElement('br', null),
         _react2.default.createElement(
@@ -757,7 +757,7 @@ var Home = _react2.default.createClass({
           _react2.default.createElement(
             _Common.Bold,
             null,
-            'Thursday December 17th, 6pm - 7pm'
+            'Wednesday, December 23rd, 6pm - 7pm'
           )
         )
       ),

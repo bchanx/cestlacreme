@@ -1104,6 +1104,7 @@ a:hover {
 }
 .order-warning .note {
   color: #ff4136;
+  font-size: 0.8rem;
 }
 .btn {
   padding: 6.5px 15px;

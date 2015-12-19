@@ -29,10 +29,10 @@ var Home = React.createClass({
         <GoogleMapsEmbed placeId="ChIJARg-smZxhlQRfhMPDMXsgL4"/>
         <Break/>
         <div className="pickup">
-          <Bold>Next scheduled pickup date:</Bold>
+          <Bold>Special holiday pickup date:</Bold>
           <br/>
           <div className="pickup-date">
-            <Bold>Thursday December 17th, 6pm - 7pm</Bold>
+            <Bold>Wednesday, December 23rd, 6pm - 7pm</Bold>
           </div>
         </div>
         <Break/>
