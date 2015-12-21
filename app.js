@@ -55,7 +55,7 @@ models.forEach(function(r) {
 
 // Setup logging middleware
 app.use(function(req, res, next) {
-  console.log('[ ' + req.method + ' ]', req.url, req.query);
+  console.log('[ ' + req.method + ' ]', req.url, req.query, req.body);
   next();
 });
 

@@ -13,7 +13,7 @@ var setup = function() {
         table.json('error');
         table.timestamp('created_at').defaultTo(db.client.fn.now());
       }).catch(function(e) {
-        db.error(ATTEMPTS_TABLE, 'setup', e);
+        db.log(ATTEMPTS_TABLE, 'setup', e);
       });
     }
   });
@@ -22,14 +22,8 @@ var setup = function() {
 var log = function(params, callback) {
   db.client.insert(params)
     .into(ATTEMPTS_TABLE)
-    .then(function(results) {
-      db.result(null, results, callback);
-    })
-    .catch(function(e) {
-      db.error(ATTEMPTS_TABLE, 'create', e);
-      db.result(e, null, callback);
-    });
-
+    .then(db.success(callback))
+    .catch(db.error(ATTEMPTS_TABLE, 'create', callback));
 };
 
 module.exports = {

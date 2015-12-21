@@ -15,14 +15,18 @@ var OrderSummary = React.createClass({
     let totalSelected = Object.keys(nextProps.selection)
       .map(type => nextProps.selection[type].value)
       .reduce((a, b) => a + b);
+    let success = nextProps.orderSuccessful;
+    let totalCharged = ((success && success.charge && success.charge.amount || (totalSelected * this.props.product.price))/100).toFixed(2);
     this.setState({
-      totalSelected: totalSelected
+      totalSelected: totalSelected,
+      totalCharged: totalCharged
     });
   },
 
   getInitialState: function() {
     return {
-      totalSelected: 0
+      totalSelected: 0,
+      totalCharged: 0.00
     };
   },
 
@@ -47,7 +51,7 @@ var OrderSummary = React.createClass({
                 return (
                   <div key={itm} className="order-item">
                     {this.props.selection[itm].name} x {this.props.selection[itm].value}
-                    <span className="order-price">${(this.props.selection[itm].value * this.props.product.price).toFixed(2)}</span>
+                    <span className="order-price">${(this.props.selection[itm].value * this.props.product.price/100).toFixed(2)}</span>
                   </div>
                 );
               });
@@ -55,7 +59,7 @@ var OrderSummary = React.createClass({
             <div className="order-total">
               {this.state.totalSelected < this.props.product.minimum ? <div className="order-warning"><Note><Bold>*Minimum $20.00 required*</Bold></Note></div> : null}
               <Bold>
-                Total: ${(this.state.totalSelected * this.props.product.price).toFixed(2)}
+                Total: ${(this.state.totalCharged)}
               </Bold>
             </div>
           </div> : null}

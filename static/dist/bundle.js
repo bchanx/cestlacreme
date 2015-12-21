@@ -1108,7 +1108,7 @@ var _OrderSummary2 = _interopRequireDefault(_OrderSummary);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var PRODUCT = {
-  price: 5.00,
+  price: 500, // cents
   minimum: 4,
   maximum: 12
 };
@@ -1133,7 +1133,7 @@ var Menu = _react2.default.createClass({
         }
       },
       disabled: false,
-      orderSuccessful: false
+      orderSuccessful: null
     };
   },
 
@@ -1159,7 +1159,7 @@ var Menu = _react2.default.createClass({
         'div',
         null,
         'Our creme brulee\'s are sold at a flat rate of $',
-        PRODUCT.price,
+        PRODUCT.price / 100,
         ' each. However due to the nature of our business, we require at least ',
         PRODUCT.minimum,
         ' brulee\'s per order, meaning a ',
@@ -1488,14 +1488,18 @@ var OrderSummary = _react2.default.createClass({
     }).reduce(function (a, b) {
       return a + b;
     });
+    var success = nextProps.orderSuccessful;
+    var totalCharged = ((success && success.charge && success.charge.amount || totalSelected * this.props.product.price) / 100).toFixed(2);
     this.setState({
-      totalSelected: totalSelected
+      totalSelected: totalSelected,
+      totalCharged: totalCharged
     });
   },
 
   getInitialState: function getInitialState() {
     return {
-      totalSelected: 0
+      totalSelected: 0,
+      totalCharged: 0.00
     };
   },
 
@@ -1543,7 +1547,7 @@ var OrderSummary = _react2.default.createClass({
                 'span',
                 { className: 'order-price' },
                 '$',
-                (_this.props.selection[itm].value * _this.props.product.price).toFixed(2)
+                (_this.props.selection[itm].value * _this.props.product.price / 100).toFixed(2)
               )
             );
           });
@@ -1568,7 +1572,7 @@ var OrderSummary = _react2.default.createClass({
             _Common.Bold,
             null,
             'Total: $',
-            (this.state.totalSelected * this.props.product.price).toFixed(2)
+            this.state.totalCharged
           )
         )
       ) : null
@@ -1753,7 +1757,7 @@ var StripeReact = _react2.default.createClass({
       product: null,
       selection: null,
       disabled: false,
-      orderSuccessful: false,
+      orderSuccessful: null,
       updateState: null,
       resetState: null,
       formParams: [{
@@ -1771,6 +1775,9 @@ var StripeReact = _react2.default.createClass({
       }, {
         type: 'email',
         placeholder: 'Email'
+      }, {
+        type: 'coupon',
+        placeholder: 'Coupon code (optional)'
       }, {
         type: 'comments',
         placeholder: 'Additional comments (optional)',
@@ -1813,11 +1820,11 @@ var StripeReact = _react2.default.createClass({
         expiry: '',
         cvc: '',
         email: '',
+        coupon: '',
         comments: ''
       },
       focused: 'number',
-      error: null,
-      orderNumber: null
+      error: null
     };
   },
 
@@ -1991,8 +1998,7 @@ var StripeReact = _react2.default.createClass({
 
     // Reset errors
     this.setState({
-      error: null,
-      orderNumber: null
+      error: null
     });
     var error = this.validateForm();
     if (error) {
@@ -2036,6 +2042,7 @@ var StripeReact = _react2.default.createClass({
         created: response.created,
         livemode: response.livemode,
         email: this.state.form.email,
+        coupon: this.state.form.coupon,
         comments: this.state.form.comments,
         selection: this.props.selection
       }).accept('json').end(function (error, response) {
@@ -2052,11 +2059,6 @@ var StripeReact = _react2.default.createClass({
           // Could also be network error. Make sure error message is present.
           error.message = error.message || 'Something went wrong.';
           _this2.focusError(error);
-        } else {
-          // Save current order number
-          _this2.setState({
-            orderNumber: response && response.body && response.body.orderNumber
-          });
         }
         _this2.setState({
           error: error,
@@ -2064,7 +2066,7 @@ var StripeReact = _react2.default.createClass({
         });
         _this2.props.updateState({
           disabled: !error,
-          orderSuccessful: !error
+          orderSuccessful: !error ? response.body : null
         });
       });
     }
@@ -2248,11 +2250,23 @@ var StripeReact = _react2.default.createClass({
           'Hurray! Your order was successfully created! ',
           _react2.default.createElement('span', { className: 'ion-checkmark' }),
           _react2.default.createElement('br', null),
+          this.props.orderSuccessful.coupon ? _react2.default.createElement(
+            'div',
+            null,
+            'Coupon code ',
+            _react2.default.createElement(
+              _Common.Bold,
+              null,
+              this.props.orderSuccessful.coupon
+            ),
+            ' was applied.',
+            _react2.default.createElement('br', null)
+          ) : null,
           'Your order number is ',
           _react2.default.createElement(
             _Common.Bold,
             { className: 'stripe-order-number' },
-            this.state.orderNumber
+            this.props.orderSuccessful.orderNumber
           ),
           '.',
           _react2.default.createElement('br', null),

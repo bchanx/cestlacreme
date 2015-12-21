@@ -16,7 +16,7 @@ var StripeReact = React.createClass({
       product: null,
       selection: null,
       disabled: false,
-      orderSuccessful: false,
+      orderSuccessful: null,
       updateState: null,
       resetState: null,
       formParams: [{
@@ -34,6 +34,9 @@ var StripeReact = React.createClass({
       }, {
         type: 'email',
         placeholder: 'Email'
+      }, {
+        type: 'coupon',
+        placeholder: 'Coupon code (optional)',
       }, {
         type: 'comments',
         placeholder: 'Additional comments (optional)',
@@ -76,11 +79,11 @@ var StripeReact = React.createClass({
         expiry: '',
         cvc: '',
         email: '',
+        coupon: '',
         comments: ''
       },
       focused: 'number',
-      error: null,
-      orderNumber: null
+      error: null
     };
   },
 
@@ -254,8 +257,7 @@ var StripeReact = React.createClass({
 
     // Reset errors
     this.setState({
-      error: null,
-      orderNumber: null
+      error: null
     });
     let error = this.validateForm();
     if (error) {
@@ -300,6 +302,7 @@ var StripeReact = React.createClass({
           created: response.created,
           livemode: response.livemode,
           email: this.state.form.email,
+          coupon: this.state.form.coupon,
           comments: this.state.form.comments,
           selection: this.props.selection
         })
@@ -320,19 +323,13 @@ var StripeReact = React.createClass({
             error.message = error.message || 'Something went wrong.';
             this.focusError(error);
           }
-          else {
-            // Save current order number
-            this.setState({
-              orderNumber: response && response.body && response.body.orderNumber
-            });
-          }
           this.setState({
             error: error,
             showPayments: !!error
           });
           this.props.updateState({
             disabled: !error,
-            orderSuccessful: !error
+            orderSuccessful: !error ? response.body : null
           });
         });
     }
@@ -502,8 +499,14 @@ var StripeReact = React.createClass({
           <div className="stripe-success">
             <div className="stripe-success-text">
               Hurray! Your order was successfully created! <span className="ion-checkmark"></span>
-              <br/> 
-              Your order number is <Bold className="stripe-order-number">{this.state.orderNumber}</Bold>.
+              <br/>
+              { this.props.orderSuccessful.coupon ?
+                <div>
+                  Coupon code <Bold>{this.props.orderSuccessful.coupon}</Bold> was applied.
+                  <br/>
+                </div>
+                : null }
+              Your order number is <Bold className="stripe-order-number">{this.props.orderSuccessful.orderNumber}</Bold>.
               <br/>
               A receipt has been sent to <Bold>{this.state.form.email}</Bold>.
             </div>

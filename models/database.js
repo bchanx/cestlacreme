@@ -10,7 +10,7 @@ var db = knex({
   }
 });
 
-var error = function(table, fn, error) {
+var log = function(table, fn, error) {
   console.error('[ POSTGRES ] Something went wrong for table (' + table + ') from function (' + fn + '):', error);
 };
 
@@ -20,15 +20,30 @@ var result = function(error, results, callback) {
     results: results || []
   };
   if (callback) {
-    callback(r);
+    return callback(r);
   }
   else {
-    return (r);
+    return r;
   }
+};
+
+var success = function(callback) {
+  return function(results) {
+    result(null, results, callback);
+  };
+};
+
+var error = function(table, type, callback) {
+  return function(error) {
+    log(table, type, error);
+    result(error, null, callback);
+  };
 };
 
 module.exports = {
   client: db,
-  error: error,
-  result: result
+  log: log,
+  result: result,
+  success: success,
+  error: error
 };
