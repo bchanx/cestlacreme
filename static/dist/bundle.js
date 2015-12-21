@@ -1167,7 +1167,7 @@ var Menu = _react2.default.createClass({
           _Common.Bold,
           null,
           'minimum $',
-          PRODUCT.price * PRODUCT.minimum,
+          PRODUCT.price / 100 * PRODUCT.minimum,
           ' purchase'
         ),
         '.',

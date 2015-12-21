@@ -50,7 +50,7 @@ var Menu = React.createClass({
     return (
       <div className="menu">
         <div>
-          Our creme brulee's are sold at a flat rate of ${PRODUCT.price/100} each. However due to the nature of our business, we require at least {PRODUCT.minimum} brulee's per order, meaning a <Bold>minimum ${PRODUCT.price * PRODUCT.minimum} purchase</Bold>.
+          Our creme brulee's are sold at a flat rate of ${PRODUCT.price/100} each. However due to the nature of our business, we require at least {PRODUCT.minimum} brulee's per order, meaning a <Bold>minimum ${PRODUCT.price/100 * PRODUCT.minimum} purchase</Bold>.
           <br/>
           <br/>
           Flavors can be mixed and matched to your preference.
