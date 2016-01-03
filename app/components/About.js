@@ -52,10 +52,12 @@ var About = React.createClass({
             For larger quantities, please <a href="mailto:cestlacreme@gmail.com">email us</a> and request for a special order.
           </FAQ>
           <FAQ question={"When and where is pickup?"}>
-            Orders before <Bold>8pm PST Tuesday</Bold> will be scheduled for pickup the same week Thursday. Orders after the deadline will be scheduled for pickup on the week after Thursday.
+            Orders are collected bi-weekly, closing on <Bold>8pm PST Tuesday</Bold> every other week. Pickup is scheduled for the Thursday right after orders close. Orders after each deadline will be scheduled for pickup the Thursday two weeks after.
             <br/>
             <br/>
-            Pickup location is at the McDonalds parking lot, next to the Main Skytrain station. The exact address is <Bold>1527 Main St, Vancouver, BC V6A 2W5</Bold>.
+            Pickup location is at the McDonalds parking lot, next to the Main Skytrain station.
+            <br/>
+            The exact address is <Bold>1527 Main St, Vancouver, BC V6A 2W5</Bold>.
             <br/>
             Pickup time is between <Bold>6pm - 7pm</Bold>.
             <GoogleMapsEmbed placeId="ChIJARg-smZxhlQRfhMPDMXsgL4"/>

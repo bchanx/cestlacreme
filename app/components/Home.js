@@ -24,15 +24,15 @@ var Home = React.createClass({
         </Note>
         <Break/>
         <div>
-          <Bold>How it works:</Bold> We take regular orders online throughout the week, with orders closing weekly at 8pm every Tuesday. Thursday is pickup day! Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.
+          <Bold>How it works:</Bold> We take regular orders online throughout the week, with orders closing at 8pm every other Tuesday. The immediately following Thursday is pickup day! Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.
         </div>
         <GoogleMapsEmbed placeId="ChIJARg-smZxhlQRfhMPDMXsgL4"/>
         <Break/>
         <div className="pickup">
-          <Bold>Special holiday pickup date:</Bold>
+          <Bold>Next scheduled pickup date:</Bold>
           <br/>
           <div className="pickup-date">
-            <Bold>Wednesday, December 23rd, 6pm - 7pm</Bold>
+            <Bold>Thursday, January 14th, 6pm - 7pm</Bold>
           </div>
         </div>
         <Break/>

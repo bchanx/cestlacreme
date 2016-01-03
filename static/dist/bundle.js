@@ -130,16 +130,18 @@ var About = _react2.default.createClass({
         _react2.default.createElement(
           _FAQ2.default,
           { question: "When and where is pickup?" },
-          'Orders before ',
+          'Orders are collected bi-weekly, closing on ',
           _react2.default.createElement(
             _Common.Bold,
             null,
             '8pm PST Tuesday'
           ),
-          ' will be scheduled for pickup the same week Thursday. Orders after the deadline will be scheduled for pickup on the week after Thursday.',
+          ' every other week. Pickup is scheduled for the Thursday right after orders close. Orders after each deadline will be scheduled for pickup the Thursday two weeks after.',
           _react2.default.createElement('br', null),
           _react2.default.createElement('br', null),
-          'Pickup location is at the McDonalds parking lot, next to the Main Skytrain station. The exact address is ',
+          'Pickup location is at the McDonalds parking lot, next to the Main Skytrain station.',
+          _react2.default.createElement('br', null),
+          'The exact address is ',
           _react2.default.createElement(
             _Common.Bold,
             null,
@@ -738,7 +740,7 @@ var Home = _react2.default.createClass({
           null,
           'How it works:'
         ),
-        ' We take regular orders online throughout the week, with orders closing weekly at 8pm every Tuesday. Thursday is pickup day! Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.'
+        ' We take regular orders online throughout the week, with orders closing at 8pm every other Tuesday. The immediately following Thursday is pickup day! Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.'
       ),
       _react2.default.createElement(_GoogleMaps.GoogleMapsEmbed, { placeId: 'ChIJARg-smZxhlQRfhMPDMXsgL4' }),
       _react2.default.createElement(_Common.Break, null),
@@ -748,7 +750,7 @@ var Home = _react2.default.createClass({
         _react2.default.createElement(
           _Common.Bold,
           null,
-          'Special holiday pickup date:'
+          'Next scheduled pickup date:'
         ),
         _react2.default.createElement('br', null),
         _react2.default.createElement(
@@ -757,7 +759,7 @@ var Home = _react2.default.createClass({
           _react2.default.createElement(
             _Common.Bold,
             null,
-            'Wednesday, December 23rd, 6pm - 7pm'
+            'Thursday, January 14th, 6pm - 7pm'
           )
         )
       ),

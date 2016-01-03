@@ -25,6 +25,7 @@
     "knex": "^0.9.0",
     "lodash": "^3.10.1",
     "moment": "^2.10.6",
+    "nodemailer": "^1.10.0",
     "pg": "4.4.3",
     "react": "^0.14.1",
     "react-credit-card": "^0.10.0",
