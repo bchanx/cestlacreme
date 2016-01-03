@@ -740,7 +740,10 @@ var Home = _react2.default.createClass({
           null,
           'How it works:'
         ),
-        ' We take regular orders online throughout the week, with orders closing at 8pm every other Tuesday. The immediately following Thursday is pickup day! Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.'
+        ' Our online schedule runs bi-weekly, with orders closing every other Tuesday at 8pm. The following Thursday (two days later) is pickup day!',
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        'Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.'
       ),
       _react2.default.createElement(_GoogleMaps.GoogleMapsEmbed, { placeId: 'ChIJARg-smZxhlQRfhMPDMXsgL4' }),
       _react2.default.createElement(_Common.Break, null),
