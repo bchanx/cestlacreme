@@ -762,7 +762,7 @@ var Home = _react2.default.createClass({
           _react2.default.createElement(
             _Common.Bold,
             null,
-            'Thursday, January 14th, 6pm - 7pm'
+            'Thursday, January 28th, 6pm - 7pm'
           )
         )
       ),
