@@ -38,8 +38,10 @@ const VENDOR_DEPS = [
 
 ///// STYLESHEETS /////
 
+const STYLESHEETS = ['splash', 'main'];
+
 gulp.task('stylus', function() {
-  var styls = ['splash', 'main'].map(function(s) {
+  var styls = STYLESHEETS.map(function(s) {
     return gulp.src('stylesheets/stylus/' + s + '.styl')
       .pipe(stylus())
       .pipe(rename(s + '.css'))
@@ -49,7 +51,7 @@ gulp.task('stylus', function() {
 });
 
 gulp.task('css', function() {
-  var css = ['splash', 'main'].map(function(c) {
+  var css = STYLESHEETS.map(function(c) {
     return gulp.src('stylesheets/' + c + '.css')
       .pipe(autoprefixer({
         browsers: ['last 2 version'],
@@ -149,7 +151,7 @@ gulp.task('browserify', function() {
       .transform(babelify, {
         presets: ['es2015', 'react']
       })
-      .transform(envify, config.all(env))
+      .transform(envify, config.all(env));
     if (env === 'development') {
       bundler = bundler.on('update', rebundle);
     }
@@ -170,10 +172,11 @@ gulp.task('browserify', function() {
         })
         .pipe(source('bundle.js'));
       if (env === 'production') {
-        vendor = vendor.pipe(streamify(uglify({ mangle: true })))
-        .pipe(rename({
-          extname: '.min.js'
-        }));
+        vendor = vendor
+          .pipe(streamify(uglify({ mangle: true })))
+          .pipe(rename({
+            extname: '.min.js'
+          }));
       }
       vendor = vendor.pipe(gulp.dest(STATIC));
     });
