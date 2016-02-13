@@ -35,7 +35,7 @@ var Home = React.createClass({
           <Bold>Next scheduled pickup date:</Bold>
           <br/>
           <div className="pickup-date">
-            <Bold>Thursday, February 11th, 6pm - 7pm</Bold>
+            <Bold>Thursday, February 25th, 6pm - 7pm</Bold>
           </div>
         </div>
         <Break/>
