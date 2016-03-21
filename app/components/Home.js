@@ -15,34 +15,44 @@ var Home = React.createClass({
         <Break/>
         <Instagram/>
         <Break/>
-        <div>
-          We operate solely through online purchases, market pop-ups, and catering for events and weddings.
-        </div>
-        <br/>
-        <Note>
-          *Please bear with us as we are limited by the current size of our operations and may sell out!*
-        </Note>
-        <Break/>
-        <div>
-          <Bold>How it works:</Bold> Our online schedule runs bi-weekly, with orders closing every other Tuesday at 8pm. The following Thursday (two days later) is pickup day!
+        <div className="hidden">
+          <div>
+            We operate solely through online purchases, market pop-ups, and catering for events and weddings.
+          </div>
           <br/>
-          <br/>
-          Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.
-        </div>
-        <GoogleMapsEmbed placeId="ChIJARg-smZxhlQRfhMPDMXsgL4"/>
-        <Break/>
-        <div className="pickup">
-          <Bold>Next scheduled pickup date:</Bold>
-          <br/>
-          <div className="pickup-date">
-            <Bold>Thursday, February 25th, 6pm - 7pm</Bold>
+          <Note>
+            *Please bear with us as we are limited by the current size of our operations and may sell out!*
+          </Note>
+          <Break/>
+          <div>
+            <Bold>How it works:</Bold> Our online schedule runs bi-weekly, with orders closing every other Tuesday at 8pm. The following Thursday (two days later) is pickup day!
+            <br/>
+            <br/>
+            Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.
+          </div>
+          <GoogleMapsEmbed placeId="ChIJARg-smZxhlQRfhMPDMXsgL4"/>
+          <Break/>
+          <div className="pickup">
+            <Bold>Next scheduled pickup date:</Bold>
+            <br/>
+            <div className="pickup-date">
+              <Bold>Thursday, February 25th, 6pm - 7pm</Bold>
+            </div>
+          </div>
+          <Break/>
+          <div>
+            Interested? Check out our&nbsp;
+            <Link to="/menu">menu</Link>
+            &nbsp;and see what's available for ordering!
           </div>
         </div>
-        <Break/>
         <div>
-          Interested? Check out our&nbsp;
-          <Link to="/menu">menu</Link>
-          &nbsp;and see what's available for ordering!
+          We are no longer accepting online orders at this time.
+          <br/>
+          Please <a href="mailto:cestlacreme@gmail.com">contact us</a> if you would like to request a custom order.
+          <br/>
+          <br/>
+          Thank you for your interest.
         </div>
         <Break/>
         <Footer/>

@@ -21,6 +21,13 @@ var handleError = function(res, email, metadata, error) {
 
 // Stripe call to CHARGE
 router.post('/order', function(req, res) {
+  if (true) {
+    return {
+      success: false,
+      error: 'We are no longer accepting online payments at this time. Thank you for your interest.'
+    };
+  }
+
   var email = req.body.email;
   if (!validate.validate(email)) {
     // Email is invalid

@@ -722,61 +722,81 @@ var Home = _react2.default.createClass({
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
         'div',
-        null,
-        'We operate solely through online purchases, market pop-ups, and catering for events and weddings.'
-      ),
-      _react2.default.createElement('br', null),
-      _react2.default.createElement(
-        _Common.Note,
-        null,
-        '*Please bear with us as we are limited by the current size of our operations and may sell out!*'
-      ),
-      _react2.default.createElement(_Common.Break, null),
-      _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-          _Common.Bold,
-          null,
-          'How it works:'
-        ),
-        ' Our online schedule runs bi-weekly, with orders closing every other Tuesday at 8pm. The following Thursday (two days later) is pickup day!',
-        _react2.default.createElement('br', null),
-        _react2.default.createElement('br', null),
-        'Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.'
-      ),
-      _react2.default.createElement(_GoogleMaps.GoogleMapsEmbed, { placeId: 'ChIJARg-smZxhlQRfhMPDMXsgL4' }),
-      _react2.default.createElement(_Common.Break, null),
-      _react2.default.createElement(
-        'div',
-        { className: 'pickup' },
-        _react2.default.createElement(
-          _Common.Bold,
-          null,
-          'Next scheduled pickup date:'
-        ),
-        _react2.default.createElement('br', null),
+        { className: 'hidden' },
         _react2.default.createElement(
           'div',
-          { className: 'pickup-date' },
+          null,
+          'We operate solely through online purchases, market pop-ups, and catering for events and weddings.'
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          _Common.Note,
+          null,
+          '*Please bear with us as we are limited by the current size of our operations and may sell out!*'
+        ),
+        _react2.default.createElement(_Common.Break, null),
+        _react2.default.createElement(
+          'div',
+          null,
           _react2.default.createElement(
             _Common.Bold,
             null,
-            'Thursday, February 25th, 6pm - 7pm'
+            'How it works:'
+          ),
+          ' Our online schedule runs bi-weekly, with orders closing every other Tuesday at 8pm. The following Thursday (two days later) is pickup day!',
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('br', null),
+          'Current pickup point is at the McDonalds parking lot next to the Main Skytrain station (1527 Main St, Vancouver, BC V6A 2W5). Pickup time is between 6pm - 7pm.'
+        ),
+        _react2.default.createElement(_GoogleMaps.GoogleMapsEmbed, { placeId: 'ChIJARg-smZxhlQRfhMPDMXsgL4' }),
+        _react2.default.createElement(_Common.Break, null),
+        _react2.default.createElement(
+          'div',
+          { className: 'pickup' },
+          _react2.default.createElement(
+            _Common.Bold,
+            null,
+            'Next scheduled pickup date:'
+          ),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement(
+            'div',
+            { className: 'pickup-date' },
+            _react2.default.createElement(
+              _Common.Bold,
+              null,
+              'Thursday, February 25th, 6pm - 7pm'
+            )
           )
+        ),
+        _react2.default.createElement(_Common.Break, null),
+        _react2.default.createElement(
+          'div',
+          null,
+          'Interested? Check out our ',
+          _react2.default.createElement(
+            _reactRouter.Link,
+            { to: '/menu' },
+            'menu'
+          ),
+          ' and see what\'s available for ordering!'
         )
       ),
-      _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(
         'div',
         null,
-        'Interested? Check out our ',
+        'We are no longer accepting online orders at this time.',
+        _react2.default.createElement('br', null),
+        'Please ',
         _react2.default.createElement(
-          _reactRouter.Link,
-          { to: '/menu' },
-          'menu'
+          'a',
+          { href: 'mailto:cestlacreme@gmail.com' },
+          'contact us'
         ),
-        ' and see what\'s available for ordering!'
+        ' if you would like to request a custom order.',
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        'Thank you for your interest.'
       ),
       _react2.default.createElement(_Common.Break, null),
       _react2.default.createElement(_Footer2.default, null)
@@ -2300,6 +2320,24 @@ var StripeReact = _react2.default.createClass({
           'Ready to order?'
         )
       ) : null
+    );
+
+    // Disable payments
+    payment = _react2.default.createElement(
+      'div',
+      null,
+      'We are no longer accepting payments at this time.',
+      _react2.default.createElement('br', null),
+      'Please ',
+      _react2.default.createElement(
+        'a',
+        { href: 'mailto:cestlacreme@gmail.com' },
+        'contact us'
+      ),
+      ' if you would like to request a custom order.',
+      _react2.default.createElement('br', null),
+      _react2.default.createElement('br', null),
+      'Thank you for your interest.'
     );
     return _react2.default.createElement(
       'div',

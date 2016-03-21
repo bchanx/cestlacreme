@@ -521,6 +521,18 @@ var StripeReact = React.createClass({
           </div> : null }
       </div>
     );
+
+    // Disable payments
+    payment = (
+      <div>
+        We are no longer accepting payments at this time.
+        <br/>
+        Please <a href="mailto:cestlacreme@gmail.com">contact us</a> if you would like to request a custom order.
+        <br/>
+        <br/>
+        Thank you for your interest.
+      </div>
+    );
     return (
       <div className="stripe">
         { this.state.loading ? <Button disabled="true">Payments Loading...</Button> : this.state.loadingError ? <Button className="btn-danger">Payments Error</Button> : payment }
